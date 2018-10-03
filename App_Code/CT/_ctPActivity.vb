@@ -4,8 +4,9 @@ Imports System.Data
 Imports System.Data.SqlClient
 Imports System.ComponentModel
 Namespace SIS.CT
-  <DataObject()> _
+  <DataObject()>
   Partial Public Class ctPActivity
+    'checking Modification in Git Hub
     Private Shared _RecordCount As Integer
     Private _t_cprj As String = ""
     Private _t_acty As String = ""
@@ -431,12 +432,12 @@ Namespace SIS.CT
         _ttcmcs0522001_t_dsca = value
       End Set
     End Property
-    Public Readonly Property DisplayField() As String
+    Public ReadOnly Property DisplayField() As String
       Get
         Return "" & _t_desc.ToString.PadRight(256, " ")
       End Get
     End Property
-    Public Readonly Property PrimaryKey() As String
+    Public ReadOnly Property PrimaryKey() As String
       Get
         Return _t_cprj & "|" & _t_cact
       End Get
@@ -477,7 +478,7 @@ Namespace SIS.CT
         Return _FK_ttpisg220200_t_cprj
       End Get
     End Property
-    <DataObjectMethod(DataObjectMethodType.Select)> _
+    <DataObjectMethod(DataObjectMethodType.Select)>
     Public Shared Function ctPActivitySelectList(ByVal OrderBy As String) As List(Of SIS.CT.ctPActivity)
       Dim Results As List(Of SIS.CT.ctPActivity) = Nothing
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
