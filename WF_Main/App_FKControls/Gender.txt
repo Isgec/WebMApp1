@@ -1,0 +1,89 @@
+<section id="gender">
+  <h5 class="page-header">Gender Icons</h5>
+  <div class="row fontawesome-icon-list">
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-genderless" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>genderless</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-intersex" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>intersex <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-mars" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>mars</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-mars-double" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>mars-double</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-mars-stroke" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>mars-stroke</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-mars-stroke-h" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>mars-stroke-h</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-mars-stroke-v" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>mars-stroke-v</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-mercury" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>mercury</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-neuter" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>neuter</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-transgender" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>transgender</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-transgender-alt" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>transgender-alt</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-venus" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>venus</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-venus-double" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>venus-double</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-venus-mars" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>venus-mars</a>
+    </div>
+  </div>
+</section>

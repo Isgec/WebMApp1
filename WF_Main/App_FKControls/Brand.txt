@@ -1,0 +1,1139 @@
+<section id="brand">
+  <h5 class="page-header">Brand Icons</h5>
+  <div class="row fontawesome-icon-list margin-bottom-lg">
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-500px" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>500px</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-adn" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>adn</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-amazon" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>amazon</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-android" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>android</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-angellist" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>angellist</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-apple" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>apple</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bandcamp" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bandcamp</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-behance" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>behance</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-behance-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>behance-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bitbucket" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bitbucket</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bitbucket-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bitbucket-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bitcoin" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bitcoin <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-black-tie" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>black-tie</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bluetooth" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bluetooth</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bluetooth-b" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bluetooth-b</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-btc" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>btc</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-buysellads" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>buysellads</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-amex" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-amex</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-diners-club" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-diners-club</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-discover" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-discover</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-jcb" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-jcb</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-mastercard" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-mastercard</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-paypal" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-paypal</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-stripe" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-stripe</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-visa" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-visa</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-chrome" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>chrome</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-codepen" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>codepen</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-codiepie" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>codiepie</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-connectdevelop" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>connectdevelop</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-contao" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>contao</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-css3" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>css3</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-dashcube" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>dashcube</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-delicious" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>delicious</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-deviantart" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>deviantart</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-digg" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>digg</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-dribbble" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>dribbble</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-dropbox" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>dropbox</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-drupal" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>drupal</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-edge" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>edge</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-eercast" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>eercast</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-empire" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>empire</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-envira" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>envira</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-etsy" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>etsy</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-expeditedssl" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>expeditedssl</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-fa" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>fa <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-facebook" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>facebook</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-facebook-f" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>facebook-f <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-facebook-official" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>facebook-official</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-facebook-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>facebook-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-firefox" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>firefox</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-first-order" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>first-order</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-flickr" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>flickr</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-font-awesome" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>font-awesome</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-fonticons" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>fonticons</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-fort-awesome" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>fort-awesome</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-forumbee" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>forumbee</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-foursquare" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>foursquare</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-free-code-camp" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>free-code-camp</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-ge" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>ge <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-get-pocket" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>get-pocket</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-gg" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>gg</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-gg-circle" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>gg-circle</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-git" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>git</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-git-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>git-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-github" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>github</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-github-alt" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>github-alt</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-github-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>github-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-gitlab" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>gitlab</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-gittip" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>gittip <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-glide" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>glide</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-glide-g" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>glide-g</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-google" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>google</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-google-plus" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>google-plus</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-google-plus-circle" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>google-plus-circle <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-google-plus-official" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>google-plus-official</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-google-plus-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>google-plus-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-google-wallet" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>google-wallet</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-gratipay" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>gratipay</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-grav" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>grav</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hacker-news" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hacker-news</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-houzz" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>houzz</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-html5" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>html5</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-imdb" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>imdb</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-instagram" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>instagram</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-internet-explorer" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>internet-explorer</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-ioxhost" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>ioxhost</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-joomla" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>joomla</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-jsfiddle" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>jsfiddle</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-lastfm" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>lastfm</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-lastfm-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>lastfm-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-leanpub" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>leanpub</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-linkedin" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>linkedin</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-linkedin-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>linkedin-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-linode" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>linode</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-linux" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>linux</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-maxcdn" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>maxcdn</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-meanpath" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>meanpath</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-medium" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>medium</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-meetup" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>meetup</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-mixcloud" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>mixcloud</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-modx" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>modx</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-odnoklassniki" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>odnoklassniki</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-odnoklassniki-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>odnoklassniki-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-opencart" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>opencart</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-openid" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>openid</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-opera" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>opera</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-optin-monster" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>optin-monster</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-pagelines" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>pagelines</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-paypal" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>paypal</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-pied-piper" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>pied-piper</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-pied-piper-alt" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>pied-piper-alt</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-pied-piper-pp" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>pied-piper-pp</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-pinterest" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>pinterest</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-pinterest-p" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>pinterest-p</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-pinterest-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>pinterest-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-product-hunt" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>product-hunt</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-qq" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>qq</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-quora" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>quora</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-ra" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>ra <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-ravelry" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>ravelry</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-rebel" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>rebel</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-reddit" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>reddit</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-reddit-alien" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>reddit-alien</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-reddit-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>reddit-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-renren" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>renren</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-resistance" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>resistance <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-safari" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>safari</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-scribd" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>scribd</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-sellsy" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>sellsy</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-share-alt" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>share-alt</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-share-alt-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>share-alt-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-shirtsinbulk" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>shirtsinbulk</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-simplybuilt" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>simplybuilt</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-skyatlas" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>skyatlas</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-skype" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>skype</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-slack" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>slack</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-slideshare" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>slideshare</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-snapchat" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>snapchat</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-snapchat-ghost" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>snapchat-ghost</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-snapchat-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>snapchat-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-soundcloud" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>soundcloud</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-spotify" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>spotify</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-stack-exchange" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>stack-exchange</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-stack-overflow" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>stack-overflow</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-steam" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>steam</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-steam-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>steam-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-stumbleupon" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>stumbleupon</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-stumbleupon-circle" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>stumbleupon-circle</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-superpowers" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>superpowers</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-telegram" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>telegram</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-tencent-weibo" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>tencent-weibo</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-themeisle" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>themeisle</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-trello" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>trello</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-tripadvisor" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>tripadvisor</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-tumblr" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>tumblr</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-tumblr-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>tumblr-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-twitch" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>twitch</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-twitter" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>twitter</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-twitter-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>twitter-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-usb" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>usb</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-viacoin" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>viacoin</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-viadeo" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>viadeo</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-viadeo-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>viadeo-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-vimeo" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>vimeo</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-vimeo-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>vimeo-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-vine" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>vine</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-vk" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>vk</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-wechat" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wechat <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-weibo" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>weibo</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-weixin" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>weixin</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-whatsapp" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>whatsapp</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-wikipedia-w" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wikipedia-w</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-windows" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>windows</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-wordpress" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wordpress</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-wpbeginner" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wpbeginner</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-wpexplorer" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wpexplorer</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-wpforms" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wpforms</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-xing" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>xing</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-xing-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>xing-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-y-combinator" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>y-combinator</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-y-combinator-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>y-combinator-square <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-yahoo" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>yahoo</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-yc" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>yc <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-yc-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>yc-square <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-yelp" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>yelp</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-yoast" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>yoast</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-youtube" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>youtube</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-youtube-play" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>youtube-play</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-youtube-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>youtube-square</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,77 @@
+<section id="payment">
+  <h5 class="page-header">Payment Icons</h5>
+  <div class="row fontawesome-icon-list">
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-amex" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-amex</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-diners-club" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-diners-club</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-discover" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-discover</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-jcb" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-jcb</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-mastercard" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-mastercard</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-paypal" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-paypal</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-stripe" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-stripe</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cc-visa" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc-visa</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-credit-card" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>credit-card</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-credit-card-alt" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>credit-card-alt</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-google-wallet" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>google-wallet</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-paypal" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>paypal</a>
+    </div>
+  </div>
+</section>

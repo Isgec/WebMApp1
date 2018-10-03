@@ -1,0 +1,107 @@
+<section id="hand">
+  <h5 class="page-header">Hand Icons</h5>
+  <div class="row fontawesome-icon-list">
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-grab-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-grab-o <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-lizard-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-lizard-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-o-down" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-o-down</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-o-left" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-o-left</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-o-right" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-o-right</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-o-up" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-o-up</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-paper-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-paper-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-peace-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-peace-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-pointer-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-pointer-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-rock-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-rock-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-scissors-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-scissors-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-spock-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-spock-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hand-stop-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hand-stop-o <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-thumbs-down" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>thumbs-down</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-thumbs-o-down" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>thumbs-o-down</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-thumbs-o-up" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>thumbs-o-up</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-thumbs-up" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>thumbs-up</a>
+    </div>
+  </div>
+</section>

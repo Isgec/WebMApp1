@@ -1,0 +1,77 @@
+<section id="medical">
+  <h5 class="page-header">Medical Icons</h5>
+  <div class="row fontawesome-icon-list">
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-ambulance" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>ambulance</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-h-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>h-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-heart" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>heart</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-heart-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>heart-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-heartbeat" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>heartbeat</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-hospital-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hospital-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-medkit" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>medkit</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-plus-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>plus-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-stethoscope" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>stethoscope</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-user-md" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>user-md</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-wheelchair" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wheelchair</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-wheelchair-alt" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wheelchair-alt</a>
+    </div>
+  </div>
+</section>

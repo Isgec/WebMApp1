@@ -1,0 +1,113 @@
+<section id="transportation">
+  <h5 class="page-header">Transportation Icons</h5>
+  <div class="row fontawesome-icon-list">
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-ambulance" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>ambulance</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-automobile" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>automobile <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bicycle" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bicycle</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bus" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bus</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cab" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cab <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-car" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>car</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-fighter-jet" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>fighter-jet</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-motorcycle" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>motorcycle</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-plane" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>plane</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-rocket" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>rocket</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-ship" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>ship</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-space-shuttle" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>space-shuttle</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-subway" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>subway</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-taxi" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>taxi</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-train" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>train</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-truck" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>truck</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-wheelchair" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wheelchair</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-wheelchair-alt" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wheelchair-alt</a>
+    </div>
+  </div>
+</section>

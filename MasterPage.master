@@ -1,0 +1,169 @@
+<%@ Master Language="VB" CodeFile="MasterPage.master.vb" Inherits="lgMasterPage" %>
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+  <title>ISGEC-Mobile App</title>
+  <link rel="SHORTCUT ICON" type="image/x-icon" runat="server" href="~/isgec.ico" />
+  <!--Existing Pure CSS Menu-->
+
+  <!--JQuery 3.3-->
+  <script type="text/javascript" src="jq3.3/jquery-3.3.1.min.js" ></script>
+  <link rel="stylesheet" href="~/jq3.3/ui/themes/smoothness/jquery-ui.css" runat="server" />
+  <script type="text/javascript" src="jq3.3/ui/jquery-ui.js"></script>
+  <!-- Font 4.7-->
+  <link href="~/fa47/css/font-awesome.min.css" rel="stylesheet" runat="server" />
+  <!--Bootstrap 4.0 uses Jquery 3 or above, Popper & Tooltip-->
+  <link rel="stylesheet" href="~/bs4.0/css/bootstrap.min.css" runat="server" />
+  <script type="text/javascript" src="Popper1.0/popper.min.js"></script>
+  <script type="text/javascript" src="Popper1.0/tooltip.min.js"></script>
+  <script type="text/javascript" src="bs4.0/js/bootstrap.min.js"></script>
+
+  <asp:ContentPlaceHolder ID="cphMain" runat="server" EnableViewState="true">
+  </asp:ContentPlaceHolder>
+  <style type="text/css">
+    td {
+      padding: 1px 1px 1px 1px;
+    }
+    .dmychk, .dmytxt {
+      border: #5F9EA0 1pt solid;
+      background-color: #e3e0df;
+      padding: 6px 3px 1px 3px;
+      color: #000066;
+    }
+    .mychk {
+      border: 1pt solid #FF99CC;
+      background-color: #FFEBCD;
+      padding: 6px 3px 1px 3px;
+      margin: auto;
+      color: #000066;
+    }
+    .mypktxt {
+      border: 1pt solid #FF99CC;
+      background-color: #FFEBCD;
+      color: dimgray;
+    }
+    .myddl, .mytxt, .myfktxt {
+      border-color: cornflowerblue;
+      background-color: lightblue;
+      border-width: 1pt;
+      margin: auto;
+      padding:2px 2px 2px 2px;
+      color: #000066;
+    }
+    .myLbl {
+      margin: auto;
+      padding: 2px 2px 2px 2px;
+      border: 1px solid #FFCC00;
+      color: #9F6000;
+      background-color: #FEEFB3;
+    }
+    .myReq {
+      border: #5F9EA0 1pt solid;
+      min-width: 200px !important;
+      background-color: #FFEBCD;
+      color: #ff006e;
+    }
+    /* overriding LEGEND defined in BS with my value */
+    legend {
+      width:auto;
+      height:auto;
+      font-size:11px;
+      padding: 4px 15px 4px 10px;
+      margin: 4px 0 8px 8px;
+      _margin-top: 0px;
+      border: 1px solid #dddddd;
+      background: #e9e9e9;
+      font-weight: bold;
+      border-radius: 8px;
+      background: #014464;
+      color: #f1f1f1;
+      background-image: -moz-linear-gradient(top, #0272a7, #013953);
+      background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0272a7), to(#013953));
+      background-image: linear-gradient(#0272a7, #013953);
+      background-image: -o-linear-gradient(top, #0272a7, #013953);
+    }
+  </style>
+</head>
+<body>
+  <form id="form1" runat="server">
+  <!--Patch for webkit based browser, chrome & safari-->
+  <ASP:ScriptManager ID="ToolkitScriptManager1" EnableScriptGlobalization="true" runat="server" EnablePageMethods="true" AsyncPostBackTimeout="3600" EnableScriptLocalization="True" ScriptMode="Auto">
+    <Scripts>
+        <asp:ScriptReference Path="~/jq3.3/ui/webkit.js" />
+    </Scripts>
+  </ASP:ScriptManager>
+  <LGM:LGLoading ID="LGLoadingM" runat="server" />
+    <script type="text/javascript">
+      Sys.WebForms.PageRequestManager.getInstance().add_endRequest(hideProcessingMPV);
+      Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(showProcessingMPV);
+      function groupClicked(p) {
+        var tbl = p.parentElement.parentElement;
+        var o = p.parentElement.rowIndex;
+        for (ii = 0; ii <= tbl.rows.length - 1; ii++) {
+          if (ii > o) {
+            if (tbl.rows[ii].id != '')
+              return;
+            if (tbl.rows[ii].style.display == 'none')
+              tbl.rows[ii].style.display = '';
+            else
+              tbl.rows[ii].style.display = 'none';
+          }
+        }
+      }
+      function dc(o, p) {
+        var dec = /^-?\d+(?:\.\d{0,6})?$/;
+        var v = o.value;
+        if (v.match(dec)) {
+          o.value = parseFloat(v).toFixed(p);
+        } else {
+          o.value = parseFloat('0').toFixed(p);
+        }
+      }
+    </script>
+    <div id="divmain" class="master_table">
+    <table style="width: 100%">
+      <tr>
+        <td class="sis_header">
+          <asp:Image ID="any" runat="server" AlternateText="logo" CssClass="sis_header" ImageUrl="~/App_Themes/Default/Images/headernew.jpg" />
+        </td>
+        <td class="loginTd">
+          <LGM:LoginLine ID="LoginLine1" runat="server" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" id="algmnu" runat="server" align="center" style="margin: auto">
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="wp_body" runat="server" id="mainBody">
+          <asp:ContentPlaceHolder ID="cph1" runat="server" EnableViewState="true">
+          </asp:ContentPlaceHolder>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="sis_footer">
+          <table style="width: 100%">
+            <tr>
+              <td>
+                <span style="color: #ffffff"><font size="1">© ISGEC Heavy Engineering Limited. All rights reserved.</font></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <font size="1"><span style="color: #ffffff">A-4, Sector-24, NOIDA, U.P. 201 301, INDIA </span></font>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span style="color: #99ccff">Designed &amp; Developed by:</span> <span style="color: #99ffcc">ISGEC IT Team</span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+  </form>
+
+</body>
+</html>

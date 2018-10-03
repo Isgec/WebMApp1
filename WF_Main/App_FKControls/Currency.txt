@@ -1,0 +1,167 @@
+<section id="currency">
+  <h5 class="page-header">Currency Icons</h5>
+  <div class="row fontawesome-icon-list">
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bitcoin" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bitcoin <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-btc" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>btc</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-cny" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cny <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-dollar" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>dollar <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-eur" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>eur</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-euro" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>euro <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-gbp" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>gbp</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-gg" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>gg</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-gg-circle" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>gg-circle</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-ils" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>ils</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-inr" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>inr</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-jpy" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>jpy</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-krw" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>krw</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-money" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>money</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-rmb" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>rmb <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-rouble" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>rouble <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-rub" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>rub</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-ruble" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>ruble <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-rupee" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>rupee <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-shekel" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>shekel <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-sheqel" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>sheqel <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-try" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>try</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-turkish-lira" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>turkish-lira <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-usd" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>usd</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-viacoin" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>viacoin</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-won" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>won <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-yen" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>yen <span class="text-muted">(alias)</span></a>
+    </div>
+  </div>
+</section>

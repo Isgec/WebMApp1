@@ -1,0 +1,35 @@
+<section id="chart">
+  <h5 class="page-header">Chart Icons</h5>
+  <div class="row fontawesome-icon-list">
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-area-chart" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>area-chart</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bar-chart" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bar-chart</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-bar-chart-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>bar-chart-o <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-line-chart" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>line-chart</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-pie-chart" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>pie-chart</a>
+    </div>
+  </div>
+</section>

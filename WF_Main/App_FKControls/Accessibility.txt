@@ -1,0 +1,119 @@
+<section id="accessibility">
+  <h5 class="page-header">Accessibility Icons</h5>
+  <div class="row fontawesome-icon-list">
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-american-sign-language-interpreting" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>american-sign-language-interpreting</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-asl-interpreting" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>asl-interpreting <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-assistive-listening-systems" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>assistive-listening-systems</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-audio-description" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>audio-description</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-blind" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>blind</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-braille" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>braille</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-cc" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>cc</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-deaf" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>deaf</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-deafness" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>deafness <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-hard-of-hearing" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>hard-of-hearing <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-low-vision" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>low-vision</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-question-circle-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>question-circle-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-sign-language" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>sign-language</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-signing" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>signing <span class="text-muted">(alias)</span></a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-tty" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>tty</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-universal-access" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>universal-access</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-volume-control-phone" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>volume-control-phone</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-wheelchair" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wheelchair</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a onclick="return icon_selected(this);" href="#">
+        <i class="fa fa-wheelchair-alt" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>wheelchair-alt</a>
+    </div>
+  </div>
+</section>

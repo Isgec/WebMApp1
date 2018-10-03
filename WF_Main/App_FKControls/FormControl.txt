@@ -1,0 +1,71 @@
+<section id="form-control">
+  <h5 class="page-header">Form Control Icons</h5>
+  <div class="row fontawesome-icon-list">
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-check-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>check-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-check-square-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>check-square-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-circle" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>circle</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-circle-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>circle-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-dot-circle-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>dot-circle-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-minus-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>minus-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-minus-square-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>minus-square-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-plus-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>plus-square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-plus-square-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>plus-square-o</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-square" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>square</a>
+    </div>
+    <div class="fa-hover col-md-3 col-sm-4">
+      <a href="#" onclick="return icon_selected(this);">
+        <i class="fa fa-square-o" aria-hidden="true">
+        </i>
+        <span class="sr-only">Example of </span>square-o</a>
+    </div>
+  </div>
+</section>
