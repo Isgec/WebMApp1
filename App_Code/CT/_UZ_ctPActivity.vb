@@ -26,14 +26,14 @@ Namespace SIS.CT
         Dim Results As String = ""
         Dim Sql As String = ""
         Sql &= " Select (case when (select count(*) from ttpisg183200 "
-        Sql &= "                          where t_cprj='" & t_cprj & "' and t_atid='" & t_cact & "' )=0"
+        Sql &= "            where t_cprj='" & t_cprj & "' and t_atid='" & t_cact & "' and t_orno='" & t_orno & "' )=0"
         Sql &= "         Then"
         Sql &= "           'No Record'"
         Sql &= "         Else"
         Sql &= "           (select convert(nvarchar(10),isnull(aa.t_aced,'')) from ttpisg183200 as aa"
-        Sql &= "             where aa.t_cprj ='" & t_cprj & "' and aa.t_atid='" & t_cact & "' "
+        Sql &= "             where aa.t_cprj ='" & t_cprj & "' and aa.t_atid='" & t_cact & "' and t_orno='" & t_orno & "'"
         Sql &= "               And aa.t_srno = (select max(bb.t_srno) from ttpisg183200 as bb"
-        Sql &= "                                where aa.t_cprj = bb.t_cprj And aa.t_atid = bb.t_atid)"
+        Sql &= "                                where aa.t_cprj = bb.t_cprj And aa.t_atid = bb.t_atid And aa.t_orno = bb.t_orno)"
         Sql &= "                               )"
         Sql &= "         End) As tmp"
         Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
@@ -225,7 +225,9 @@ Namespace SIS.CT
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
           While (Reader.Read())
-            Results.Add(New SIS.CT.ctPActivity(Reader))
+            Dim tmp As New SIS.CT.ctPActivity(Reader)
+            tmp.t_orno = t_orno
+            Results.Add(tmp)
           End While
           Reader.Close()
           _RecordCount = Cmd.Parameters("@RecordCount").Value

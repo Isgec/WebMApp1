@@ -76,7 +76,7 @@ Public Class MfgServices
     Dim OrderNo As String = CascadingDropDown.ParseKnownCategoryValuesString(knownCategoryValues)("t_orno")
     Dim Irefs As New List(Of CascadingDropDownNameValue)
     Dim Sql As String = ""
-    Sql &= " select distinct t220.t_sub1, t220.t_sub1 + '_' + t220.t_cprj  "
+    Sql &= " select distinct t220.t_sub1, t220.t_sub1 + '_' + t220.t_cprj + '_" & OrderNo & "'"
     Sql &= " from ttpisg220200 as t220 "
     Sql &= "     inner join tdmisg140200 as t140 on t220.t_sub1 = t140.t_iref and t220.t_cprj = t140.t_cprj "
     Sql &= "     inner join ttdisg002200 as t002 on t140.t_docn = t002.t_docn "
@@ -101,7 +101,6 @@ Public Class MfgServices
   Public Function GetProjectIrefs(knownCategoryValues As String, contextKey As String) As CascadingDropDownNameValue()
     Dim ProjectID As String = CascadingDropDown.ParseKnownCategoryValuesString(knownCategoryValues)("t_cprj")
     Dim Irefs As New List(Of CascadingDropDownNameValue)
-    'Dim mContext As String = IIf(contextKey.ToLower.Contains("dummy"), "", contextKey)
     Dim aVal() As String = contextKey.Split("|".ToCharArray)
     Dim Sql As String = ""
     Sql &= " select distinct t220.t_sub1, t220.t_sub1 + '_' + t220.t_cprj  "
@@ -126,6 +125,72 @@ Public Class MfgServices
       End Using
     End Using
     Return Irefs.ToArray()
+  End Function
+  <WebMethod(EnableSession:=True)>
+  Public Function GetMfgSubItems(knownCategoryValues As String) As CascadingDropDownNameValue()
+    Dim aVal() As String = CascadingDropDown.ParseKnownCategoryValuesString(knownCategoryValues)("t_iref").Split("_".ToCharArray)
+    Dim ItemRef As String = aVal(0)
+    Dim ProjectID As String = aVal(1)
+    Dim PoNo As String = aVal(2)
+    Dim SubItems As New List(Of CascadingDropDownNameValue)
+    Dim Sql As String = ""
+    Dim poType As Integer = GetPOType(PoNo)
+    Select Case poType
+      Case pakErpPOTypes.ISGECEngineered
+        Sql &= " select distinct ttpisg243200.t_sub2 + ' ' + ttpisg243200.t_sub3 + ' ' + ttpisg243200.t_sub4 As t_subx, "
+        Sql &= " ttpisg243200.t_sitm   "
+        Sql &= " from ttpisg220200, ttpisg243200 , tdmisg140200, ttdisg002200, tdmisg002200 "
+        Sql &= " where ttpisg243200.t_iref = ttpisg220200.t_sub1 "
+        Sql &= " and ttpisg243200.t_cprd = ttpisg220200.t_pcod   "
+        Sql &= " and ttpisg220200.t_sitm = ttpisg243200.t_sitm "
+        Sql &= " and ttpisg220200.t_sub1 = tdmisg140200.t_iref and ttpisg220200.t_cprj = tdmisg140200.t_cprj "
+        Sql &= " and tdmisg140200.t_docn = ttdisg002200.t_docn "
+        Sql &= " and tdmisg002200.t_docn = ttdisg002200.t_docn and tdmisg002200.t_item = ttdisg002200.t_item "
+        Sql &= " and ttpisg220200.t_sitm = tdmisg002200.t_sitm  "
+        Sql &= " and ttpisg220200.t_bohd = 'CT_MANUFACTURING' "
+        Sql &= " and ttpisg220200.t_cprj='" & ProjectID & "'"
+        Sql &= " and ttpisg220200.t_sub1='" & ItemRef & "'"
+        Sql &= " and ttdisg002200.t_orno='" & PoNo & "'"
+      Case Else   ' pakErpPOTypes.Boughtout, pakErpPOTypes.Package
+        'It is same as SubItem Function Given Below
+        Sql &= "  select distinct t243.t_sub2 + ' ' + t243.t_sub3 + ' ' + t243.t_sub4 As t_subx, t243.t_sitm "
+        Sql &= "  from ttpisg243200 as t243 "
+        Sql &= "    inner join ttpisg220200 as t220 on t243.t_iref = t220.t_sub1 and t243.t_cprd = t220.t_pcod "
+        Sql &= "  where "
+        Sql &= "        t220.t_cprj='" & ProjectID & "'"
+        Sql &= "    and t220.t_sub1='" & ItemRef & "'"
+    End Select
+    Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+      Using Cmd As SqlCommand = Con.CreateCommand()
+        Cmd.CommandType = CommandType.Text
+        Cmd.CommandText = Sql
+        Con.Open()
+        Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+        While (Reader.Read())
+          SubItems.Add(New CascadingDropDownNameValue() With {.name = Reader(0).ToString(), .value = Reader(1).ToString()})
+        End While
+        Reader.Close()
+      End Using
+    End Using
+    Return SubItems.ToArray()
+  End Function
+  Public Enum pakErpPOTypes
+    ISGECEngineered = 1
+    Package = 2
+    Boughtout = 3
+  End Enum
+
+  Private Function GetPOType(ByVal PoNo As String) As Integer
+    Dim mRet As Integer = 0
+    Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetConnectionString())
+      Using Cmd As SqlCommand = Con.CreateCommand()
+        Cmd.CommandType = CommandType.Text
+        Cmd.CommandText = "Select isnull(POTypeID,0) from PAK_PO where PONumber='" & PoNo & "'"
+        Con.Open()
+        mRet = Cmd.ExecuteScalar
+      End Using
+    End Using
+    Return mRet
   End Function
   <WebMethod(EnableSession:=True)>
   Public Function GetSubItems(knownCategoryValues As String) As CascadingDropDownNameValue()

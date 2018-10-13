@@ -48,6 +48,8 @@ Namespace SIS.CT
     Private _t_Refcntu As Int32 = 0
     Private _ttcmcs0522001_t_dsca As String = ""
     Private _FK_ttpisg220200_t_cprj As SIS.CT.ctProjects = Nothing
+    Public Property t_orno As String = ""
+    Public Property t_sitm As String = ""
     Public ReadOnly Property ForeColor() As System.Drawing.Color
       Get
         Dim mRet As System.Drawing.Color = Drawing.Color.Blue
@@ -214,7 +216,7 @@ Namespace SIS.CT
         Return _t_sdst
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_sdst = ""
         Else
           _t_sdst = value
@@ -229,7 +231,7 @@ Namespace SIS.CT
         Return _t_sdfn
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_sdfn = ""
         Else
           _t_sdfn = value
@@ -244,7 +246,7 @@ Namespace SIS.CT
         Return _t_acsd
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_acsd = ""
         Else
           _t_acsd = value
@@ -259,7 +261,7 @@ Namespace SIS.CT
         Return _t_acfn
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_acfn = ""
         Else
           _t_acfn = value
@@ -282,7 +284,7 @@ Namespace SIS.CT
         Return _t_otsd
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_otsd = ""
         Else
           _t_otsd = value
@@ -297,7 +299,7 @@ Namespace SIS.CT
         Return _t_oted
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_oted = ""
         Else
           _t_oted = value
@@ -633,12 +635,12 @@ Namespace SIS.CT
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_cpgv", SqlDbType.Float, 16, Record.t_cpgv)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_cact", SqlDbType.VarChar, 31, Record.t_cact)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_pcod", SqlDbType.VarChar, 10, Record.t_pcod)
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_sdst", SqlDbType.DateTime, 21, IIf(Record.t_sdst = "", "01/01/1753", Record.t_sdst))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_sdfn", SqlDbType.DateTime, 21, IIf(Record.t_sdfn = "", "01/01/1753", Record.t_sdfn))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_acsd", SqlDbType.DateTime, 21, IIf(Record.t_acsd = "", "01/01/1753", Record.t_acsd))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_acfn", SqlDbType.DateTime, 21, IIf(Record.t_acfn = "", "01/01/1753", Record.t_acfn))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_otsd", SqlDbType.DateTime, 21, IIf(Record.t_otsd = "", "01/01/1753", Record.t_otsd))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_oted", SqlDbType.DateTime, 21, IIf(Record.t_oted = "", "01/01/1753", Record.t_oted))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_sdst", SqlDbType.DateTime, 21, IIf(Record.t_sdst = "", "01/01/1970", Record.t_sdst))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_sdfn", SqlDbType.DateTime, 21, IIf(Record.t_sdfn = "", "01/01/1970", Record.t_sdfn))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_acsd", SqlDbType.DateTime, 21, IIf(Record.t_acsd = "", "01/01/1970", Record.t_acsd))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_acfn", SqlDbType.DateTime, 21, IIf(Record.t_acfn = "", "01/01/1970", Record.t_acfn))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_otsd", SqlDbType.DateTime, 21, IIf(Record.t_otsd = "", "01/01/1970", Record.t_otsd))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_oted", SqlDbType.DateTime, 21, IIf(Record.t_oted = "", "01/01/1970", Record.t_oted))
           'SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_iref", SqlDbType.VarChar, 51, Record.t_iref)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_rmks", SqlDbType.VarChar, 501, Record.t_rmks)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_gps3", SqlDbType.VarChar, 101, Record.t_gps3)

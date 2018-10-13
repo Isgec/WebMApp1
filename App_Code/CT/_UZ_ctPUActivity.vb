@@ -13,7 +13,7 @@ Namespace SIS.CT
         Return _t_oted
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_oted = ""
         Else
           _t_oted = value
@@ -28,7 +28,7 @@ Namespace SIS.CT
         Return _t_otsd
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_otsd = ""
         Else
           _t_otsd = value
@@ -43,7 +43,7 @@ Namespace SIS.CT
         Return _t_acsd
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_acsd = ""
         Else
           _t_acsd = value
@@ -58,7 +58,7 @@ Namespace SIS.CT
         Return _t_aced
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_aced = ""
         Else
           _t_aced = value
@@ -332,8 +332,13 @@ Namespace SIS.CT
             mayAddNewUpdate = False
           End If
         End If
+        If tmpL.t_cpgv + tmpL.t_tpgv >= 100 Then
+          mayAddNewUpdate = False
+        End If
       End If
       If Not mayAddNewUpdate Then
+        tmpU = tmpL
+      ElseIf tmpL IsNot Nothing AndAlso tmpL.t_tpgv = 0 Then
         tmpU = tmpL
       Else
         tmpU = New SIS.CT.ctPUActivity
@@ -369,20 +374,6 @@ Namespace SIS.CT
             .t_oted = ""
             .t_cpgv = 0.00
           End If
-
-          ''If tmpLFound Then
-          '.t_acsd = tmpA.t_acsd
-          '.t_aced = tmpA.t_acfn
-          '.t_otsd = tmpA.t_otsd
-          '.t_oted = tmpA.t_oted
-          '.t_cpgv = tmpA.t_cpgv
-          ''Else
-          ''  .t_acsd = ""
-          ''  .t_aced = ""
-          ''  .t_otsd = ""
-          ''  .t_oted = ""
-          ''  .t_cpgv = 0.00
-          ''End If
         End With
         tmpU.AddNewUpdate = mayAddNewUpdate
         tmpU = SIS.CT.ctPUActivity.ctPUActivityInsert(tmpU)

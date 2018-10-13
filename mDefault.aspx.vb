@@ -26,33 +26,6 @@ Partial Class mLGDefault
       ViewState.Add("QString", value)
     End Set
   End Property
-  Private Sub LGDefault_Load(sender As Object, e As EventArgs) Handles Me.Load
-    'If Not Page.User.Identity.IsAuthenticated AndAlso Not HttpContext.Current.Session("IsAuthenticated") Then
-    '  If Request.QueryString("UserID") IsNot Nothing AndAlso Request.QueryString("AppID") IsNot Nothing Then
-    '    Dim UserID As String = Request.QueryString("UserID")
-    '    Dim AppID As String = Request.QueryString("AppID")
-    '    AuthenticateAndRedirect(UserID, AppID)
-    '  ElseIf Request.QueryString("deviceID") Is Nothing Then
-    '    Me.invalidDevice.Visible = True
-    '  Else
-    '    DeviceID = Request.QueryString("deviceID")
-    '    Qstring = Request.QueryString.ToString
-    '    If DeviceID = String.Empty Then
-    '      Me.invalidDevice.Visible = True
-    '    Else
-    '      Dim tmpDvc As SIS.MAPP.maapRegisteredDevices = SIS.MAPP.maapRegisteredDevices.maapRegisteredDevicesGetByDeviceID(DeviceID)
-    '      If tmpDvc Is Nothing Then
-    '        Me.unknownDevice.Visible = True
-    '        Me.registerUser.Visible = True
-    '      Else
-    '        If AuthenticateRegisteredUser(tmpDvc.UserID) Then
-    '          Response.Redirect("mMenu.aspx?" & Request.QueryString.ToString)
-    '        End If
-    '      End If
-    '    End If
-    '  End If
-    'End If
-  End Sub
   Protected Sub AuthenticateAndRedirect(ByVal UserID As String, ByVal AppID As String)
     HttpContext.Current.Session("LoginID") = UserID
     Dim tmpApl As SIS.MAPP.mappApplications = SIS.MAPP.mappApplications.mappApplicationsGetByID(AppID)

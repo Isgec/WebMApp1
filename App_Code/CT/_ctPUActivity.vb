@@ -80,7 +80,7 @@ Namespace SIS.CT
         Return _t_plsd
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_plsd = ""
         Else
           _t_plsd = value
@@ -95,7 +95,7 @@ Namespace SIS.CT
         Return _t_plfd
       End Get
       Set(ByVal value As String)
-        If value = "01/01/1753" Then
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
           _t_plfd = ""
         Else
           _t_plfd = value
@@ -153,7 +153,7 @@ Namespace SIS.CT
     Public Property t_cron() As String
       Get
         If Not _t_cron = String.Empty Then
-          Return Convert.ToDateTime(_t_cron).ToString("dd/MM/yyyy")
+          Return Convert.ToDateTime(_t_cron).ToString("dd/MM/yyyy HH:mm:ss")
         End If
         Return _t_cron
       End Get
@@ -399,12 +399,12 @@ Namespace SIS.CT
           Cmd.CommandType = CommandType.StoredProcedure
           Cmd.CommandText = "spctPUActivityInsert"
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_srno", SqlDbType.Int, 11, Record.t_srno)
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_plsd", SqlDbType.DateTime, 21, IIf(Record.t_plsd = "", "01/01/1753", Record.t_plsd))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_plfd", SqlDbType.DateTime, 21, IIf(Record.t_plfd = "", "01/01/1753", Record.t_plfd))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_acsd", SqlDbType.DateTime, 21, IIf(Record.t_acsd = "", "01/01/1753", Record.t_acsd))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_aced", SqlDbType.DateTime, 21, IIf(Record.t_aced = "", "01/01/1753", Record.t_aced))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_otsd", SqlDbType.DateTime, 21, IIf(Record.t_otsd = "", "01/01/1753", Record.t_otsd))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_oted", SqlDbType.DateTime, 21, IIf(Record.t_oted = "", "01/01/1753", Record.t_oted))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_plsd", SqlDbType.DateTime, 21, IIf(Record.t_plsd = "", "01/01/1970", Record.t_plsd))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_plfd", SqlDbType.DateTime, 21, IIf(Record.t_plfd = "", "01/01/1970", Record.t_plfd))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_acsd", SqlDbType.DateTime, 21, IIf(Record.t_acsd = "", "01/01/1970", Record.t_acsd))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_aced", SqlDbType.DateTime, 21, IIf(Record.t_aced = "", "01/01/1970", Record.t_aced))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_otsd", SqlDbType.DateTime, 21, IIf(Record.t_otsd = "", "01/01/1970", Record.t_otsd))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_oted", SqlDbType.DateTime, 21, IIf(Record.t_oted = "", "01/01/1970", Record.t_oted))
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_puom", SqlDbType.VarChar, 11, Record.t_puom)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_tpgv", SqlDbType.Float, 16, Record.t_tpgv)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_cpgv", SqlDbType.Float, 16, Record.t_cpgv)
@@ -463,24 +463,32 @@ Namespace SIS.CT
         .t_rmks = Record.t_rmks
         .t_orno = IIf(.t_orno = "", Record.t_orno, .t_orno)
       End With
-      'Update Header
+      'Update CT 
       'Only in case of Erec & Commissioning NOT for MFG
       Dim tmpPA As SIS.CT.ctPActivity = SIS.CT.ctPActivity.ctPActivityGetByID(Record.t_cprj, Record.t_atid)
       Select Case tmpPA.t_bohd
         Case "CT_ERECTION", "CT_COMMISSIONING", "CT_ESTIMATION", "CT_LOGISTIC", "CT_MARKETING", "CT_PROJECT"
-          With tmpPA
-            .t_acsd = Record.t_acsd
-            .t_acfn = Record.t_aced
-            .t_otsd = Record.t_otsd
-            .t_oted = Record.t_oted
-            .t_rmks = Record.t_rmks
-            .t_gps1 = Record.t_gps1
-            .t_gps2 = Record.t_gps2
-            .t_gps3 = Record.t_gps3
-            .t_gps4 = Record.t_gps4
-            .t_cpgv = .t_cpgv + Record.t_tpgv
-          End With
-          tmpPA = SIS.CT.ctPActivity.UpdateData(tmpPA)
+          Dim Sql As String = ""
+          Sql &= " UPDATE ttpisg220200 SET "
+          Sql &= " t_acsd=convert(datetime,'" & Record.t_acsd & "',103), "
+          Sql &= " t_acfn=convert(datetime,'" & IIf(Record.t_aced = "", "01/01/1753", Record.t_aced) & "',103), "
+          Sql &= " t_otsd=convert(datetime,'" & IIf(Record.t_otsd = "", "01/01/1970", Record.t_otsd) & "',103), "
+          Sql &= " t_oted=convert(datetime,'" & IIf(Record.t_oted = "", "01/01/1970", Record.t_oted) & "',103), "
+          Sql &= " t_rmks='" & Record.t_rmks & "',"
+          Sql &= " t_gps1='" & Record.t_gps1 & "',"
+          Sql &= " t_gps2='" & Record.t_gps2 & "',"
+          Sql &= " t_gps3='" & Record.t_gps3 & "',"
+          Sql &= " t_gps4='" & Record.t_gps4 & "',"
+          Sql &= " t_cpgv= " & tmpPA.t_cpgv + Record.t_tpgv
+          Sql &= " WHERE t_cprj ='" & Record.t_cprj & "' AND t_cact ='" & Record.t_atid & "'"
+          Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+            Using Cmd As SqlCommand = Con.CreateCommand()
+              Cmd.CommandType = CommandType.Text
+              Cmd.CommandText = Sql
+              Con.Open()
+              Cmd.ExecuteNonQuery()
+            End Using
+          End Using
         Case "CT_MANUFACTURING"
           Dim mayUpdate As Boolean = False
           If tmpPA.t_acsd = "" Then
@@ -488,14 +496,27 @@ Namespace SIS.CT
           Else
             If Convert.ToDateTime(tmpPA.t_acsd) < Convert.ToDateTime("31/12/2000") Then
               mayUpdate = True
+            ElseIf Record.t_acsd <> "" Then
+              If Convert.ToDateTime(tmpPA.t_acsd) > Convert.ToDateTime(Record.t_acsd) Then
+                mayUpdate = True
+              End If
             End If
           End If
           If mayUpdate Then
-            tmpPA.t_acsd = Record.t_acsd
-            tmpPA = SIS.CT.ctPActivity.UpdateData(tmpPA)
+            Dim Sql As String = ""
+            Sql &= " UPDATE ttpisg220200 SET "
+            Sql &= " t_acsd=convert(datetime,'" & Record.t_acsd & "',103) "
+            Sql &= " WHERE t_cprj ='" & Record.t_cprj & "' AND t_cact ='" & Record.t_atid & "'"
+            Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+              Using Cmd As SqlCommand = Con.CreateCommand()
+                Cmd.CommandType = CommandType.Text
+                Cmd.CommandText = Sql
+                Con.Open()
+                Cmd.ExecuteNonQuery()
+              End Using
+            End Using
           End If
       End Select
-      '==================
       Return SIS.CT.ctPUActivity.UpdateData(_Rec)
     End Function
     Public Shared Function UpdateData(ByVal Record As SIS.CT.ctPUActivity) As SIS.CT.ctPUActivity
@@ -507,12 +528,12 @@ Namespace SIS.CT
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@Original_t_atid", SqlDbType.VarChar, 31, Record.t_atid)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@Original_t_cprj", SqlDbType.NVarChar, 7, Record.t_cprj)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_srno", SqlDbType.Int, 11, Record.t_srno)
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_plsd", SqlDbType.DateTime, 21, IIf(Record.t_plsd = "", "01/01/1753", Record.t_plsd))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_plfd", SqlDbType.DateTime, 21, IIf(Record.t_plfd = "", "01/01/1753", Record.t_plfd))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_acsd", SqlDbType.DateTime, 21, IIf(Record.t_acsd = "", "01/01/1753", Record.t_acsd))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_aced", SqlDbType.DateTime, 21, IIf(Record.t_aced = "", "01/01/1753", Record.t_aced))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_otsd", SqlDbType.DateTime, 21, IIf(Record.t_otsd = "", "01/01/1753", Record.t_otsd))
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_oted", SqlDbType.DateTime, 21, IIf(Record.t_oted = "", "01/01/1753", Record.t_oted))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_plsd", SqlDbType.DateTime, 21, IIf(Record.t_plsd = "", "01/01/1970", Record.t_plsd))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_plfd", SqlDbType.DateTime, 21, IIf(Record.t_plfd = "", "01/01/1970", Record.t_plfd))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_acsd", SqlDbType.DateTime, 21, IIf(Record.t_acsd = "", "01/01/1970", Record.t_acsd))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_aced", SqlDbType.DateTime, 21, IIf(Record.t_aced = "", "01/01/1970", Record.t_aced))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_otsd", SqlDbType.DateTime, 21, IIf(Record.t_otsd = "", "01/01/1970", Record.t_otsd))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_oted", SqlDbType.DateTime, 21, IIf(Record.t_oted = "", "01/01/1970", Record.t_oted))
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_puom", SqlDbType.VarChar, 11, Record.t_puom)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_tpgv", SqlDbType.Float, 16, Record.t_tpgv)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_cpgv", SqlDbType.Float, 16, Record.t_cpgv)

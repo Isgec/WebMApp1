@@ -7,10 +7,11 @@ Partial Class mGctMfgActivity
         Dim t_cprj As String = GVctPActivity.DataKeys(e.CommandArgument).Values("t_cprj")
         Dim t_cact As String = GVctPActivity.DataKeys(e.CommandArgument).Values("t_cact")
         Dim t_orno As String = F_t_orno.SelectedValue
+        Dim t_nama As String = F_t_bpid.SelectedItem.Text
         Dim tmpU As SIS.CT.ctPUActivity = SIS.CT.ctPUActivity.GetctPUActivityForUpdate(t_cprj, t_cact, t_orno, "CT_MANUFACTURING")
         If tmpU IsNot Nothing Then
           Dim t_srno As String = tmpU.t_srno
-          Dim RedirectUrl As String = "~/CT_mMain/App_Edit/mEctPUActivity.aspx" & "?t_cprj=" & t_cprj & "&t_cact=" & t_cact & "&t_srno=" & t_srno & "&ed=" & IIf(tmpU.AddNewUpdate, "Y", "N")
+          Dim RedirectUrl As String = "~/CT_mMain/App_Edit/mEctPUActivity.aspx" & "?t_cprj=" & t_cprj & "&t_cact=" & t_cact & "&t_srno=" & t_srno & "&ed=" & IIf(tmpU.AddNewUpdate, "Y", "N") & "&t_nama=" & t_nama
           Response.Redirect(RedirectUrl)
         End If
       Catch ex As Exception
@@ -57,6 +58,5 @@ Partial Class mGctMfgActivity
       e.Row.CssClass = CType(e.Row.DataItem, SIS.CT.ctPActivity).bgCssClass
     End If
   End Sub
-
 
 End Class

@@ -176,7 +176,7 @@ input:checked + .slider:before {
               PromptText="Select Sub Item"
               PromptValue=""
               ServicePath="~/App_Services/MfgServices.asmx" 
-              ServiceMethod="GetSubItems"
+              ServiceMethod="GetMfgSubItems"
               Category="t_sitm"
               LoadingText="Loading. . ."
               runat="server" />
