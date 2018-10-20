@@ -4,13 +4,22 @@ Imports System.Data.SqlClient
 Imports System.Configuration
 Imports System.Web.Configuration
 Imports Microsoft.VisualBasic
-
+Imports System.Diagnostics
 Namespace SIS.SYS.SQLDatabase
   Partial Public Class DBCommon
     Implements IDisposable
     Public Shared Property BaaNLive As Boolean = False
     Public Shared Property JoomlaLive As Boolean = False
     Public Shared Function GetBaaNConnectionString() As String
+      'This is for CT to run on BaaN Test Server for testing as data is available on Test Server
+      Dim ct As New StackTrace
+      Dim FunctionName As String = ct.GetFrame(1).GetMethod().Name
+      Select Case FunctionName
+        Case "UZ_dmisg121200SelectList", "UZ_dmisg121200SelectList_All"
+          'Always Return BaaN Live
+          Return "Data Source=192.9.200.129;Initial Catalog=inforerpdb;Integrated Security=False;User Instance=False;Persist Security Info=True;User ID=lalit;Password=scorpions"
+      End Select
+
       If BaaNLive Then
         Return "Data Source=192.9.200.129;Initial Catalog=inforerpdb;Integrated Security=False;User Instance=False;Persist Security Info=True;User ID=lalit;Password=scorpions"
       Else
