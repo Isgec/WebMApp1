@@ -183,6 +183,7 @@ input:checked + .slider:before {
           </div>
           <div class="input-group mb-3">
             <asp:Button ID="cmdSubmit" runat="server" CssClass="btn btn-primary" Text="Submit" />
+            <asp:HyperLink ID="cmdHome" runat="server" CssClass="btn btn-danger" Text="Home" NavigateUrl="~/mMenu.aspx"></asp:HyperLink>
           </div>
         </div>
         <br />

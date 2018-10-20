@@ -36,6 +36,11 @@ Namespace SIS.SYS.SQLDatabase
       Cmd.Parameters.Add(Parm)
     End Sub
     Private disposedValue As Boolean = False    ' To detect redundant calls
+
+    Shared Sub New()
+      BaaNLive = Convert.ToBoolean(ConfigurationManager.AppSettings("BaaNLive"))
+      JoomlaLive = Convert.ToBoolean(ConfigurationManager.AppSettings("JoomlaLive"))
+    End Sub
     ' IDisposable
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
       If Not Me.disposedValue Then

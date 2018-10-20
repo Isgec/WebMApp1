@@ -468,9 +468,11 @@ Namespace SIS.CT
       Dim tmpPA As SIS.CT.ctPActivity = SIS.CT.ctPActivity.ctPActivityGetByID(Record.t_cprj, Record.t_atid)
       Select Case tmpPA.t_bohd
         Case "CT_ERECTION", "CT_COMMISSIONING", "CT_ESTIMATION", "CT_LOGISTIC", "CT_MARKETING", "CT_PROJECT"
+          If Record.t_tpgv + Record.t_cpgv < 100 Then Record.t_aced = ""
+          If Record.t_tpgv + Record.t_cpgv = 0 Then Record.t_acsd = ""
           Dim Sql As String = ""
           Sql &= " UPDATE ttpisg220200 SET "
-          Sql &= " t_acsd=convert(datetime,'" & Record.t_acsd & "',103), "
+          Sql &= " t_acsd=convert(datetime,'" & IIf(Record.t_acsd = "", "01/01/1753", Record.t_acsd) & "',103), "
           Sql &= " t_acfn=convert(datetime,'" & IIf(Record.t_aced = "", "01/01/1753", Record.t_aced) & "',103), "
           Sql &= " t_otsd=convert(datetime,'" & IIf(Record.t_otsd = "", "01/01/1970", Record.t_otsd) & "',103), "
           Sql &= " t_oted=convert(datetime,'" & IIf(Record.t_oted = "", "01/01/1970", Record.t_oted) & "',103), "
@@ -479,7 +481,7 @@ Namespace SIS.CT
           Sql &= " t_gps2='" & Record.t_gps2 & "',"
           Sql &= " t_gps3='" & Record.t_gps3 & "',"
           Sql &= " t_gps4='" & Record.t_gps4 & "',"
-          Sql &= " t_cpgv= " & tmpPA.t_cpgv + Record.t_tpgv
+          Sql &= " t_cpgv= " & Record.t_cpgv + Record.t_tpgv
           Sql &= " WHERE t_cprj ='" & Record.t_cprj & "' AND t_cact ='" & Record.t_atid & "'"
           Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
             Using Cmd As SqlCommand = Con.CreateCommand()
@@ -492,7 +494,9 @@ Namespace SIS.CT
         Case "CT_MANUFACTURING"
           Dim mayUpdate As Boolean = False
           If tmpPA.t_acsd = "" Then
-            mayUpdate = True
+            If Record.t_tpgv > 0 Then
+              mayUpdate = True
+            End If
           Else
             If Convert.ToDateTime(tmpPA.t_acsd) < Convert.ToDateTime("31/12/2000") Then
               mayUpdate = True
@@ -501,11 +505,18 @@ Namespace SIS.CT
                 mayUpdate = True
               End If
             End If
+            If Record.t_tpgv + Record.t_cpgv = 0 Then
+              Record.t_acsd = ""
+              If Convert.ToDateTime(tmpPA.t_acsd) > Convert.ToDateTime("31/12/2000") Then
+                mayUpdate = True
+              End If
+            End If
+
           End If
           If mayUpdate Then
             Dim Sql As String = ""
             Sql &= " UPDATE ttpisg220200 SET "
-            Sql &= " t_acsd=convert(datetime,'" & Record.t_acsd & "',103) "
+            Sql &= " t_acsd=convert(datetime,'" & IIf(Record.t_acsd = "", "01/01/1753", Record.t_acsd) & "',103) "
             Sql &= " WHERE t_cprj ='" & Record.t_cprj & "' AND t_cact ='" & Record.t_atid & "'"
             Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
               Using Cmd As SqlCommand = Con.CreateCommand()

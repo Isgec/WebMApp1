@@ -32,10 +32,6 @@
                   var val = 0.00;
                   if (tpgv.value != '') { try { val = parseFloat(tpgv.value); } catch (x) { } }
                   if (cpgv.innerText != '') { try { val = val + parseFloat(cpgv.innerText); } catch (x) { } }
-                  //if (tpgv.value == '') { tpgv.value = 0; }
-                  //if (cpgv.value == '') { cpgv.value = 0; }
-
-                  //var val = parseFloat(tpgv.value) + parseFloat(cpgv.innerText);
 
                   if (val < 0 || val > 100) {
                     alert('Total Progress % Can NOT be less than ZERO or greater than HUNDRED.');
@@ -48,6 +44,17 @@
                       acsd.disabled = false;
                       ValidatorEnable($get('RFVF_t_acsd'), true);
                     }
+                    if (cpgv.innerText != '') {
+                      if (parseFloat(cpgv.innerText)==0){
+                        acsd.disabled = false;
+                        ValidatorEnable($get('RFVF_t_acsd'), true);
+                      }
+                    }
+                  }
+                  if (val == 0) {
+                    //acsd.value = '';
+                    acsd.disabled = true;
+                    ValidatorEnable($get('RFVF_t_acsd'), false);
                   }
                   if (val == 100) {
                     if (aced.value == '') {
