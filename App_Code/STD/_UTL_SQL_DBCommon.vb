@@ -15,7 +15,7 @@ Namespace SIS.SYS.SQLDatabase
       Dim ct As New StackTrace
       Dim FunctionName As String = ct.GetFrame(1).GetMethod().Name
       Select Case FunctionName
-        Case "UZ_dmisg121200SelectList", "UZ_dmisg121200SelectList_All"
+        Case "UZ_dmisg121200SelectList", "UZ_dmisg121200SelectList_All", "ediAFileGetByHandleIndex"
           'Always Return BaaN Live
           Return "Data Source=192.9.200.129;Initial Catalog=inforerpdb;Integrated Security=False;User Instance=False;Persist Security Info=True;User ID=lalit;Password=scorpions"
       End Select

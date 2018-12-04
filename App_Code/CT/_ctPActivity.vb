@@ -50,6 +50,9 @@ Namespace SIS.CT
     Private _FK_ttpisg220200_t_cprj As SIS.CT.ctProjects = Nothing
     Public Property t_orno As String = ""
     Public Property t_sitm As String = ""
+    Public Property SubItem As String = ""
+    Public Property t_days As Integer = 0
+    Public Property t_type As String = ""
     Public ReadOnly Property ForeColor() As System.Drawing.Color
       Get
         Dim mRet As System.Drawing.Color = Drawing.Color.Blue
@@ -517,7 +520,7 @@ Namespace SIS.CT
           Cmd.CommandText = "spctPActivitySelectByID"
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_cprj", SqlDbType.VarChar, t_cprj.ToString.Length, t_cprj)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_cact", SqlDbType.VarChar, t_cact.ToString.Length, t_cact)
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@LoginID", SqlDbType.NVarChar, 9, HttpContext.Current.Session("LoginID"))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@LoginID", SqlDbType.NVarChar, 9, "")
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
           If Reader.Read() Then

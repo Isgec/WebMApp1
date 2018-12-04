@@ -126,6 +126,36 @@ Namespace SIS.CT
         End If
       End Set
     End Property
+    Public Property dt_cted() As String
+      Get
+        If Not _t_cted = String.Empty Then
+          Return Convert.ToDateTime(_t_cted).ToString("yyyy-MM-dd")
+        End If
+        Return ""
+      End Get
+      Set(ByVal value As String)
+        If value = "01/01/0001 00:00:00" Then
+          _t_cted = ""
+        Else
+          _t_cted = value
+        End If
+      End Set
+    End Property
+    Public Property dt_ctsd() As String
+      Get
+        If Not _t_ctsd = String.Empty Then
+          Return Convert.ToDateTime(_t_ctsd).ToString("yyyy-MM-dd")
+        End If
+        Return ""
+      End Get
+      Set(ByVal value As String)
+        If value = "01/01/0001 00:00:00" Then
+          _t_ctsd = ""
+        Else
+          _t_ctsd = value
+        End If
+      End Set
+    End Property
     Public Shared Function GetLastUpdate(ByVal t_cprj As String, ByVal t_atid As String, ByVal t_orno As String) As SIS.CT.ctPUActivity
       Dim Results As SIS.CT.ctPUActivity = Nothing
       Dim Sql As String = ""

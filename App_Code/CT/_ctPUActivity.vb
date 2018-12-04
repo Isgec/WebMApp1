@@ -30,6 +30,10 @@ Namespace SIS.CT
     Private _t_oted As String = ""
     Public Property t_orno As String = ""
     Public Property t_bohd As String = ""
+    Private _t_cted As String = ""
+    Private _t_ctsd As String = ""
+    Public Property OnlyFullProgress As String = "no"
+
     Private _ttcmcs0522001_t_dsca As String = ""
     Private _ttpisg2202002_t_desc As String = ""
     Private _FK_ttpisg183200_t_cprj As SIS.CT.ctProjects = Nothing
@@ -99,6 +103,36 @@ Namespace SIS.CT
           _t_plfd = ""
         Else
           _t_plfd = value
+        End If
+      End Set
+    End Property
+    Public Property t_ctsd() As String
+      Get
+        If Not _t_ctsd = String.Empty Then
+          Return Convert.ToDateTime(_t_ctsd).ToString("dd/MM/yyyy")
+        End If
+        Return _t_ctsd
+      End Get
+      Set(ByVal value As String)
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
+          _t_ctsd = ""
+        Else
+          _t_ctsd = value
+        End If
+      End Set
+    End Property
+    Public Property t_cted() As String
+      Get
+        If Not _t_cted = String.Empty Then
+          Return Convert.ToDateTime(_t_cted).ToString("dd/MM/yyyy")
+        End If
+        Return _t_cted
+      End Get
+      Set(ByVal value As String)
+        If value = "01/01/1753" OrElse value = "01/01/1970" Then
+          _t_cted = ""
+        Else
+          _t_cted = value
         End If
       End Set
     End Property
@@ -303,14 +337,29 @@ Namespace SIS.CT
     <DataObjectMethod(DataObjectMethodType.Select)> _
     Public Shared Function ctPUActivityGetByID(ByVal t_cprj As String, ByVal t_atid As String, ByVal t_srno As Int32) As SIS.CT.ctPUActivity
       Dim Results As SIS.CT.ctPUActivity = Nothing
+      'If Outlook Duration is ZERO OnlyFullProgress [100%] is allowed
+      Dim Sql As String = ""
+      Sql &= "  SELECT"
+      Sql &= "    [ttpisg183200].* ,"
+      Sql &= "    [ttpisg2202002].[t_otsd] AS t_ctsd,"
+      Sql &= "    [ttpisg2202002].[t_oted] AS t_cted,"
+      Sql &= "    (case when [ttpisg2202002].[t_odur] = 0 then 'yes' else 'no' end)  AS OnlyFullProgress,"
+      Sql &= "    [ttcmcs0522001].[t_dsca] AS ttcmcs0522001_t_dsca,"
+      Sql &= "    [ttpisg2202002].[t_desc] AS ttpisg2202002_t_desc "
+      Sql &= "  FROM [ttpisg183200] "
+      Sql &= "  INNER JOIN [ttcmcs052200] AS [ttcmcs0522001]"
+      Sql &= "    ON [ttpisg183200].[t_cprj] = [ttcmcs0522001].[t_cprj]"
+      Sql &= "  INNER JOIN [ttpisg220200] AS [ttpisg2202002]"
+      Sql &= "    ON [ttpisg183200].[t_cprj] = [ttpisg2202002].[t_cprj]"
+      Sql &= "    AND [ttpisg183200].[t_atid] = [ttpisg2202002].[t_cact]"
+      Sql &= "  WHERE"
+      Sql &= "  [ttpisg183200].[t_cprj] ='" & t_cprj & "'"
+      Sql &= "  AND [ttpisg183200].[t_atid] ='" & t_atid & "'"
+      Sql &= "  AND [ttpisg183200].[t_srno] = " & t_srno
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
-          Cmd.CommandType = CommandType.StoredProcedure
-          Cmd.CommandText = "spctPUActivitySelectByID"
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_cprj", SqlDbType.NVarChar, t_cprj.ToString.Length, t_cprj)
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_atid", SqlDbType.VarChar, t_atid.ToString.Length, t_atid)
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_srno", SqlDbType.Int, t_srno.ToString.Length, t_srno)
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@LoginID", SqlDbType.NVarChar, 9, HttpContext.Current.Session("LoginID"))
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
           If Reader.Read() Then
@@ -474,8 +523,10 @@ Namespace SIS.CT
           Sql &= " UPDATE ttpisg220200 SET "
           Sql &= " t_acsd=convert(datetime,'" & IIf(Record.t_acsd = "", "01/01/1753", Record.t_acsd) & "',103), "
           Sql &= " t_acfn=convert(datetime,'" & IIf(Record.t_aced = "", "01/01/1753", Record.t_aced) & "',103), "
-          Sql &= " t_otsd=convert(datetime,'" & IIf(Record.t_otsd = "", "01/01/1970", Record.t_otsd) & "',103), "
-          Sql &= " t_oted=convert(datetime,'" & IIf(Record.t_oted = "", "01/01/1970", Record.t_oted) & "',103), "
+          'Sql &= " t_otsd=convert(datetime,'" & IIf(Record.t_otsd = "", "01/01/1970", Record.t_otsd) & "',103), "
+          'Sql &= " t_oted=convert(datetime,'" & IIf(Record.t_oted = "", "01/01/1970", Record.t_oted) & "',103), "
+          Sql &= " t_mosd=convert(datetime,'" & IIf(Record.t_otsd = "", "01/01/1753", Record.t_otsd) & "',103), "
+          Sql &= " t_moed=convert(datetime,'" & IIf(Record.t_oted = "", "01/01/1753", Record.t_oted) & "',103), "
           Sql &= " t_rmks='" & Record.t_rmks & "',"
           Sql &= " t_gps1='" & Record.t_gps1 & "',"
           Sql &= " t_gps2='" & Record.t_gps2 & "',"

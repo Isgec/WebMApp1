@@ -84,7 +84,7 @@ Namespace SIS.CT
     End Property
     Public Readonly Property DisplayField() As String
       Get
-        Return "" & _t_dsca.ToString.PadRight(30, " ")
+        Return "" & _t_dsca.ToString.PadRight(50, " ")
       End Get
     End Property
     Public Readonly Property PrimaryKey() As String
@@ -142,12 +142,10 @@ Namespace SIS.CT
     <DataObjectMethod(DataObjectMethodType.Select)>
     Public Shared Function ctProjectsGetByID(ByVal t_cprj As String) As SIS.CT.ctProjects
       Dim Results As SIS.CT.ctProjects = Nothing
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
-          Cmd.CommandType = CommandType.StoredProcedure
-          Cmd.CommandText = "spctProjectsSelectByID"
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_cprj", SqlDbType.VarChar, t_cprj.ToString.Length, t_cprj)
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@LoginID", SqlDbType.NVarChar, 9, HttpContext.Current.Session("LoginID"))
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = "select top 1 ProjectID as t_cprj, Description as t_dsca from IDM_Projects where projectid='" & t_cprj & "'"
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
           If Reader.Read() Then

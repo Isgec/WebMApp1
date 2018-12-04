@@ -12,7 +12,7 @@
   <!--Bootstrap 4.0 uses Jquery 3 or above, Popper & Tooltip-->
   <link rel="stylesheet" href="/../UserRights/bs4.0/css/bootstrap.min.css" />
   <script type="text/javascript" src="/../UserRights/Popper1.0/Popper.min.js"></script>
-  <script type="text/javascript" src="/../UserRights/bs4.0/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/../UserRights/bs4.0/js/bootstrap.min.js"></script>
   <style>
 .autocomplete_completionListElement {
   visibility: hidden;

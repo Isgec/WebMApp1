@@ -29,6 +29,7 @@
                   var cpgv = $get('F_t_cpgv');
                   var acsd = $get('F_t_acsd');
                   var aced = $get('F_t_aced');
+                  var ofpr = $get('OnlyFullProgress');
                   var val = 0.00;
                   if (tpgv.value != '') { try { val = parseFloat(tpgv.value); } catch (x) { } }
                   if (cpgv.innerText != '') { try { val = val + parseFloat(cpgv.innerText); } catch (x) { } }
@@ -38,6 +39,14 @@
                     tpgv.value = '';
                     tpgv.focus();
                     return false;
+                  }
+                  if (ofpr.value == 'yes') {
+                    if (val > 0 && val < 100) {
+                      alert('Progress % Can be ZERO or HUNDRED PERCENT.');
+                      tpgv.value = '';
+                      tpgv.focus();
+                      return false;
+                    }
                   }
                   if (tpgv.value > '0') {
                     if (acsd.value == '') {
@@ -120,6 +129,7 @@
                 }
               }
             </script>
+            <asp:TextBox ID="OnlyFullProgress" runat="server" Text='<%# Eval("OnlyFullProgress") %>' style="display:none;"></asp:TextBox>
             <div class="form-group">
               <h6><span class="badge badge-secondary">Project</span></h6>
               <div class="input-group mb-3">
@@ -155,6 +165,23 @@
                   ID="Label2"
                   Text='<%# t_nama %>'
                   CssClass="form-control"
+                  runat="Server" />
+              </div>
+              <h6><span class="badge badge-secondary">System driven outlook Start & Finish Date</span></h6>
+              <div class="input-group mb-3">
+                <asp:TextBox
+                  ID="Label3"
+                  Text='<%# Eval("dt_ctsd") %>'
+                  CssClass="form-control"
+                  type="date"
+                  enabled="false"
+                  runat="Server" />
+                <asp:TextBox
+                  ID="Label4"
+                  Text='<%# Eval("dt_cted") %>'
+                  CssClass="form-control"
+                  type="date"
+                  enabled="false"
                   runat="Server" />
               </div>
               <h6><span class="badge badge-secondary">% Progress :</span></h6>

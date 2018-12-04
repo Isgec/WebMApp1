@@ -545,5 +545,278 @@ Namespace SIS.CT
       End Using
       Return Results
     End Function
+    Public Shared Function UZ_DelayedActivity(ByVal t_cprj As String, ByVal t_acty As String, ByVal OrderBy As String) As List(Of SIS.CT.ctPActivity)
+      Dim Results As List(Of SIS.CT.ctPActivity) = Nothing
+      Dim t_date As String = Now.ToString("dd/MM/yyyy")
+      Dim Sql As String = ""
+      Sql &= "select * from (                                                                                                                                                                                     "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_dela as t_days                                                                                                                                                                 "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'"
+      Sql &= "And t_acty='" & t_acty & "'"
+      Sql &= "and t_sdst between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) And convert(datetime,'" & t_date & "',103)                                                                            "
+      Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela >0 then 1 else  0 end                                                                                   "
+      Sql &= "union all                                                                                                                                                                                           "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_dela as t_days                                                                                                                                                              "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'                                                                                                                                                                      "
+      Sql &= "And t_acty='" & t_acty & "'                                                                                                                                                                        "
+      Sql &= "and t_sdst between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) And convert(datetime,'" & t_date & "',103)                                                                            "
+      Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela >0 then 1 else  0 end                                                                                "
+      Sql &= "union all                                                                                                                                                                                           "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_delf as t_days                                                                                                                                                                 "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'                                                                                                                                                                      "
+      Sql &= "And t_acty='" & t_acty & "'                                                                                                                                                                        "
+      Sql &= "and t_sdfn between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) And convert(datetime,'" & t_date & "',103)                                                                            "
+      Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf >0 then 1 else  0 end                                                                                   "
+      Sql &= "union all                                                                                                                                                                                           "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_delf as t_days                                                                                                                                                              "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'                                                                                                                                                                      "
+      Sql &= "And t_acty='" & t_acty & "'                                                                                                                                                                        "
+      Sql &= "and t_sdfn between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) And convert(datetime,'" & t_date & "',103)                                                                            "
+      Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf >0 then 1 else  0 end                                                                                "
+      Sql &= ") as tmp                                                                                                                                                                                            "
+      Sql &= "order by t_days desc, t_sub1                                                                                                                                                                                "
+
+
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          Results = New List(Of SIS.CT.ctPActivity)()
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            Dim tmp As New SIS.CT.ctPActivity(Reader)
+            Results.Add(tmp)
+          End While
+          Reader.Close()
+        End Using
+      End Using
+      Return Results
+    End Function
+    Public Shared Function UZ_BacklogActivity(ByVal t_cprj As String, ByVal t_acty As String, ByVal OrderBy As String) As List(Of SIS.CT.ctPActivity)
+      Dim Results As List(Of SIS.CT.ctPActivity) = Nothing
+      Dim Period As SIS.CT.tpisg216.ProjectPeriod = SIS.CT.tpisg216.StartFinish(t_cprj)
+      Dim s_date As String = Period.StDt.ToString("dd/MM/yyyy")
+      Dim t_date As String = Now.AddDays(-31).ToString("dd/MM/yyyy")
+      Dim Sql As String = ""
+      Sql &= "select * from (                                                                                                                                                                                     "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_dela as t_days                                                                                                                                                                 "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'"
+      Sql &= "And t_acty='" & t_acty & "'"
+      Sql &= "and t_sdst between convert(datetime,'" & s_date & "',103) And DATEADD(d,-31, convert(datetime,'" & t_date & "',103))                                                                            "
+      Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela >0 then 1 else  0 end                                                                                   "
+      Sql &= "union all                                                                                                                                                                                           "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_dela as t_days                                                                                                                                                              "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'                                                                                                                                                                      "
+      Sql &= "And t_acty='" & t_acty & "'                                                                                                                                                                        "
+      Sql &= "and t_sdst between convert(datetime,'" & s_date & "',103) And DATEADD(d,-31, convert(datetime,'" & t_date & "',103))                                                                            "
+      Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela >0 then 1 else  0 end                                                                                "
+      Sql &= "union all                                                                                                                                                                                           "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_delf as t_days                                                                                                                                                                 "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'                                                                                                                                                                      "
+      Sql &= "And t_acty='" & t_acty & "'                                                                                                                                                                        "
+      Sql &= "and t_sdfn between convert(datetime,'" & s_date & "',103) And DATEADD(d,-31, convert(datetime,'" & t_date & "',103))                                                                            "
+      Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf >0 then 1 else  0 end                                                                                   "
+      Sql &= "union all                                                                                                                                                                                           "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_delf as t_days                                                                                                                                                              "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'                                                                                                                                                                      "
+      Sql &= "And t_acty='" & t_acty & "'                                                                                                                                                                        "
+      Sql &= "and t_sdfn between convert(datetime,'" & s_date & "',103) And DATEADD(d,-31, convert(datetime,'" & t_date & "',103))                                                                            "
+      Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf >0 then 1 else  0 end                                                                                "
+      Sql &= ") as tmp                                                                                                                                                                                            "
+      Sql &= "order by t_days desc, t_sub1                                                                                                                                                                                "
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          Results = New List(Of SIS.CT.ctPActivity)()
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            Dim tmp As New SIS.CT.ctPActivity(Reader)
+            Results.Add(tmp)
+          End While
+          Reader.Close()
+        End Using
+      End Using
+      Return Results
+    End Function
+    Public Shared Function UZ_OverallDelayedActivity(ByVal t_cprj As String, ByVal t_acty As String, ByVal OrderBy As String) As List(Of SIS.CT.ctPActivity)
+      Dim Results As List(Of SIS.CT.ctPActivity) = Nothing
+      If t_cprj = "" Then Return Results
+      Dim Period As SIS.CT.tpisg216.ProjectPeriod = SIS.CT.tpisg216.StartFinish(t_cprj)
+      Dim s_date As String = Period.StDt.ToString("dd/MM/yyyy")
+      Dim t_date As String = Now.ToString("dd/MM/yyyy")
+      Dim Sql As String = ""
+      Sql &= "select top 10 * from (                                                                                                                                                                                     "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_dela as t_days                                                                                                                                                                 "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'"
+      Sql &= "And t_acty='" & t_acty & "'"
+      Sql &= "and t_sdst between convert(datetime,'" & s_date & "',103) And convert(datetime,'" & t_date & "',103)                                                                            "
+      Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela >0 then 1 else  0 end                                                                                   "
+      Sql &= "union all                                                                                                                                                                                           "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_dela as t_days                                                                                                                                                              "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'                                                                                                                                                                      "
+      Sql &= "And t_acty='" & t_acty & "'                                                                                                                                                                        "
+      Sql &= "and t_sdst between convert(datetime,'" & s_date & "',103) And convert(datetime,'" & t_date & "',103)                                                                            "
+      Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela >0 then 1 else  0 end                                                                                "
+      Sql &= "union all                                                                                                                                                                                           "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_delf as t_days                                                                                                                                                                 "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'                                                                                                                                                                      "
+      Sql &= "And t_acty='" & t_acty & "'                                                                                                                                                                        "
+      Sql &= "and t_sdfn between convert(datetime,'" & s_date & "',103) And convert(datetime,'" & t_date & "',103)                                                                            "
+      Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf >0 then 1 else  0 end                                                                                   "
+      Sql &= "union all                                                                                                                                                                                           "
+      Sql &= "select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,                                                                                                                              "
+      Sql &= "(select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+      Sql &= "t_drem as t_type,                                                                                                                                                                                     "
+      Sql &= "t_delf as t_days                                                                                                                                                              "
+      Sql &= "from ttpisg220200                                                                                                                                                                                   "
+      Sql &= "where t_cprj='" & t_cprj & "'                                                                                                                                                                      "
+      Sql &= "And t_acty='" & t_acty & "'                                                                                                                                                                        "
+      Sql &= "and t_sdfn between convert(datetime,'" & s_date & "',103) And convert(datetime,'" & t_date & "',103)                                                                            "
+      Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf >0 then 1 else  0 end                                                                                "
+      Sql &= ") as tmp                                                                                                                                                                                            "
+      Sql &= "order by t_days desc, t_sub1                                                                                                                                                                                "
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          Results = New List(Of SIS.CT.ctPActivity)()
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            Dim tmp As New SIS.CT.ctPActivity(Reader)
+            Results.Add(tmp)
+          End While
+          Reader.Close()
+        End Using
+      End Using
+      Return Results
+    End Function
+    Public Shared Function UZ_IrefWiseDelayedActivity(ByVal t_cprj As String, ByVal t_cact As String, ByVal t_acty As String, ByVal ID As String, ByVal All As Boolean, ByVal OrderBy As String) As List(Of SIS.CT.ctPActivity)
+      Dim Results As List(Of SIS.CT.ctPActivity) = Nothing
+      Dim t_date As String = Now.ToString("dd/MM/yyyy")
+      'Dim o_acty As String = "'PARENT','DESIGN','INDT','RFQ-TO-PO','MFG','EREC'"
+      Dim othAct As String = "('DISP','RECPT')"
+
+      Dim Sql As String = ""
+      Select Case ID
+        Case "DATA_S"
+          Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1, "
+          Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+          Sql &= " t_drem as t_type, "
+          Sql &= " t_dela as t_days "
+          Sql &= " from ttpisg220200  "
+          Sql &= " where t_cprj='" & t_cprj & "'"
+          Sql &= " and t_sub1= (select t_sub1 from ttpisg220200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "')"
+          If t_acty = "OTHERS" Then
+            Sql &= " And t_acty in " & othAct
+          Else
+            Sql &= " And t_acty='" & t_acty & "'"
+          End If
+          'Sql &= " and t_sdst between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) And convert(datetime,'" & t_date & "',103)"
+          Sql &= " order by t_cact "
+        Case "DATA_F"
+          Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,"
+          Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+          Sql &= " t_drem as t_type, "
+          Sql &= " t_delf as t_days "
+          Sql &= " from ttpisg220200 "
+          Sql &= " where t_cprj='" & t_cprj & "'"
+          Sql &= " and t_sub1= (select t_sub1 from ttpisg220200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "')"
+          If t_acty = "OTHERS" Then
+            Sql &= " And t_acty in " & othAct
+          Else
+            Sql &= " And t_acty='" & t_acty & "'"
+          End If
+          'Sql &= " and t_sdfn between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) And convert(datetime,'" & t_date & "',103) "
+          Sql &= " order by t_cact "
+        Case "ACTIVITY"
+          Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1, "
+          Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+          Sql &= " t_drem as t_type, "
+          Sql &= " (case when t_dela > t_delf then t_dela else t_delf end) as t_days "
+          Sql &= " from ttpisg220200  "
+          Sql &= " where t_cprj='" & t_cprj & "'"
+          If t_acty = "OTHERS" Then
+            Sql &= " And t_acty in " & othAct
+          Else
+            Sql &= " And t_acty='" & t_acty & "'"
+          End If
+          'Sql &= " and ((t_sdst between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) And convert(datetime,'" & t_date & "',103)) or (t_sdfn between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) And convert(datetime,'" & t_date & "',103)))"
+          Sql &= " order by t_cact "
+        Case "ITEM"
+          Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1, "
+          Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem, "
+          Sql &= " t_drem as t_type, "
+          Sql &= " (case when t_dela > t_delf then t_dela else t_delf end) as t_days "
+          Sql &= " from ttpisg220200  "
+          Sql &= " where t_cprj='" & t_cprj & "'"
+          Sql &= " and t_sub1= (select t_sub1 from ttpisg220200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "')"
+          'Sql &= " and ((t_sdst between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) And convert(datetime,'" & t_date & "',103)) or (t_sdfn between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) And convert(datetime,'" & t_date & "',103)))"
+          Sql &= " order by t_cact "
+      End Select
+
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          Results = New List(Of SIS.CT.ctPActivity)()
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            Dim tmp As New SIS.CT.ctPActivity(Reader)
+            Results.Add(tmp)
+          End While
+          Reader.Close()
+        End Using
+      End Using
+      Return Results
+    End Function
   End Class
 End Namespace

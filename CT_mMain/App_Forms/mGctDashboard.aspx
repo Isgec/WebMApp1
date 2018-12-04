@@ -1,97 +1,97 @@
-<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" EnableEventValidation = "false" CodeFile="mGctDashboard.aspx.vb" Inherits="mGctDashboard" title="Project Dashboard" %>
+<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" EnableEventValidation = "false" CodeFile="mGctDashboard.aspx.vb" Inherits="mGctDashboard" Title="Project Dashboard" %>
 <asp:Content ID="None" ContentPlaceHolderID="cphMain" runat="server">
   <style>
-.chartDiv {
-  overflow: hidden;
-  margin: 15px auto;
-  padding: 0px 0px 6px 0px;
-  text-align:center;
-  /*background: #e3e3e3;*/
-  color: #333333;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  border: 1px solid gray;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-
-.switch input {display:none;}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 24px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-</style>
-  <style>
-      a.transparent-input{
-         background-color:rgba(0,0,0,0) !important;
-         border:none !important;
-      }
-      span.transparent-input{
-         background-color:rgba(0,0,0,0) !important;
-         border:none !important;
-      }
+    .chartDiv {
+      overflow: hidden;
+      margin: 15px auto;
+      padding: 0px 0px 6px 0px;
+      text-align: center;
+      /*background: #e3e3e3;*/
+      color: #333333;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      border: 1px solid gray;
+    }
   </style>
+  <style>
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+    }
+
+      .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        /*font-size: 25px;*/
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+      }
+
+        .sidenav a:hover {
+          color: #f1f1f1;
+        }
+
+      .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+      }
+
+    @media screen and (max-height: 450px) {
+      .sidenav {
+        padding-top: 15px;
+      }
+
+        .sidenav a {
+          font-size: 18px;
+        }
+    }
+  </style>
+  <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+  </script>
 </asp:Content>
 <asp:Content ID="CPHctPActivity" ContentPlaceHolderID="cph1" runat="Server">
-  <div class="container" style="margin-top:30px">
+  <%--Side Menu Bar--%>
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <asp:LinkButton ID="cmdActivitySCurve" runat="server" Text="Activity wise S-Curve" ToolTip="S-Curve of Major Activities." />
+  <asp:LinkButton ID="cmd30Days" runat="server" Text="Delayed Items [Last 30 Days]" ToolTip="Last 30 days from today." />
+  <asp:LinkButton ID="cmdBacklog" runat="server" Text="Delayed Items [Backlog]" ToolTip="Since Project Start till 30 days befor from today." />
+</div>
+
+  <%--Main Container--%>
+  <div class="container" style="margin-top: 10px">
+    <%--Project Selection Drop Down--%>
     <div class="row">
-      <div class="col-sm-4">
+      <div class="col-sm-12">
         <asp:UpdatePanel ID="UPNLctPActivity" runat="server">
           <ContentTemplate>
             <div class="form-group">
               <div class="input-group mb-3">
+                <span class=" btn btn-sm btn-dark" style="width:40px;text-align:center;cursor:pointer" title="Menu" onclick="openNav()">&#9776;</span>
                 <asp:DropDownList
                   ID="F_t_cprj"
                   CssClass="form-control"
+                  ClientIDMode="static"
                   runat="Server">
                 </asp:DropDownList>
                 <AJX:CascadingDropDown
@@ -104,12 +104,8 @@ input:checked + .slider:before {
                   Category="t_cprj"
                   LoadingText="Loading. . ."
                   runat="server" />
-              </div>
-              <div class="input-group mb-3">
                 <asp:Button ID="cmdSubmit" runat="server" CssClass="btn btn-primary btn-sm" Text="SHOW" />
-              </div>
-              <div class="input-group mb-3">
-                <asp:HyperLink ID="cmdHome" runat="server" CssClass="btn btn-danger btn-sm" Text="HOME" NavigateUrl="~/mMenu.aspx"></asp:HyperLink>
+                <%--<asp:HyperLink ID="cmdHome" runat="server" CssClass="btn btn-danger btn-sm" Text="HOME" NavigateUrl="~/mMenu.aspx"></asp:HyperLink>--%>
               </div>
             </div>
             <br />
@@ -119,133 +115,223 @@ input:checked + .slider:before {
           </Triggers>
         </asp:UpdatePanel>
       </div>
-      <div class="col-sm-8">
-        <h2>DASHBOARD</h2>
-        <div class="container-fluid">
-          <div class="chartDiv">
-                <h2>Overall Planned Vs Actual</h2>
-            <asp:Chart
-              ID="Chart1"
-              DataSourceID="ODStpisg216"
-              Height="200px"
-              Width="300px"
-              ClientIDMode="Predictable"
-              runat="server">
-              <Series>
-                <asp:Series Name="Series1" ChartArea="ChartArea1" XValueMember="t_curr" YValueMembers="t_prop" ChartType="Spline"></asp:Series>
-                <asp:Series Name="Series2" ChartArea="ChartArea1" XValueMember="t_curr" YValueMembers="t_proa" ChartType="Spline"></asp:Series>
-              </Series>
+    </div>
+    <%--Project & Period Detaila--%>
+    <div class="row">
+      <div class="col-sm-4 text-center">
+      <h5><asp:Label ID="Label1" runat="server" Font-Underline="true" Text="PROGRESS S-CURVE"></asp:Label></h5>
+      </div>
+      <div class="col-sm-4 text-center">
+      <h4><asp:Label ID="ProjectName" runat="server"></asp:Label></h4>
+      </div>
+      <div class="col-sm-4 text-center">
+      <h6>(<asp:Label ID="ProjectPeriod" runat="server"></asp:Label>)</h6>
+      </div>
+    </div>
+    <%--Main Graph Row--%>
+    <div class="row">
+      <div class="col-sm-12 text-center ">
+        <div class="chartDiv" >
+          <h5>OVERALL SUMMARY</h5>
+          <asp:Chart
+            ID="Chart1"
+            DataSourceID="ODStpisg216"
+            Height="400px"
+            Width="1000px"
+            ClientIDMode="Predictable"
+            runat="server">
+            <Series>
+              <asp:Series
+                Name="Series1"
+                ChartArea="ChartArea1"
+                XValueMember="t_curr"
+                YValueMembers="t_prop"
+                ChartType="Spline"
+                XValueType="DateTime"
+                ToolTip="Value of X: #VALX Value of Y #VALY"
+                LegendText="Planned Progress %"
+                IsVisibleInLegend="True"
+                Legend="Legend1">
+              </asp:Series>
+              <asp:Series
+                Name="Series2"
+                ChartArea="ChartArea1"
+                XValueMember="t_curr"
+                YValueMembers="t_proa"
+                ChartType="Spline"
+                XValueType="DateTime"
+                ToolTip="Value of X: #VALX Value of Y #VALY"
+                LegendText="Actual Progress %"
+                IsVisibleInLegend="True"
+                Legend="Legend1">
+              </asp:Series>
+            </Series>
+            <Legends>
+              <asp:Legend Name="Legend1" Docking="Bottom" IsDockedInsideChartArea="true">
+                <Position Auto="True" />
+              </asp:Legend>
+            </Legends>
+            <ChartAreas>
+              <asp:ChartArea Name="ChartArea1">
+                <AxisX Interval="30" Title="Time" TitleForeColor="Blue">
+                  <MajorGrid LineColor="LightGray" LineWidth="1" />
+                  <LabelStyle Format="dd-MMM" />
+                </AxisX>
+                <AxisY Interval="10" Minimum="0" Maximum="100" Title="% Progress" TitleForeColor="Blue">
+                  <MajorGrid LineColor="LightGray" LineWidth="1" />
+                </AxisY>
+              </asp:ChartArea>
+            </ChartAreas>
               
-              <ChartAreas>
-                <asp:ChartArea Name="ChartArea1" >
-                  
-                  <AxisX Interval="10">
-                    <MajorGrid Enabled="False" />
-                  </AxisX>
-                  <AxisY>
-                    <MajorGrid Enabled="False" />
-                    
-                    <CustomLabels>
-                      <asp:CustomLabel Text="% Progress" />
-                    </CustomLabels>
-                  </AxisY>
-                </asp:ChartArea>
-              </ChartAreas>
-            </asp:Chart>
-            <asp:ObjectDataSource
-              ID="ODStpisg216"
-              runat="server"
-              SelectMethod="SelectList"
-              TypeName="SIS.CT.tpisg216" 
-              OldValuesParameterFormatString="original_{0}">
-              <SelectParameters>
-                <asp:ControlParameter ControlID="F_t_cprj" PropertyName="SelectedValue" Name="t_cprj" Type="String" DefaultValue="" Size="6" />
-              </SelectParameters>
-            </asp:ObjectDataSource>
-          </div>
-          <br />
-          <br />
-          <asp:Repeater ID="rCharts" runat="server" DataSourceID="ODStpisg206" ClientIDMode="Predictable">
-            <ItemTemplate>
-              <div class="chartDiv">
-                <h3><%# Eval("t_dsca") %></h3>
-                <asp:Label ID="L_t_acty" runat="server" Text='<%# Eval("t_acty") %>' style="display:none;" ></asp:Label>
-                <asp:Label ID="L_t_cprj" runat="server" Text='<%# Eval("t_cprj") %>' style="display:none;"></asp:Label>
-                <asp:Chart
-                  ID="Chart2"
-                  Height="200px"
-                  Width="700px"
-                  DataSourceID="ODStpisg214"
-                  IsMapEnabled="true"
-                  RenderType="ImageTag"
-                  runat="server" >
-                  <Series>
-                    <asp:Series 
-                      Name="Series3" 
-                      ChartArea="ChartArea2" 
-                      XValueMember="t_date" 
-                      YValueMembers="t_pprc" 
-                      ChartType="Spline" 
-                      XValueType="DateTime" 
-                      ToolTip="Value of X: #VALX Value of Y #VALY" 
-                      LegendText="Planned Progress %" 
-                      IsVisibleInLegend="True" 
-                      Legend="Legend2" >
-                      <SmartLabelStyle Enabled="true" />
-                    </asp:Series>
-                    <asp:Series 
-                      Name="Series4" 
-                      ChartArea="ChartArea2" 
-                      XValueMember="t_date" 
-                      YValueMembers="t_acpr" 
-                      ChartType="Spline" 
-                      XValueType="DateTime" 
-                      ToolTip="Value of X: #VALX Value of Y #VALY" 
-                      LegendText="Actual Progress %" 
-                      IsVisibleInLegend="True" 
-                      Legend="Legend2"  >
-                    </asp:Series>
-                  </Series>
-                  <Legends>
-                    <asp:Legend Name="Legend2" ></asp:Legend>
-                  </Legends>
-                  <ChartAreas>
-                    <asp:ChartArea Name="ChartArea2">
-                      <AxisX Interval="5" Title="Time" TitleForeColor="Blue" >
-                        <MajorGrid LineColor="LightGray" LineWidth="1" />
-                      </AxisX>
-                      <AxisY Interval="10" Minimum="0" Maximum="100" Title="% Progress" TitleForeColor="Blue" >
-                        <MajorGrid LineColor="LightGray" LineWidth="1"  />
-                      </AxisY>
-                    </asp:ChartArea>
-                  </ChartAreas>
-                </asp:Chart>
-                <asp:ObjectDataSource
-                  ID="ODStpisg214"
-                  runat="server"
-                  SelectMethod="SelectList"
-                  TypeName="SIS.CT.tpisg214" 
-                  OldValuesParameterFormatString="original_{0}">
-                  <SelectParameters>
-                    <asp:ControlParameter ControlID="L_t_cprj" PropertyName="Text" Name="t_cprj" Type="String" DefaultValue="" Size="6" />
-                    <asp:ControlParameter ControlID="L_t_acty" PropertyName="Text" Name="t_acty" Type="String" DefaultValue=""  />
-                  </SelectParameters>
-                </asp:ObjectDataSource>
-              </div>
-            </ItemTemplate>
-          </asp:Repeater>
+          </asp:Chart>
           <asp:ObjectDataSource
-            ID="ODStpisg206"
+            ID="ODStpisg216"
             runat="server"
             SelectMethod="SelectList"
-            TypeName="SIS.CT.tpisg206" 
+            TypeName="SIS.CT.tpisg216"
             OldValuesParameterFormatString="original_{0}">
             <SelectParameters>
               <asp:ControlParameter ControlID="F_t_cprj" PropertyName="SelectedValue" Name="t_cprj" Type="String" DefaultValue="" Size="6" />
             </SelectParameters>
           </asp:ObjectDataSource>
+          <div id="OverallDataTable" runat="server" class="container-fluid text-center"></div>
         </div>
       </div>
     </div>
+    <%--Start Finish Counts--%>
+    <div class="row chartDiv">
+      <div class="col-sm-6 text-center">
+        <h5>
+          <asp:Label ID="Label2" runat="server" Text="Activity - Due for Start "></asp:Label></h5>
+        <h6>
+          <asp:Label ID="Label3" runat="server" Font-Underline="true" Text=""></asp:Label></h6>
+        <div id="ReviewSheetStart" runat="server" class="container-fluid text-center">
+          <table class='table-bordered' style='width: 100%; margin: 5px 5px 5px 5px;'>
+            <thead>
+              <tr style="background-color: black; color: white;">
+                <th rowspan="2" style='text-align: center;'></th>
+                <th rowspan="2" style='text-align: center;'>Early Start</th>
+                <th rowspan="2" style='text-align: center;'>On Time</th>
+                <th colspan="4" style='text-align: center;'>Delay [Days]</th>
+              </tr>
+              <tr style="background-color: black; color: white;">
+                <th style='text-align: center;'>1 to 30 </th>
+                <th style='text-align: center;'>31 to 60 </th>
+                <th style='text-align: center;'>61 to 90</th>
+                <th style='text-align: center;'>> 91</th>
+              </tr>
+            </thead>
+            <tr>
+              <td style='text-align: center; font-weight: bold;'>STARTED</td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="STE" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="ST0" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="ST10" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="ST20" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="ST30" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="STZ" runat="server" OnClick="abc"></asp:Button>
+              </td>
+            </tr>
+            <tr>
+              <td style='text-align: center; font-weight: bold;'>NOT STARTED</td>
+              <td style='text-align: center;'>-</td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="NST0" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NST10" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NST20" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NST30" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NSTZ" runat="server" OnClick="abc"></asp:Button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-6 text-center ">
+        <h5>
+          <asp:Label ID="Label4" runat="server" Text="Activity - Due for Finish "></asp:Label></h5>
+        <h6>
+          <asp:Label ID="Label5" runat="server" Font-Underline="true" Text=""></asp:Label></h6>
+        <div id="ReviewSheetFinish" runat="server" class="container-fluid text-center">
+          <table class='table-bordered' style='width: 100%; margin: 5px 5px 5px 5px;'>
+            <thead>
+              <tr style="background-color: black; color: white;">
+                <th rowspan="2" style='text-align: center;'></th>
+                <th rowspan="2" style='text-align: center;'>Early Finish</th>
+                <th rowspan="2" style='text-align: center;'>On Time</th>
+                <th colspan="4" style='text-align: center;'>Delay [Days]</th>
+              </tr>
+              <tr style="background-color: black; color: white;">
+                <th style='text-align: center;'>1 to 30</th>
+                <th style='text-align: center;'>31 to 60 </th>
+                <th style='text-align: center;'>61 to 90 </th>
+                <th style='text-align: center;'>> 91 </th>
+              </tr>
+            </thead>
+            <tr>
+              <td style='text-align: center; font-weight: bold;'>FINISHED</td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="FDE" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="FD0" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="FD10" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="FD20" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="FD30" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="FDZ" runat="server" OnClick="abc"></asp:Button>
+              </td>
+            </tr>
+            <tr>
+              <td style='text-align: center; font-weight: bold;'>NOT FINISHED</td>
+              <td style='text-align: center;'>-</td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="NFD0" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NFD10" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NFD20" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NFD30" runat="server" OnClick="abc"></asp:Button>
+              </td>
+              <td style='text-align: center;'>
+                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NFDZ" runat="server" OnClick="abc"></asp:Button>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
   </div>
+
+
 </asp:Content>

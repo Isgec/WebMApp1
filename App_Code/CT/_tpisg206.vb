@@ -11,13 +11,33 @@ Namespace SIS.CT
     Public Property t_cprj As String = ""
     Public Property t_Refcntd As Integer = 0
     Public Property t_Refcntu As Integer = 0
+    Public ReadOnly Property GetRedirectLink As String
+      Get
+        Return "~/CT_mMain/App_Forms/mGctActivityDashboard.aspx?t_cprj=" & t_cprj & "&t_acty=" & t_acty
+      End Get
+    End Property
+
+    Public ReadOnly Property DataTable As String
+      Get
+        Dim data As List(Of SIS.CT.tpisg214) = SIS.CT.tpisg214.SelectList(t_cprj, t_acty)
+        Dim mStr As String = ""
+        Dim row1 As String = ""
+        Dim row2 As String = ""
+        Dim row3 As String = ""
+        mStr &= "<table><tr><td></td></tr></table>"
+        For Each dt As SIS.CT.tpisg214 In data
+
+        Next
+        Return mStr
+      End Get
+    End Property
     <DataObjectMethod(DataObjectMethodType.Select)>
     Public Shared Function SelectList(ByVal t_cprj As String) As List(Of SIS.CT.tpisg206)
       Dim Results As List(Of SIS.CT.tpisg206) = Nothing
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = "select * from ttpisg206200 as aa where 0 < (select count(*) from ttpisg214200 as bb where bb.t_cprj='" & t_cprj & "' and bb.t_acty=aa.t_acty)"
+          Cmd.CommandText = "select * from ttpisg206200 as aa where aa.t_acty = 'DESIGN' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'INDT'  UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'RFQ-TO-PO' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'MFG' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'DISP' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'RECPT' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'EREC'"
           Results = New List(Of SIS.CT.tpisg206)()
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
