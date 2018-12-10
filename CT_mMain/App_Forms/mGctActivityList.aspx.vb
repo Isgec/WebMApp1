@@ -12,6 +12,7 @@ Partial Class mGctActivityList
   Private IsAll As Boolean = False
   Private ItemReference As String = ""
   Private ListType As String = ""
+  Private IsBacklog As Boolean = False
 
   Private Sub mGctActivityList_Load(sender As Object, e As EventArgs) Handles Me.Load
     ProjectID = Request.QueryString("t_cprj")
@@ -20,12 +21,20 @@ Partial Class mGctActivityList
     If Request.QueryString("t_acty") IsNot Nothing Then ActivityType = Request.QueryString("t_acty")
     If Request.QueryString("all") IsNot Nothing Then IsAll = Request.QueryString("all")
     If Request.QueryString("ListType") IsNot Nothing Then ListType = Request.QueryString("ListType")
+    If Request.QueryString("Backlog") IsNot Nothing Then IsBacklog = True
 
     Period = SIS.CT.tpisg216.StartFinish(ProjectID)
+    Dim lDt As DateTime = SIS.CT.DelayStatus30Days.LastUpdatedOn(ProjectID)
+
     If IsAll Then
       Label2.Text = "(From " & Period.StDt.ToString("dd/MM/yyyy") & " Till " & DateAdd(DateInterval.Day, -31, Now).ToString("dd/MM/yyyy") & " - As On " & Now.ToString("dd/MM/yyyy") & ")"
     Else
-      Label2.Text = "(Last 30 Days - As On " & Now.ToString("dd/MM/yyyy") & ")"
+      If IsBacklog Then
+        'Label2.Text = "(As On " & Now.ToString("dd/MM/yyyy") & ")"
+        Label2.Text = "From " & Period.StDt.ToString("dd/MM/yyyy") & " Till " & Now.ToString("dd/MM/yyyy") & " - Updated On " & lDt.ToString("dd/MM/yyyy") & ""
+      Else
+        Label2.Text = "(Last 30 Days - As On " & Now.ToString("dd/MM/yyyy") & ")"
+      End If
     End If
     Select Case ClickedID
       Case "ACTIVITY", "DATA_S", "DATA_F"
@@ -74,8 +83,8 @@ Partial Class mGctActivityList
       Case ""
         data = SIS.CT.DelayStatus30Days.SelectActivity(t_cprj, t_cact, t_acty, ID, IsAll)
     End Select
-
-    'data.Sort(Function(x, y) x.t_cact.CompareTo(y.t_cact))
+    'Now sorting is needed as parents are inserted after Select statement
+    data.Sort(Function(x, y) x.t_actp.CompareTo(y.t_actp))
     Dim hideItem As Boolean = False
     Select Case ClickedID
       Case "ITEM", "DATA_S", "DATA_F"
@@ -184,7 +193,33 @@ Partial Class mGctActivityList
           End If
           Select Case I
             Case 0
-              .Text = dt.t_desc
+
+              Dim tmpStr As String = ""
+              Dim predCnt As Integer = SIS.CT.DelayStatus30Days.GetPredActivitiesCount(t_cprj, dt.t_cact)
+              Dim cogStyle As String = ""
+              If predCnt > 0 Then
+                cogStyle = "color:lime;cursor:pointer;"
+              Else
+                cogStyle = "color:gray;cursor:pointer;"
+              End If
+              tmpStr &= "<table style='border-collapse:collapse;border:none;'>"
+              tmpStr &= "  <tr>"
+              tmpStr &= "    <td style='background-color:black;border-collapse:collapse;border:none;width:18px;text-align:center;'>"
+              tmpStr &= "      <i "
+              If predCnt > 0 Then
+                tmpStr &= "      id='cog_" & dt.t_cact & "' "
+                tmpStr &= "      data-project='" & t_cprj & "' "
+                tmpStr &= "      data-activity='" & dt.t_cact & "' "
+                tmpStr &= "      data-loaded='0' "
+                tmpStr &= "      onclick='load_pred(this);' "
+              End If
+              tmpStr &= "      class='fa fa-cog' style='" & cogStyle & "'></i>"
+              tmpStr &= "    </td>"
+              tmpStr &= "    <td style='border-collapse:collapse;border:none;'>" & dt.t_desc
+              tmpStr &= "    </td>"
+              tmpStr &= "  </tr>"
+              tmpStr &= "</table>"
+              .Text = tmpStr
             Case 1
               .Text = dt.t_sub1
               .Attributes.Add("style", "text-align:left;min-height:24px !important;")
@@ -226,15 +261,20 @@ Partial Class mGctActivityList
         End If
       Next
       tbl.Rows.Add(tr)
+      'If dt.t_acty <> "PARENT" Then
       tr = New TableRow
-      Dim predTd As TableCell = SIS.CT.DelayStatus30Days.GetPredCell(t_cprj, dt.t_cact)
+      Dim predTd As New TableCell '= SIS.CT.DelayStatus30Days.GetPredCell(t_cprj, dt.t_cact)
       If hideItem Then
         predTd.ColumnSpan = 14
       Else
         predTd.ColumnSpan = 15
       End If
+      predTd.ID = "predTD_" & dt.t_cact
+      predTd.ClientIDMode = ClientIDMode.Static
       tr.Cells.Add(predTd)
       tbl.Rows.Add(tr)
+      'End If
+
     Next
     Return tbl
   End Function
@@ -251,8 +291,18 @@ Partial Class mGctActivityList
     Dim mRet As String = "0|" & rowID & "|" & str
     Return mRet
   End Function
+  <System.Web.Services.WebMethod()>
+  Public Shared Function getPredTbl(ByVal context As String) As String
+    Dim aVal() As String = context.Split("|".ToCharArray)
+    ' project + '|' + activity
+    Dim ProjectID As String = aVal(0)
+    Dim ActivityID As String = aVal(1)
+    Dim str As String = SIS.CT.DelayStatus30Days.GetPredCellHTML(ProjectID, ActivityID)
+    Dim mRet As String = ActivityID & "|" & str
+    Return mRet
+  End Function
 
   Private Sub cmdRefresh_Click(sender As Object, e As EventArgs) Handles cmdRefresh.Click
-    SIS.CT.RebuildPredcessors.RebuildPred(ProjectID)
+    'SIS.CT.RebuildPredcessors.RebuildPred(ProjectID)
   End Sub
 End Class

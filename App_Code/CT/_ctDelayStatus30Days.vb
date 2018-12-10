@@ -66,6 +66,10 @@ Namespace SIS.CT
       Public Property Middle As Boolean = False
       Public Property Bottom As Boolean = False
       Public Property Indent As Integer = 0
+      Public Property ShowPred As Boolean = False
+      Public Property t_outl As Integer = 0
+      Public Property t_pact As String = ""
+      Public Property t_actp As Integer = 0
       Public Property t_sdst() As String
         Get
           If Not _t_sdst = String.Empty Then
@@ -164,21 +168,22 @@ Namespace SIS.CT
       Dim t_date As String = Now.ToString("dd/MM/yyyy")
 
       Dim Sql As String = ""
-      Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,t_drem, t_dela, t_delf,t_otsd,t_oted, t_pprc,t_cpgv,t_acty,t_dept, "
+      Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,t_drem, t_dela, t_delf,t_otsd,t_oted, t_pprc,t_cpgv,t_acty,t_dept,t_pact, t_outl,t_actp, "
       Sql &= " IsCurrent = case when ((t_sdst between dateadd(d,-30,getdate()) and getdate())   or   (t_sdfn between dateadd(d,-30,getdate()) and getdate())) or ((t_sdst < dateadd(d,-30,getdate()))   and   (t_sdfn > getdate())) then 1 else 0 end, "
       Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem "
       Sql &= " from ttpisg220200  "
       Sql &= " where t_cprj='" & t_cprj & "'"
+      Sql &= " And t_acty <> 'PARENT'"
       Select Case ID
         Case "DATA_S", "DATA_F"
           Sql &= " and t_sub1= (select t_sub1 from ttpisg220200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "')"
-          Sql &= " And t_acty='" & t_acty & "'"
+          Sql &= " And (t_acty='" & t_acty & "' )"
         Case "ACTIVITY"
-          Sql &= " And t_acty='" & t_acty & "'"
+          Sql &= " And (t_acty='" & t_acty & "' )"
         Case "ITEM"
           Sql &= " and t_sub1= (select t_sub1 from ttpisg220200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "')"
       End Select
-      Sql &= " order by t_cact "
+      Sql &= " order by t_actp "
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
@@ -193,6 +198,7 @@ Namespace SIS.CT
                 If Convert.ToDateTime(tmp.t_sdst) > Now Then tmp.IsDue = False Else tmp.IsDue = True
                 If Year(Convert.ToDateTime(tmp.t_acsd)) > 1753 Then tmp.IsStarted = True
                 If Year(Convert.ToDateTime(tmp.t_acfn)) > 1753 Then tmp.IsFinished = True
+                tmp.ShowPred = True
               Catch ex As Exception
               End Try
             End With
@@ -201,9 +207,186 @@ Namespace SIS.CT
           Reader.Close()
         End Using
       End Using
+      '===========================================
+      'Process List to Include Parent As Per Logic
+      '===========================================
+      Dim NewResults As New List(Of SIS.CT.DelayStatus30Days.Activities)
+      Select Case ID
+        Case "ACTIVITY", "DATA_S", "DATA_F", "ITEM"
+          Dim Last_t_pact As String = ""
+          Dim ADDED As Boolean = False
+          For Each tmp As SIS.CT.DelayStatus30Days.Activities In Results
+            If Last_t_pact = "" Then
+              Last_t_pact = tmp.t_pact
+            End If
+            If Last_t_pact <> tmp.t_pact Then
+              Last_t_pact = tmp.t_pact
+              ADDED = False
+            End If
+            Select Case tmp.t_acty
+              Case "DESIGN"
+                If Not ADDED Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, True, 0)
+                ADDED = True
+              Case "INDT"
+                'Parent NOT to be loaded
+                'If Not ADDED Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
+                ADDED = True
+              Case "RFQ-TO-PO"
+                If Not ADDED Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
+                ADDED = True
+              Case Else
+                If Not ADDED Then
+                  If tmp.SubItem <> "" Then
+                    InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2)
+                  Else
+                    InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
+                  End If
+                End If
+                ADDED = True
+            End Select
+          Next
+          'Case "DATA_S", "DATA_F", "ITEM"
+          '  Dim Last_t_acty As String = ""
+          '  Dim DESIGN As Boolean = False
+          '  Dim INDT As Boolean = False
+          '  Dim RFQ As Boolean = False
+          '  Dim MFG As Boolean = False
+          '  Dim DISP As Boolean = False
+          '  Dim RECPT As Boolean = False
+          '  Dim EREC As Boolean = False
+          '  For Each tmp As SIS.CT.DelayStatus30Days.Activities In Results
+          '    If tmp.t_acty <> "PARENT" Then Continue For
+
+          '    If Last_t_acty = "" Then Last_t_acty = tmp.t_acty
+          '    If Last_t_acty <> tmp.t_acty Then
+          '      Last_t_acty = tmp.t_acty
+
+          '    End If
+          '    Select Case tmp.t_acty
+          '      Case "DESIGN"
+          '        If Not DESIGN Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, True, 0)
+          '        DESIGN = True
+          '      Case "INDT"
+          '        'Parent NOT to be loaded
+          '        'If Not INDT Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
+          '        'INDT = True
+          '      Case "RFQ-TO-PO"
+          '        If Not RFQ Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
+          '        RFQ = True
+          '      Case "MFG"
+          '        If Not MFG Then
+          '          If tmp.SubItem <> "" Then
+          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2)
+          '          Else
+          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
+          '          End If
+          '        End If
+          '        MFG = True
+          '      Case "DISP"
+          '        If Not DISP Then
+          '          If tmp.SubItem <> "" Then
+          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2)
+          '          Else
+          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
+          '          End If
+          '        End If
+          '        DISP = True
+          '      Case "RECPT"
+          '        If Not RECPT Then
+          '          If tmp.SubItem <> "" Then
+          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2)
+          '          Else
+          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
+          '          End If
+          '        End If
+          '        RECPT = True
+          '      Case "EREC"
+          '        If Not EREC Then
+          '          If tmp.SubItem <> "" Then
+          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2)
+          '          Else
+          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
+          '          End If
+          '        End If
+          '        EREC = True
+          '    End Select
+          '    DESIGN = False
+          '    INDT = False
+          '    RFQ = False
+          '    MFG = False
+          '    DISP = False
+          '    RECPT = False
+          '    EREC = False
+          '  Next
+      End Select
+      Results.AddRange(NewResults)
+      '===========================================
       Return Results
     End Function
-
+    Public Shared Function InsertParents(ByRef actList As List(Of SIS.CT.DelayStatus30Days.Activities), ByVal t_pact As String, ByVal t_cprj As String, ByVal UptoTop As Boolean, ByVal UptoLevel As Integer) As List(Of SIS.CT.DelayStatus30Days.Activities)
+      Dim LevelCount As Integer = 0
+      Do While True
+        LevelCount += 1
+        Dim tmp As SIS.CT.DelayStatus30Days.Activities = Nothing
+        If Not actList.Exists(Function(x) x.t_cact = t_pact) Then
+          tmp = GetParentActivity(t_pact, t_cprj)
+          actList.Add(tmp)
+        End If
+        If UptoTop Then
+          If tmp.t_cact = tmp.t_pact Then
+            'actList.Add(GetParentActivity(tmp.t_pact, t_cprj))
+            Exit Do
+          End If
+        Else
+          If LevelCount = UptoLevel Then
+            Exit Do
+          End If
+        End If
+        t_pact = tmp.t_pact
+        'If tmp.t_cact = tmp.t_pact Then
+        '  Exit Do
+        'End If
+        If LevelCount > 30 Then
+          'Break Infinite Loop
+          'At present There are records upto 13 level
+          Exit Do
+        End If
+      Loop
+      Return actList
+    End Function
+    Private Shared Function GetParentActivity(ByVal t_pact As String, ByVal t_cprj As String) As SIS.CT.DelayStatus30Days.Activities
+      Dim Results As SIS.CT.DelayStatus30Days.Activities = Nothing
+      Dim Sql As String = ""
+      Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,t_drem, t_dela, t_delf,t_otsd,t_oted, t_pprc,t_cpgv,t_acty,t_dept, t_outl, t_pact,t_actp, "
+      Sql &= " IsCurrent = case when ((t_sdst between dateadd(d,-30,getdate()) and getdate())   or   (t_sdfn between dateadd(d,-30,getdate()) and getdate())) or ((t_sdst < dateadd(d,-30,getdate()))   and   (t_sdfn > getdate())) then 1 else 0 end, "
+      Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem "
+      Sql &= " from ttpisg220200  "
+      Sql &= " where t_cprj='" & t_cprj & "'"
+      Sql &= " And t_cact = '" & t_pact & "'"
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            Dim tmp As New SIS.CT.DelayStatus30Days.Activities(Reader)
+            With tmp
+              Try
+                If Convert.ToDateTime(tmp.t_sdst) > Now Then tmp.IsDue = False Else tmp.IsDue = True
+                If Year(Convert.ToDateTime(tmp.t_acsd)) > 1753 Then tmp.IsStarted = True
+                If Year(Convert.ToDateTime(tmp.t_acfn)) > 1753 Then tmp.IsFinished = True
+                tmp.ShowPred = True
+              Catch ex As Exception
+              End Try
+            End With
+            Results = tmp
+          End While
+          Reader.Close()
+        End Using
+      End Using
+      Return Results
+    End Function
     Public Class sub1
       Public Sub New(ByVal Reader As SqlDataReader)
         Try
@@ -534,7 +717,9 @@ Namespace SIS.CT
     '  '================
     '  Return Results
     'End Function
-    Public Shared Function SelectItems(ByVal t_cprj As String, Optional ByVal t_acty As String = "") As List(Of SIS.CT.DelayStatus30Days)
+    Public Shared Function SelectItems(ByVal t_cprj As String, Optional ByVal t_acty As String = "", Optional IsBacklog As Boolean = False) As List(Of SIS.CT.DelayStatus30Days)
+      Dim FromDays As Integer = 30
+      If IsBacklog Then FromDays = 3650
       Dim Results As List(Of SIS.CT.DelayStatus30Days) = Nothing
       Dim Sql As String = ""
       Sql &= "   select distinct aa.t_sub1,aa.t_acty,"
@@ -547,7 +732,7 @@ Namespace SIS.CT
       Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountAll,   "
       Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where year(bb.t_acsd)>1753 and bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountStarted,   "
       Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where year(bb.t_acfn)>1753 and bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountFinished,   "
-      Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where (((bb.t_sdst between dateadd(d,-30,getdate()) and getdate())   or   (bb.t_sdfn between dateadd(d,-30,getdate()) and getdate())) OR ((bb.t_sdst < dateadd(d,-30,getdate()))   and   (bb.t_sdfn > getdate())) ) and bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountMark,   "
+      Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where (((bb.t_sdst between dateadd(d,-" & FromDays & ",getdate()) and getdate())   or   (bb.t_sdfn between dateadd(d,-" & FromDays & ",getdate()) and getdate())) OR ((bb.t_sdst < dateadd(d,-" & FromDays & ",getdate()))   and   (bb.t_sdfn > getdate())) ) and bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountMark,   "
       Sql &= "   (select IsNull(min(bb.t_dela),0) from ttpisg220200 as bb where bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE'"
       Sql &= "     and bb.t_otsd = (select min(cc.t_otsd) from ttpisg220200 as cc where cc.t_cprj=bb.t_cprj and cc.t_sub1=bb.t_sub1 and cc.t_acty = bb.t_acty and LEFT(UPPER(cc.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE')"
       Sql &= " ) as NotStartedDelay,   "
@@ -566,7 +751,7 @@ Namespace SIS.CT
       Sql &= "    and aa.t_sub1 in ("
       Sql &= "      select t_sub1 from ttpisg220200 as bb where bb.t_cprj=aa.t_cprj "
       Sql &= "  and bb.t_acty in ('DESIGN','INDT','RFQ-TO-PO','MFG','EREC','DISP','RECPT')"
-      Sql &= "  and (((bb.t_sdst between dateadd(d,-30,getdate()) and getdate())   or   (bb.t_sdfn between dateadd(d,-30,getdate()) and getdate()))  OR ((bb.t_sdst < dateadd(d,-30,getdate()))   and   (bb.t_sdfn > getdate()))  ) "
+      Sql &= "  and (((bb.t_sdst between dateadd(d,-" & FromDays & ",getdate()) and getdate())   or   (bb.t_sdfn between dateadd(d,-" & FromDays & ",getdate()) and getdate()))  OR ((bb.t_sdst < dateadd(d,-" & FromDays & ",getdate()))   and   (bb.t_sdfn > getdate()))  ) "
       Sql &= "  and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE'"
       Sql &= "    )"
       Sql &= "    order by t_sub1, t_acty"
@@ -857,7 +1042,7 @@ Namespace SIS.CT
     Public Shared Function GetPredRows(ByVal t_cprj As String, ByVal t_cact As String, ByVal Indent As Integer, ByVal Prefix As String) As String
       Dim mRet As String = ""
 
-      Dim CACTs As List(Of SIS.CT.DelayStatus30Days.Activities) = GetChildActivities(t_cprj, t_cact)
+      Dim CACTs As List(Of SIS.CT.DelayStatus30Days.Activities) = GetPredActivities(t_cprj, t_cact)
       For Each cact As SIS.CT.DelayStatus30Days.Activities In CACTs
         Dim tr As TableRow = GetRow(Indent, cact, Prefix)
         Dim sb As StringBuilder = New StringBuilder()
@@ -870,7 +1055,7 @@ Namespace SIS.CT
     End Function
 
     Private Shared Function GetRow(ByVal Indent As Integer, ByVal dt As SIS.CT.DelayStatus30Days.Activities, ByVal Prefix As String, Optional ByVal IsServerCall As Boolean = False) As TableRow
-      Dim CACTs As Integer = GetChildActivitiesCount(dt.t_cprj, dt.t_cact)
+      Dim CACTs As Integer = GetPredActivitiesCount(dt.t_cprj, dt.t_cact)
       If CACTs = 0 Then
         dt.Bottom = True
         dt.Top = False
@@ -1026,11 +1211,19 @@ Namespace SIS.CT
       Return tr
     End Function
 
+    Public Shared Function GetPredCellHTML(ByVal t_cprj As String, ByVal t_cact As String) As String
+      Dim td As TableCell = GetPredCell(t_cprj, t_cact)
+      Dim sb As StringBuilder = New StringBuilder()
+      Dim sw As IO.StringWriter = New IO.StringWriter(sb)
+      Dim hw As System.Web.UI.HtmlTextWriter = New System.Web.UI.HtmlTextWriter(sw)
+      td.RenderControl(hw)
+      Return sb.ToString
+    End Function
 
     Public Shared Function GetPredCell(ByVal t_cprj As String, ByVal t_cact As String) As TableCell
       'Main Function Call For activity
       Dim mRet As New TableCell
-      Dim CACTs As List(Of SIS.CT.DelayStatus30Days.Activities) = GetChildActivities(t_cprj, t_cact)
+      Dim CACTs As List(Of SIS.CT.DelayStatus30Days.Activities) = GetPredActivities(t_cprj, t_cact)
       If CACTs.Count <= 0 Then
         Return mRet
       End If
@@ -1052,7 +1245,7 @@ Namespace SIS.CT
         Dim thc As New TableHeaderCell
         With thc
           .Attributes.Add("style", "text-align:center;")
-          .CssClass = "bg-info"
+          .CssClass = "bg-warning"
 
           Select Case i
             Case 0
@@ -1093,164 +1286,13 @@ Namespace SIS.CT
       Dim Indent As Integer = 0
       For Each cact As SIS.CT.DelayStatus30Days.Activities In CACTs
         cact.Top = True
-        tbl.Rows.Add(GetRow(Indent, cact, t_cact, True))
+        tbl.Rows.Add(GetRow(Indent, cact, t_cact, False))
       Next
       mRet.Controls.Add(tbl)
       Return mRet
     End Function
 
-    'Private Shared Sub RenderCACT(ByVal Indent As Integer, ByVal dt As SIS.CT.DelayStatus30Days.Activities, ByRef tbl As Table, ByVal Prefix As String)
-    '  Dim CACTs As List(Of SIS.CT.DelayStatus30Days.Activities) = GetChildActivities(dt.t_cprj, dt.t_cact)
-    '  If CACTs.Count = 0 Then
-    '    dt.Bottom = True
-    '    dt.Top = False
-    '    dt.Middle = False
-    '  Else
-    '    If Indent > 0 Then
-    '      dt.Middle = True
-    '      dt.Top = False
-    '      dt.Bottom = False
-    '    End If
-    '  End If
-
-    '  Indent += 1
-    '  '=============
-    '  'Render Row
-    '  Dim tr As TableRow = Nothing
-    '  Dim td As TableCell = Nothing
-    '  tr = New TableRow
-    '  'tr.TableSection = TableRowSection.TableBody
-    '  tr.ClientIDMode = ClientIDMode.Static
-    '  tr.ID = Prefix & "_" & dt.t_cact
-    '  tr.Attributes.Add("onclick", "return tree_toggle(this);")
-    '  tr.Attributes.Add("data-state", "table-row")
-    '  tr.Attributes.Add("data-expended", "0")
-    '  tr.Attributes.Add("data-indent", Indent)
-    '  tr.Attributes.Add("data-bottom", CACTs.Count)
-    '  tr.Attributes.Add("data-loaded", "0")
-    '  If Indent = 1 Then
-    '    tr.Attributes.Add("style", "display:table-row;")
-    '  Else
-    '    tr.Attributes.Add("style", "display:none;")
-    '  End If
-    '  tr.CssClass = "treeRow"
-
-    '  For I As Integer = 2 To 13
-    '    td = New TableCell
-    '    With td
-
-    '      '.ClientIDMode = ClientIDMode.Static
-    '      '.ID = dt.t_cact
-
-    '      If Not dt.IsDue Then
-    '        .CssClass = "btn-outline-secondary"
-    '      Else
-    '        If Not dt.IsCurrent Then
-    '          If dt.IsStarted And dt.IsFinished Then
-    '            .CssClass = "btn-outline-success"
-    '          ElseIf dt.IsStarted And Not dt.IsFinished Then
-    '            .CssClass = "btn-outline-info"
-    '          Else
-    '            .CssClass = "btn-outline-danger"
-    '          End If
-    '        Else
-    '          If dt.IsStarted And dt.IsFinished Then
-    '            .CssClass = "btn-success"
-    '          ElseIf dt.IsStarted And Not dt.IsFinished Then
-    '            .CssClass = "btn-info"
-    '          Else
-    '            .CssClass = "btn-danger"
-    '          End If
-    '        End If
-    '      End If
-
-    '      Select Case I
-    '        Case 0
-    '          .Text = dt.t_sub1
-    '          .Attributes.Add("style", "text-align:left;min-height:24px !important;")
-    '        Case 1
-    '          .Text = dt.SubItem
-    '        Case 2
-    '          td.CssClass = ""
-    '          Dim xTbl As New Table
-    '          With xTbl
-    '            .Attributes.Add("style", "border-collapse:collapse;border:none;")
-    '          End With
-    '          Dim xTr As New TableRow
-    '          Dim xTd As New TableCell
-    '          For imgs As Integer = 1 To Indent
-    '            xTd = New TableCell
-    '            xTd.Attributes.Add("style", "border-collapse:collapse;border:none;")
-
-    '            Dim mg As New Image
-    '            With mg
-    '              .AlternateText = dt.t_cact
-    '              If imgs = Indent Then
-    '                If CACTs.Count > 0 Then
-    '                  .ImageUrl = "~/TreeImgs/Plus.gif"
-    '                  mg.ClientIDMode = ClientIDMode.Static
-    '                  mg.ID = "img_" & tr.ID
-    '                  mg.Attributes.Add("onclick", "return tree_refresh(this);")
-    '                  xTd.Controls.Add(mg)
-    '                  xTr.Cells.Add(xTd)
-    '                End If
-    '              ElseIf imgs = Indent - 1 Then
-    '                .ImageUrl = "~/TreeImgs/LineTopMidBottom.gif"
-    '                xTd.Controls.Add(mg)
-    '                xTr.Cells.Add(xTd)
-    '              Else
-    '                .ImageUrl = "~/TreeImgs/LineTopBottom.gif"
-    '                xTd.Controls.Add(mg)
-    '                xTr.Cells.Add(xTd)
-    '              End If
-    '            End With
-    '          Next
-    '          xTd = New TableCell
-    '          xTd.Attributes.Add("style", "border-collapse:collapse;border:none;")
-
-    '          xTd.Text = dt.t_desc
-    '          xTr.Cells.Add(xTd)
-    '          xTbl.Rows.Add(xTr)
-    '          td.Controls.Add(xTbl)
-    '          '.Text = dt.t_desc
-    '        '.Style.Add(HtmlTextWriterStyle.PaddingLeft, Indent * 20 & "px")
-    '        Case 3
-    '          .Text = dt.t_dela
-    '          .Attributes.Add("style", "text-align:center;")
-    '        Case 4
-    '          .Text = dt.t_delf
-    '          .Attributes.Add("style", "text-align:center;")
-    '        Case 5
-    '          .Text = dt.t_pprc.ToString("n")
-    '          .Attributes.Add("style", "text-align:center;")
-    '        Case 6
-    '          .Text = dt.t_cpgv.ToString("n")
-    '          .Attributes.Add("style", "text-align:center;")
-    '        Case 7
-    '          .Text = dt.t_drem
-    '        Case 8
-    '          .Text = dt.t_sdst
-    '        Case 9
-    '          .Text = dt.t_sdfn
-    '        Case 10
-    '          .Text = dt.t_acsd
-    '        Case 11
-    '          .Text = dt.t_acfn
-    '        Case 12
-    '          .Text = dt.t_otsd
-    '        Case 13
-    '          .Text = dt.t_oted
-    '      End Select
-    '    End With
-    '    tr.Cells.Add(td)
-    '  Next
-    '  tbl.Rows.Add(tr)
-    '  '=============
-    '  'For Each tmp As SIS.CT.DelayStatus30Days.Activities In CACTs
-    '  '  RenderCACT(Indent, tmp, tbl, Prefix & "_" & dt.t_cact)
-    '  'Next
-    'End Sub
-    Private Shared Function GetChildActivities(ByVal t_cprj As String, ByVal t_cact As String) As List(Of SIS.CT.DelayStatus30Days.Activities)
+    Private Shared Function GetPredActivities(ByVal t_cprj As String, ByVal t_cact As String) As List(Of SIS.CT.DelayStatus30Days.Activities)
       Dim Results As List(Of SIS.CT.DelayStatus30Days.Activities) = Nothing
 
       Dim Sql As String = ""
@@ -1258,7 +1300,7 @@ Namespace SIS.CT
       Sql &= " select distinct t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,t_drem, t_dela, t_delf,t_otsd,t_oted, t_pprc,t_cpgv,t_acty, t_dept "
       Sql &= " from ttpisg220200  "
       Sql &= " where t_cprj='" & t_cprj & "'"
-      Sql &= " and t_cact in (select distinct t_pact from ttpisg247200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "')"
+      Sql &= " and t_cact in (select distinct t_pact from ttpisg221200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "')"
       Sql &= " order by t_cact "
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
@@ -1284,13 +1326,17 @@ Namespace SIS.CT
       End Using
       Return Results
     End Function
-    Private Shared Function GetChildActivitiesCount(ByVal t_cprj As String, ByVal t_cact As String) As Integer
+    Public Shared Function GetPredActivitiesCount(ByVal t_cprj As String, ByVal t_cact As String) As Integer
       Dim Results As Integer = 0
       Dim Sql As String = ""
-      Sql &= " select isnull(count(*),null) as cnt "
-      Sql &= " from ttpisg220200  "
+      'Sql &= " select isnull(count(*),null) as cnt "
+      'Sql &= " from ttpisg220200  "
+      'Sql &= " where t_cprj='" & t_cprj & "'"
+      'Sql &= " and t_cact in (select distinct t_pact from ttpisg221200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "')"
+      Sql &= " select isnull(count(t_pact),0) as cnt "
+      Sql &= " from ttpisg221200  "
       Sql &= " where t_cprj='" & t_cprj & "'"
-      Sql &= " and t_cact in (select distinct t_pact from ttpisg247200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "')"
+      Sql &= " and t_cact='" & t_cact & "'"
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text

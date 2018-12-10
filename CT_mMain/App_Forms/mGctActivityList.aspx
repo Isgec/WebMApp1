@@ -54,8 +54,43 @@
       temp: function () {
       }
     }
+    function load_pred(x) {
+      if (loading)
+        return;
+      var project = x.getAttribute('data-project');
+      var activity = x.getAttribute('data-activity');
+      var loaded = parseInt(x.getAttribute('data-loaded'));
+
+      if (loaded == 1) {
+        var tdID = 'predTD_' + activity;
+        $get(tdID).innerHTML = '';
+        x.setAttribute('data-loaded', '0');
+
+        //if (!confirm('Reload Predecessors ?'))
+        //  return;
+      } else {
+      loadingCog = x;
+      x.setAttribute('class', 'fa fa-cog fa-spin');
+      PageMethods.getPredTbl(project + '|' + activity, successTD, failedTD);
+      }
+    }
+    function successTD(r) {
+      var aR = r.split('|');
+      var tdID = 'predTD_' + aR[0];
+      $get(tdID).innerHTML = aR[1];
+      loadingCog.setAttribute('data-loaded', '1');
+      loadingCog.setAttribute('class', 'fa fa-cog');
+      loading = false;
+    }
+    function failedTD(e) {
+      loadingCog.setAttribute('class', 'fa fa-cog');
+      loading = false;
+      alert(e.get_message);
+    }
+
     var loading = false;
     var loadingImg;
+    var loadingCog;
     function show_row(x, tbl) {
       var indent = parseInt(x.getAttribute('data-indent'));
       var expended = parseInt(x.getAttribute('data-expended'));
@@ -113,7 +148,7 @@
       if (bottom == 0)
         return;
       if (loaded == 1) {
-        if (!confirm('Reload Predecessors ?'))
+        if (!confirm('Reload  Predecessors ?'))
           return;
       }
       load_activity(x);
@@ -243,7 +278,7 @@
           <asp:Label ID="Label3" runat="server"></asp:Label></h6>
       </div>
       <div class="col-sm-2 text-center">
-        <asp:Button ID="cmdRefresh" runat="server" CssClass="btn btn-success" Text="Rebuild Predcessors" />
+        <asp:Button ID="cmdRefresh" runat="server" CssClass="btn btn-success" Text="Rebuild Predcessors" style="display:none;" />
       </div>
       <div class="col-sm-5 text-right">
         <h6>

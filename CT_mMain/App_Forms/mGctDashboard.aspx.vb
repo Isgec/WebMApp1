@@ -98,7 +98,8 @@ Partial Class mGctDashboard
 
   Private Sub cmdBacklog_Click(sender As Object, e As EventArgs) Handles cmdBacklog.Click
     If ProjectID <> "" Then
-      Dim RedirectURL As String = "~/CT_mMain/App_Forms/mGctBacklogIref.aspx?t_cprj=" & ProjectID & "&t_dsca=" & ProjectName.Text
+      Dim RedirectURL As String = "~/CT_mMain/App_Forms/mGctLast30DaysIref.aspx?t_cprj=" & ProjectID & "&t_dsca=" & ProjectName.Text & "&backlog="
+      '      Dim RedirectURL As String = "~/CT_mMain/App_Forms/mGctBacklogIref.aspx?t_cprj=" & ProjectID & "&t_dsca=" & ProjectName.Text
       Response.Redirect(RedirectURL)
     End If
   End Sub
