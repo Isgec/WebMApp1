@@ -155,7 +155,7 @@ Namespace SIS.CT
         End If
       End Set
     End Property
-    Public Shared Function SelectDocumentList(ByVal t_cprj As String, ByVal t_cact As String, ByVal All As Boolean) As List(Of SIS.CT.tdmisg140)
+    Public Shared Function SelectDocumentList(ByVal t_cprj As String, ByVal t_cact As String, ByVal All As Boolean, Optional ByVal IsNext As Boolean = False) As List(Of SIS.CT.tdmisg140)
       Dim Results As List(Of SIS.CT.tdmisg140) = Nothing
       Dim Sql As String = ""
       Sql &= " Select "
@@ -179,6 +179,9 @@ Namespace SIS.CT
       Sql &= " and t_iref = (Select top 1 t_sub1 from ttpisg220200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "' )"
       If Not All Then
         Sql &= " and year(t_adct) > 1970 "
+      End If
+      If IsNext Then
+        Sql &= " and t_adct between dateadd(d,30,getdate()) and getdate() "
       End If
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()

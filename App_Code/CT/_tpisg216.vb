@@ -28,10 +28,23 @@ Namespace SIS.CT
     End Property
     Public Property t_Refcntd As Integer = 0
     Public Property t_Refcntu As Integer = 0
+    Public Property t_acdt As DateTime = Nothing
+    Public Property t_oldt As DateTime = Nothing
+    Private _t_oltp As Double = 0
+    Public Property t_oltp As Double
+      Get
+        Return Math.Round(_t_oltp, 2)
+      End Get
+      Set(value As Double)
+        _t_oltp = value
+      End Set
+    End Property
+
     Public Class ProjectPeriod
       Public Property StDt As DateTime = Nothing
       Public Property FnDt As DateTime = Nothing
     End Class
+
     Public Shared Function GetDataTable(ByVal t_cprj As String, Optional ByVal AsOn As String = "") As String
       If AsOn = "" Then AsOn = Now.ToString("dd/MM/yyyy")
       Dim data As List(Of SIS.CT.tpisg216) = SIS.CT.tpisg216.SelectListForDataTable(t_cprj, AsOn)
@@ -90,13 +103,34 @@ Namespace SIS.CT
       End Using
       Return Results
     End Function
-    Public Shared Function StartFinish(ByVal t_cprj As String) As ProjectPeriod
+    Public Shared Function GetProjectPeriod(ByVal t_cprj As String) As ProjectPeriod
       If t_cprj = "" Then Return Nothing
       Dim Results As New ProjectPeriod
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = "select Min(t_curr) as stdt, Max(t_curr) as fndt from ttpisg216200 where t_cprj='" & t_cprj & "'"
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          If (Reader.Read()) Then
+            Try
+              Results.StDt = Convert.ToDateTime(Reader("stdt"))
+              Results.FnDt = Convert.ToDateTime(Reader("fndt"))
+            Catch ex As Exception
+            End Try
+          End If
+          Reader.Close()
+        End Using
+      End Using
+      Return Results
+    End Function
+    Public Shared Function GetOutlookPeriod(ByVal t_cprj As String) As ProjectPeriod
+      If t_cprj = "" Then Return Nothing
+      Dim Results As New ProjectPeriod
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = "select Min(t_curr) as stdt, Max(t_curr) as fndt from ttpisg249200 where t_cprj='" & t_cprj & "'"
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
           If (Reader.Read()) Then

@@ -24,6 +24,29 @@ Public Class MfgServices
     Return Projects.ToArray()
   End Function
   <WebMethod(EnableSession:=True)>
+  Public Function GetYNRSuppliers(knownCategoryValues As String) As CascadingDropDownNameValue()
+    Dim ProjectID As String = CascadingDropDown.ParseKnownCategoryValuesString(knownCategoryValues)("t_cprj")
+    Dim Suppliers As New List(Of CascadingDropDownNameValue)
+    Dim Sql As String = ""
+    Sql &= " select distinct pH.t_otbp + '-' + tc.t_nama, pH.t_otbp + '_' + pD.t_cprj as x_otbp from ttdpur400200 as pH "
+    Sql &= " inner join ttdpur401200 as pD on pH.t_orno = pD.t_orno "
+    Sql &= " inner join ttccom100200 As tc On pH.t_otbp = tc.t_bpid and tc.t_bpid='SUPI00002'"
+    Sql &= " where pD.t_cprj='" & ProjectID & "'"
+    Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+      Using Cmd As SqlCommand = Con.CreateCommand()
+        Cmd.CommandType = CommandType.Text
+        Cmd.CommandText = Sql
+        Con.Open()
+        Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+        While (Reader.Read())
+          Suppliers.Add(New CascadingDropDownNameValue() With {.name = Reader(0).ToString(), .value = Reader(1).ToString()})
+        End While
+        Reader.Close()
+      End Using
+    End Using
+    Return Suppliers.ToArray()
+  End Function
+  <WebMethod(EnableSession:=True)>
   Public Function GetSuppliers(knownCategoryValues As String) As CascadingDropDownNameValue()
     Dim ProjectID As String = CascadingDropDown.ParseKnownCategoryValuesString(knownCategoryValues)("t_cprj")
     Dim Suppliers As New List(Of CascadingDropDownNameValue)

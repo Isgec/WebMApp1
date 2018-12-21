@@ -1,81 +1,15 @@
 <%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" EnableEventValidation = "false" CodeFile="mGctDashboard.aspx.vb" Inherits="mGctDashboard" Title="Project Dashboard" %>
 <asp:Content ID="None" ContentPlaceHolderID="cphMain" runat="server">
-  <style>
-    .chartDiv {
-      overflow: hidden;
-      margin: 15px auto;
-      padding: 0px 0px 6px 0px;
-      text-align: center;
-      /*background: #e3e3e3;*/
-      color: #333333;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      border-radius: 5px;
-      border: 1px solid gray;
-    }
-  </style>
-  <style>
-    .sidenav {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      left: 0;
-      background-color: #111;
-      overflow-x: hidden;
-      transition: 0.5s;
-      padding-top: 60px;
-    }
-
-      .sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        /*font-size: 25px;*/
-        color: #818181;
-        display: block;
-        transition: 0.3s;
-      }
-
-        .sidenav a:hover {
-          color: #f1f1f1;
-        }
-
-      .sidenav .closebtn {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px;
-        margin-left: 50px;
-      }
-
-    @media screen and (max-height: 450px) {
-      .sidenav {
-        padding-top: 15px;
-      }
-
-        .sidenav a {
-          font-size: 18px;
-        }
-    }
-  </style>
-  <script>
-    function openNav() {
-      document.getElementById("mySidenav").style.width = "250px";
-    }
-
-    function closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-    }
-  </script>
 </asp:Content>
 <asp:Content ID="CPHctPActivity" ContentPlaceHolderID="cph1" runat="Server">
   <%--Side Menu Bar--%>
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <asp:LinkButton ID="cmdActivitySCurve" runat="server" Text="Activity wise S-Curve" ToolTip="S-Curve of Major Activities." />
-  <asp:LinkButton ID="cmd30Days" runat="server" Text="Delayed Items [Last 30 Days]" ToolTip="Last 30 days from today." />
-  <asp:LinkButton ID="cmdBacklog" runat="server" Text="Delayed Items [Backlog]" ToolTip="Since Project Start till 30 days befor from today." />
+  <asp:LinkButton ID="cmdActivitySCurve" runat="server" Text="Activity Type wise S-Curve" ToolTip="S-Curve of Major Activities." />
+  <asp:LinkButton ID="cmd30Days" runat="server" Text="Progress Status [Last 30 Days]" ToolTip="Last 30 days." />
+  <asp:LinkButton ID="cmdBacklog" runat="server" Text="Progress Status [Overall]" ToolTip="Since Project Start." />
+  <asp:LinkButton ID="cmd30Next" runat="server" Text="Progress Status [Next 30 Days]" ToolTip="Next 30 days." />
+  <asp:LinkButton ID="cmdDelayed" runat="server" Text="Delayed Status [Overall]" ToolTip="Delayed Since Project Start." />
 </div>
 
   <%--Main Container--%>
@@ -135,37 +69,10 @@
           <h5>OVERALL SUMMARY</h5>
           <asp:Chart
             ID="Chart1"
-            DataSourceID="ODStpisg216"
             Height="400px"
             Width="1000px"
             ClientIDMode="Predictable"
             runat="server">
-            <Series>
-              <asp:Series
-                Name="Series1"
-                ChartArea="ChartArea1"
-                XValueMember="t_curr"
-                YValueMembers="t_prop"
-                ChartType="Spline"
-                XValueType="DateTime"
-                ToolTip="Value of X: #VALX Value of Y #VALY"
-                LegendText="Planned Progress %"
-                IsVisibleInLegend="True"
-                Legend="Legend1">
-              </asp:Series>
-              <asp:Series
-                Name="Series2"
-                ChartArea="ChartArea1"
-                XValueMember="t_curr"
-                YValueMembers="t_proa"
-                ChartType="Spline"
-                XValueType="DateTime"
-                ToolTip="Value of X: #VALX Value of Y #VALY"
-                LegendText="Actual Progress %"
-                IsVisibleInLegend="True"
-                Legend="Legend1">
-              </asp:Series>
-            </Series>
             <Legends>
               <asp:Legend Name="Legend1" Docking="Bottom" IsDockedInsideChartArea="true">
                 <Position Auto="True" />
@@ -173,27 +80,9 @@
             </Legends>
             <ChartAreas>
               <asp:ChartArea Name="ChartArea1">
-                <AxisX Interval="30" Title="Time" TitleForeColor="Blue">
-                  <MajorGrid LineColor="LightGray" LineWidth="1" />
-                  <LabelStyle Format="dd-MMM" />
-                </AxisX>
-                <AxisY Interval="10" Minimum="0" Maximum="100" Title="% Progress" TitleForeColor="Blue">
-                  <MajorGrid LineColor="LightGray" LineWidth="1" />
-                </AxisY>
               </asp:ChartArea>
             </ChartAreas>
-              
           </asp:Chart>
-          <asp:ObjectDataSource
-            ID="ODStpisg216"
-            runat="server"
-            SelectMethod="SelectList"
-            TypeName="SIS.CT.tpisg216"
-            OldValuesParameterFormatString="original_{0}">
-            <SelectParameters>
-              <asp:ControlParameter ControlID="F_t_cprj" PropertyName="SelectedValue" Name="t_cprj" Type="String" DefaultValue="" Size="6" />
-            </SelectParameters>
-          </asp:ObjectDataSource>
           <div id="OverallDataTable" runat="server" class="container-fluid text-center"></div>
         </div>
       </div>

@@ -1,21 +1,5 @@
 <%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" EnableEventValidation = "false" CodeFile="mGctActivityList.aspx.vb" Inherits="mGctActivityList" title="Project-Activity List" %>
 <asp:Content ID="None" ContentPlaceHolderID="cphMain" runat="server">
-  <style>
-    .chartDiv {
-      overflow: hidden;
-      margin: 15px auto;
-      padding: 0px 0px 6px 0px;
-      text-align: center;
-      /*background: #e3e3e3;*/
-      color: #333333;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      border-radius: 5px;
-      border: 1px solid gray;
-      
-    }
-
-  </style>
 
   <script type="text/javascript">
     var script_ct = {

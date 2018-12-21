@@ -4,19 +4,19 @@ Imports System.Data
 Imports System.Data.SqlClient
 Imports System.ComponentModel
 Imports System.Web.Script.Serialization
-Partial Class mGctLast30DaysIref
+Partial Class mGctNext30DaysActy
   Inherits System.Web.UI.Page
   Private ProjectID As String = ""
+  Private ActivityID As String = ""
   Private Period As SIS.CT.tpisg216.ProjectPeriod = Nothing
-  Private Isbacklog As Boolean = False
-  Private IsDelayed As Boolean = False
+  Private IsBacklog As Boolean = False
   Private Sub mGctDashboard_Load(sender As Object, e As EventArgs) Handles Me.Load
     ProjectID = Request.QueryString("t_cprj")
+    ActivityID = Request.QueryString("t_acty")
     If ProjectID = "" Then Exit Sub
     Period = SIS.CT.tpisg216.GetProjectPeriod(ProjectID)
     ProjectName.Text = Request.QueryString("t_dsca")
-    Isbacklog = IIf(Request.QueryString("backlog") IsNot Nothing, True, False)
-    IsDelayed = IIf(Request.QueryString("delayed") IsNot Nothing, True, False)
+    If Request.QueryString("backlog") IsNot Nothing Then IsBacklog = True
   End Sub
   Protected Sub abc(ByVal sender As Object, ByVal e As EventArgs)
 
@@ -25,26 +25,24 @@ Partial Class mGctLast30DaysIref
 
 #Region " Item Ref. Table Last 30 Days"
   Private Sub irefDelay30d_PreRender(sender As Object, e As EventArgs) Handles irefDelay30d.PreRender
-    If ProjectID = "" Then Exit Sub
-    BaselineStart.Text = "Baseline Start: " & Period.StDt.ToString("dd/MM/yyyy")
-    BaselineFinish.Text = "Baseline Finish: " & Period.FnDt.ToString("dd/MM/yyyy")
+    If ProjectID = "" Or ActivityID = "" Then Exit Sub
+    'BaselineStart.Text = "Baseline Start: " & Period.StDt.ToString("dd/MM/yyyy")
+    'BaselineFinish.Text = "Baseline Finish: " & Period.FnDt.ToString("dd/MM/yyyy")
     Dim lDt As DateTime = SIS.CT.DelayStatus30Days.LastUpdatedOn(ProjectID)
-    If Isbacklog Then
-      Label9.Text = "(Overall - Updated On: " & lDt.ToString("dd/MM/yyyy") & ")"
-    ElseIf IsDelayed Then
-      Label9.Text = "(Overall Delayed - Updated On: " & lDt.ToString("dd/MM/yyyy") & ")"
+    If IsBacklog Then
+      Label9.Text = "(Backlog-As On: " & Now.ToString("dd/MM/yyyy") & "-Updated On: " & lDt.ToString("dd/MM/yyyy") & ")"
     Else
-      Label9.Text = "(Last 30 Days-As On: " & Now.ToString("dd/MM/yyyy") & "-Updated On: " & lDt.ToString("dd/MM/yyyy") & ")"
+      Label9.Text = "(Next 30 Days-As On: " & Now.ToString("dd/MM/yyyy") & "-Updated On: " & lDt.ToString("dd/MM/yyyy") & ")"
     End If
     Dim x As SIS.CT.DelayStatus30Days.ProjectDates = SIS.CT.DelayStatus30Days.OverAllImpactOnCommissioning(ProjectID)
-    Initial.Text = "Baseline Commissioning: " & x.Initial.ToString("dd/MM/yyyy")
-    Contractual.Text = "Contractual Commissioning: " & x.Contractual.ToString("dd/MM/yyyy")
-    Expected.Text = "Expected Commissioning: " & x.Expected.ToString("dd/MM/yyyy")
-    Overall.Text = "Expected Delay-Commissioning: " & x.TotalDays & IIf(x.CalenderDays <> x.TotalDays, " / " & x.CalenderDays, "")
-    irefDelay30d.Controls.Add(GetTable(ProjectID, Isbacklog, IsDelayed))
+    'Initial.Text = "Baseline Commissioning: " & x.Initial.ToString("dd/MM/yyyy")
+    'Contractual.Text = "Contractual Commissioning: " & x.Contractual.ToString("dd/MM/yyyy")
+    'Expected.Text = "Expected Commissioning: " & x.Expected.ToString("dd/MM/yyyy")
+    'Overall.Text = "Expected Delay-Commissioning: " & x.TotalDays & IIf(x.CalenderDays <> x.TotalDays, " / " & x.CalenderDays, "")
+    irefDelay30d.Controls.Add(GetTable(ProjectID))
   End Sub
-  Private Function GetTable(ByVal t_cprj As String, ByVal IbBacklog As Boolean, ByVal IsDelayed As Boolean) As Table
-    Dim data As List(Of SIS.CT.DelayStatus30Days) = SIS.CT.DelayStatus30Days.SelectItems(t_cprj, "", Isbacklog, False, IsDelayed)
+  Private Function GetTable(ByVal t_cprj As String) As Table
+    Dim data As List(Of SIS.CT.DelayStatus30Days) = SIS.CT.DelayStatus30Days.SelectItems(t_cprj, ActivityID, IsBacklog, True)
     data.Sort(Function(x, y) x.t_cact.CompareTo(y.t_cact))
     Dim mStr As String = ""
     Dim tbl As New Table
@@ -58,90 +56,77 @@ Partial Class mGctLast30DaysIref
     'Write Header
     Dim th As New TableHeaderRow
     Dim btn As Button = Nothing
+    Dim thc As TableHeaderCell = Nothing
     th.Attributes.Add("style", "background-color:black;color:white;")
     th.TableSection = TableRowSection.TableHeader
-    For i As Integer = 0 To 8
-      Dim thc As New TableHeaderCell
-      With thc
-        .Attributes.Add("style", "text-align:center;")
-        .ColumnSpan = 2
-        btn = New Button
-        With btn
-          .ClientIDMode = ClientIDMode.Static
-          .CssClass = "btn btn-dark btn-sm"
-          .Attributes.Add("style", "white-space:normal;")
-          .PostBackUrl = "~/CT_mMain/App_Forms/mGctActivityList.aspx?t_cprj=" & t_cprj & IIf(Isbacklog, "&backlog=", "") & "&t_cact="
-          .Font.Bold = True
-        End With
 
-        Select Case i
-          Case 0
-            .ColumnSpan = 1
-            .RowSpan = 2
-            .Text = "ITEM"
-          Case 1
-            btn.ID = "DESIGN"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "ENGINEERING"
-            thc.Controls.Add(btn)
-          Case 2
-            btn.ID = "INDT"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "INDENTING"
-            thc.Controls.Add(btn)
-          Case 3
-            btn.ID = "RFQ-TO-PO"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "RFQ-TO-PO"
-            thc.Controls.Add(btn)
-          Case 4
-            btn.ID = "MFG"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "MFG."
-            thc.Controls.Add(btn)
-          Case 5
-            btn.ID = "DISP"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "DISP"
-            thc.Controls.Add(btn)
-          Case 6
-            btn.ID = "RECPT"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "RECPT"
-            thc.Controls.Add(btn)
-          Case 7
-            btn.ID = "EREC"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "ERECTION"
-            thc.Controls.Add(btn)
-          Case 8
-            .ColumnSpan = 1
-            .RowSpan = 2
-            .Text = "IMPACT ON COMMISSIONING"
-        End Select
-        th.Cells.Add(thc)
-      End With
-    Next
-    tbl.Rows.Add(th)
-    th = New TableHeaderRow
-    th.Attributes.Add("style", "background-color:black;color:white;")
-    th.TableSection = TableRowSection.TableHeader
-    For i As Integer = 0 To 6
-      Dim thc As New TableHeaderCell
-      With thc
-        .Attributes.Add("style", "text-align:center;")
-        .Text = "Start"
-        .Font.Bold = False
-        th.Cells.Add(thc)
-      End With
+    thc = New TableHeaderCell
+    thc.Attributes.Add("style", "text-align:left;")
+    thc.RowSpan = 2
+    thc.Text = "ITEM"
+    th.Cells.Add(thc)
+
+    thc = New TableHeaderCell
+    thc.Attributes.Add("style", "text-align:center;")
+    thc.ColumnSpan = 2
+    btn = New Button
+    With btn
+      .ClientIDMode = ClientIDMode.Static
+      .CssClass = "btn btn-dark btn-sm"
+      .Attributes.Add("style", "white-space:normal;")
+      .PostBackUrl = "~/CT_mMain/App_Forms/mGctActivityList.aspx?t_cprj=" & t_cprj & "&t_cact=&ID=ACTIVITY&all=false&IsNext=&t_acty=" & ActivityID & IIf(IsBacklog, "&backlog=", "")
+      .Font.Bold = True
+      .ID = ActivityID
+      .Text = ActivityID
+    End With
+    Select Case ActivityID
+      Case "DESIGN"
+        btn.Text = "ENGINEERING"
+      Case "INDT"
+        btn.Text = "INDENTING"
+      Case "EREC"
+        btn.Text = "ERECTION"
+    End Select
+    thc.Controls.Add(btn)
+    th.Cells.Add(thc)
+
+
+    If ActivityID = "DESIGN" Then
       thc = New TableHeaderCell
       With thc
         .Attributes.Add("style", "text-align:center;")
-        .Text = "Finish"
-        .Font.Bold = False
-        th.Cells.Add(thc)
+        .RowSpan = 2
+        .Text = "TOTAL DOCUMENTS"
       End With
-    Next
+      th.Cells.Add(thc)
+      thc = New TableHeaderCell
+      With thc
+        .Attributes.Add("style", "text-align:center;")
+        .RowSpan = 2
+        .Text = "DOCUMENTS TO RELEASE"
+      End With
+      th.Cells.Add(thc)
+    End If
+
+    tbl.Rows.Add(th)
+
+    th = New TableHeaderRow
+    th.Attributes.Add("style", "background-color:black;color:white;")
+    th.TableSection = TableRowSection.TableHeader
+    thc = New TableHeaderCell
+    With thc
+      .Attributes.Add("style", "text-align:center;")
+      .Text = "Start"
+      .Font.Bold = False
+      th.Cells.Add(thc)
+    End With
+    thc = New TableHeaderCell
+    With thc
+      .Attributes.Add("style", "text-align:center;")
+      .Text = "Finish"
+      .Font.Bold = False
+      th.Cells.Add(thc)
+    End With
     tbl.Rows.Add(th)
     '==========
     'Write Data
@@ -152,9 +137,6 @@ Partial Class mGctLast30DaysIref
     Dim tr2 As TableRow = Nothing
     Dim td2 As TableCell = Nothing
     For Each dt As SIS.CT.DelayStatus30Days In data
-      If IsDelayed Then
-        If Not dt.AnyDelay Then Continue For
-      End If
       tr = New TableRow
       tr2 = New TableRow
       '1. Item Reference
@@ -174,73 +156,53 @@ Partial Class mGctLast30DaysIref
         .CssClass = "btn btn-outline-light text-dark btn-sm"
         .ID = dt.t_cact
         .Attributes.Add("style", "white-space:normal;text-align:left;")
-        .PostBackUrl = dt.GetRedirectLink & "&ID=ITEM&t_acty=&all=false" & IIf(Isbacklog, "&backlog=", "")
+        .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&IsNext=&t_acty=" & ActivityID & IIf(IsBacklog, "&backlog=", "")
         .Text = dt.t_sub1
       End With
       td.Controls.Add(btn)
       tr.Cells.Add(td)
-
       '2. Start
-      Dim actAry As Array = {"DESIGN", "INDT", "RFQ-TO-PO", "MFG", "DISP", "RECPT", "EREC"}
-      For Each act As String In actAry
-        Dim xx As SIS.CT.DelayStatus30Days.activityType = Nothing
-        Select Case act
-          Case "DESIGN"
-            xx = dt.Design
-          Case "INDT"
-            xx = dt.Indt
-          Case "RFQ-TO-PO"
-            xx = dt.RfqToPO
-          Case "MFG"
-            xx = dt.Mfg
-          Case "EREC"
-            xx = dt.Erec
-          Case "DISP"
-            xx = dt.Disp
-          Case "RECPT"
-            xx = dt.Recpt
-          Case "OTHERS"
-            xx = dt.Others
-        End Select
+      Dim xx As SIS.CT.DelayStatus30Days.activityType = Nothing
+      Select Case ActivityID
+        Case "DESIGN"
+          xx = dt.Design
+        Case "INDT"
+          xx = dt.Indt
+        Case "RFQ-TO-PO"
+          xx = dt.RfqToPO
+        Case "MFG"
+          xx = dt.Mfg
+        Case "EREC"
+          xx = dt.Erec
+        Case "DISP"
+          xx = dt.Disp
+        Case "RECPT"
+          xx = dt.Recpt
+        Case "OTHERS"
+          xx = dt.Others
+      End Select
 
+      td = New TableCell
+      td2 = New TableCell
+
+      If Not xx.Initialized Then
+        td.RowSpan = 2
+        td.Text = "<i class='fa fa-close fa-2x'></i>"
+        td.Attributes.Add("style", "text-align:center;")
+        tr.Cells.Add(td)
         td = New TableCell
-        td2 = New TableCell
-
-        If Not xx.Initialized Then
-          td.RowSpan = 2
-          td.Text = "<i class='fa fa-close fa-2x'></i>"
-          td.Attributes.Add("style", "text-align:center;")
-          tr.Cells.Add(td)
-          td = New TableCell
-          td.RowSpan = 2
-          td.Attributes.Add("style", "text-align:center;")
-          td.Text = "<i class='fa fa-close fa-2x'></i>"
-          tr.Cells.Add(td)
-
-          Continue For
-        End If
-        If IsDelayed Then
-          If xx.StartDelay <= 0 Or xx.FinishDelay <= 0 Then
-            'td.RowSpan = 2
-            'td.Text = "<i class='fa fa-close fa-2x'></i>"
-            'td.Attributes.Add("style", "text-align:center;")
-            'tr.Cells.Add(td)
-            'td = New TableCell
-            'td.RowSpan = 2
-            'td.Attributes.Add("style", "text-align:center;")
-            'td.Text = "<i class='fa fa-close fa-2x'></i>"
-            'tr.Cells.Add(td)
-
-            'Continue For
-          End If
-        End If
+        td.RowSpan = 2
+        td.Attributes.Add("style", "text-align:center;")
+        td.Text = "<i class='fa fa-close fa-2x'></i>"
+        tr.Cells.Add(td)
+      Else
         td.Attributes.Add("style", "text-align:center;")
         td2.Attributes.Add("style", "text-align:center;")
         btn = New Button
         With btn
           .CssClass = "btn btn-outline-dark btn-sm"
           .ClientIDMode = ClientIDMode.Static
-          .ID = dt.t_cact & "_" & act & "_S"
+          .ID = dt.t_cact & "_" & ActivityID & "_S"
           .Text = xx.StartDelay
           If Not xx.IsCurrent Then
             If xx.Started And xx.Finished Then
@@ -259,7 +221,7 @@ Partial Class mGctLast30DaysIref
               .CssClass = "btn btn-danger btn-sm"
             End If
           End If
-          .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&t_acty=" & act & IIf(Isbacklog, "&backlog=", "")
+          .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&IsNext=&t_acty=" & ActivityID & IIf(IsBacklog, "&backlog=", "")
         End With
         td.Text = "" 'xx.SelfStartDelay
         td.Font.Bold = True
@@ -276,7 +238,7 @@ Partial Class mGctLast30DaysIref
         With btn
           .CssClass = "btn btn-outline-dark btn-sm"
           .ClientIDMode = ClientIDMode.Static
-          .ID = dt.t_cact & "_" & act & "_F"
+          .ID = dt.t_cact & "_" & ActivityID & "_F"
           .Text = xx.FinishDelay
           If Not xx.IsCurrent Then
             If xx.Started And xx.Finished Then
@@ -295,7 +257,7 @@ Partial Class mGctLast30DaysIref
               .CssClass = "btn btn-danger btn-sm"
             End If
           End If
-          .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&t_acty=" & act & IIf(Isbacklog, "&backlog=", "")
+          .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&IsNext=&t_acty=" & ActivityID & IIf(IsBacklog, "&backlog=", "")
         End With
         td.Text = xx.SelfFinishDelay
         td.Font.Bold = True
@@ -303,15 +265,73 @@ Partial Class mGctLast30DaysIref
         td2.Controls.Add(btn)
         tr2.Cells.Add(td2)
         tr.Cells.Add(td)
-      Next
+      End If
+
       '3.
-      td = New TableCell
-      td.Attributes.Add("style", "text-align:Center;")
-      td.Attributes.Add("rowspan", "2")
-      td.Font.Bold = True
-      td.Font.Size = FontUnit.Point(11)
-      td.Text = IIf(dt.t_atsk = 0, "", dt.t_atsk)
-      tr.Cells.Add(td)
+      If ActivityID = "DESIGN" Then
+        td = New TableCell
+        td.Attributes.Add("style", "text-align:Center;")
+        td.Attributes.Add("rowspan", "2")
+
+        btn = New Button
+        With btn
+          .CssClass = "btn btn-outline-primary btn-sm"
+          .ClientIDMode = ClientIDMode.Static
+          .ID = dt.t_cact & "_" & ActivityID & "_DT"
+          .Text = dt.TotalDocs
+          If Not xx.IsCurrent Then
+            If dt.ReleasedDocs = dt.TotalDocs Then
+              .CssClass = "btn btn-outline-success btn-sm"
+            ElseIf dt.ReleasedDocs > 0 Then
+              .CssClass = "btn btn-outline-info btn-sm"
+            Else
+              .CssClass = "btn btn-outline-danger btn-sm"
+            End If
+          Else
+            If dt.ReleasedDocs = dt.TotalDocs Then
+              .CssClass = "btn btn-success btn-sm"
+            ElseIf dt.ReleasedDocs > 0 Then
+              .CssClass = "btn btn-info btn-sm"
+            Else
+              .CssClass = "btn btn-danger btn-sm"
+            End If
+          End If
+          .PostBackUrl = dt.GetDocumentLink & "&ID=DT&IsNext="
+        End With
+        td.Controls.Add(btn)
+        tr.Cells.Add(td)
+
+        td = New TableCell
+        td.Attributes.Add("style", "text-align:Center;")
+        td.Attributes.Add("rowspan", "2")
+        btn = New Button
+        With btn
+          .CssClass = "btn btn-outline-primary btn-sm"
+          .ClientIDMode = ClientIDMode.Static
+          .ID = dt.t_cact & "_" & ActivityID & "_DR"
+          .Text = dt.ReleasedDocs
+          If Not xx.IsCurrent Then
+            If dt.ReleasedDocs = dt.TotalDocs Then
+              .CssClass = "btn btn-outline-success btn-sm"
+            ElseIf dt.ReleasedDocs > 0 Then
+              .CssClass = "btn btn-outline-info btn-sm"
+            Else
+              .CssClass = "btn btn-outline-danger btn-sm"
+            End If
+          Else
+            If dt.ReleasedDocs = dt.TotalDocs Then
+              .CssClass = "btn btn-success btn-sm"
+            ElseIf dt.ReleasedDocs > 0 Then
+              .CssClass = "btn btn-info btn-sm"
+            Else
+              .CssClass = "btn btn-danger btn-sm"
+            End If
+          End If
+          .PostBackUrl = dt.GetDocumentLink & "&ID=DR&IsNext="
+        End With
+        td.Controls.Add(btn)
+        tr.Cells.Add(td)
+      End If
 
       tbl.Rows.Add(tr)
       tbl.Rows.Add(tr2)

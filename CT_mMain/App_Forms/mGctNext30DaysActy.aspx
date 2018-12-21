@@ -1,4 +1,4 @@
-<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" EnableEventValidation = "false" CodeFile="mGctLast30DaysActy.aspx.vb" Inherits="mGctLast30DaysActy" title="Progress Status-Last 30 Days" %>
+<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" EnableEventValidation = "false" CodeFile="mGctNext30DaysActy.aspx.vb" Inherits="mGctNext30DaysActy" title="Progress Status-Next 30 Days" %>
 <asp:Content ID="None" ContentPlaceHolderID="cphMain" runat="server">
 </asp:Content>
 <asp:Content ID="CPHctPActivity" ContentPlaceHolderID="cph1" runat="Server">

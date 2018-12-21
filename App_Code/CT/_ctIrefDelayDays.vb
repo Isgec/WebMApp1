@@ -99,7 +99,7 @@ Namespace SIS.CT
     Public Shared Function SelectListItemRefWiseDelayAll(ByVal t_cprj As String) As List(Of SIS.CT.IrefDelayDays)
       Dim Results As List(Of SIS.CT.IrefDelayDays) = Nothing
       If t_cprj = "" Then Return Results
-      Dim Period As SIS.CT.tpisg216.ProjectPeriod = SIS.CT.tpisg216.StartFinish(t_cprj)
+      Dim Period As SIS.CT.tpisg216.ProjectPeriod = SIS.CT.tpisg216.GetProjectPeriod(t_cprj)
       Dim s_date As String = Period.StDt.ToString("dd/MM/yyyy")
       Dim t_date As String = Now.AddDays(-31).ToString("dd/MM/yyyy")
       Dim Sql As String = ""

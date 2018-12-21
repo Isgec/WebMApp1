@@ -163,13 +163,18 @@ Namespace SIS.CT
 
     End Class
 
-    Public Shared Function SelectActivity(ByVal t_cprj As String, ByVal t_cact As String, ByVal t_acty As String, ByVal ID As String, ByVal All As Boolean) As List(Of SIS.CT.DelayStatus30Days.Activities)
+    Public Shared Function SelectActivity(ByVal t_cprj As String, ByVal t_cact As String, ByVal t_acty As String, ByVal ID As String, ByVal All As Boolean, Optional ByVal IsNext As Boolean = False) As List(Of SIS.CT.DelayStatus30Days.Activities)
       Dim Results As List(Of SIS.CT.DelayStatus30Days.Activities) = Nothing
       Dim t_date As String = Now.ToString("dd/MM/yyyy")
-
+      Dim FromDays As Integer = -30
+      If IsNext Then FromDays = 30
       Dim Sql As String = ""
       Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,t_drem, t_dela, t_delf,t_otsd,t_oted, t_pprc,t_cpgv,t_acty,t_dept,t_pact, t_outl,t_actp, "
-      Sql &= " IsCurrent = case when ((t_sdst between dateadd(d,-30,getdate()) and getdate())   or   (t_sdfn between dateadd(d,-30,getdate()) and getdate())) or ((t_sdst < dateadd(d,-30,getdate()))   and   (t_sdfn > getdate())) then 1 else 0 end, "
+      If Not IsNext Then
+        Sql &= " IsCurrent = case when ((t_sdst between dateadd(d," & FromDays & ",getdate()) and getdate())   or   (t_sdfn between dateadd(d," & FromDays & ",getdate()) and getdate())) or ((t_sdst < dateadd(d," & FromDays & ",getdate()))   and   (t_sdfn > getdate())) then 1 else 0 end, "
+      Else
+        Sql &= " IsCurrent = case when ((t_sdst between getdate() and dateadd(d," & FromDays & ",getdate()))   or   (t_sdfn between getdate() and dateadd(d," & FromDays & ",getdate()))) or ((t_sdst < getdate() )   and   (t_sdfn > dateadd(d," & FromDays & ",getdate()))) then 1 else 0 end, "
+      End If
       Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem "
       Sql &= " from ttpisg220200  "
       Sql &= " where t_cprj='" & t_cprj & "'"
@@ -211,125 +216,49 @@ Namespace SIS.CT
       'Process List to Include Parent As Per Logic
       '===========================================
       Dim NewResults As New List(Of SIS.CT.DelayStatus30Days.Activities)
-      Select Case ID
-        Case "ACTIVITY", "DATA_S", "DATA_F", "ITEM"
-          Dim Last_t_pact As String = ""
-          Dim ADDED As Boolean = False
-          For Each tmp As SIS.CT.DelayStatus30Days.Activities In Results
-            If Last_t_pact = "" Then
-              Last_t_pact = tmp.t_pact
+      Dim Last_t_pact As String = ""
+      Dim ADDED As Boolean = False
+      For Each tmp As SIS.CT.DelayStatus30Days.Activities In Results
+        If Last_t_pact = "" Then
+          Last_t_pact = tmp.t_pact
+        End If
+        If Last_t_pact <> tmp.t_pact Then
+          Last_t_pact = tmp.t_pact
+          ADDED = False
+        End If
+        Select Case tmp.t_acty
+          Case "DESIGN"
+            If Not ADDED Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, True, 0, IsNext)
+            ADDED = True
+          Case "INDT"
+            'Parent NOT to be loaded
+            'If Not ADDED Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1, IsNext)
+            ADDED = True
+          Case "RFQ-TO-PO"
+            If Not ADDED Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1, IsNext)
+            ADDED = True
+          Case Else
+            If Not ADDED Then
+              If tmp.SubItem <> "" Then
+                InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2, IsNext)
+              Else
+                InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1, IsNext)
+              End If
             End If
-            If Last_t_pact <> tmp.t_pact Then
-              Last_t_pact = tmp.t_pact
-              ADDED = False
-            End If
-            Select Case tmp.t_acty
-              Case "DESIGN"
-                If Not ADDED Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, True, 0)
-                ADDED = True
-              Case "INDT"
-                'Parent NOT to be loaded
-                'If Not ADDED Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
-                ADDED = True
-              Case "RFQ-TO-PO"
-                If Not ADDED Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
-                ADDED = True
-              Case Else
-                If Not ADDED Then
-                  If tmp.SubItem <> "" Then
-                    InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2)
-                  Else
-                    InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
-                  End If
-                End If
-                ADDED = True
-            End Select
-          Next
-          'Case "DATA_S", "DATA_F", "ITEM"
-          '  Dim Last_t_acty As String = ""
-          '  Dim DESIGN As Boolean = False
-          '  Dim INDT As Boolean = False
-          '  Dim RFQ As Boolean = False
-          '  Dim MFG As Boolean = False
-          '  Dim DISP As Boolean = False
-          '  Dim RECPT As Boolean = False
-          '  Dim EREC As Boolean = False
-          '  For Each tmp As SIS.CT.DelayStatus30Days.Activities In Results
-          '    If tmp.t_acty <> "PARENT" Then Continue For
-
-          '    If Last_t_acty = "" Then Last_t_acty = tmp.t_acty
-          '    If Last_t_acty <> tmp.t_acty Then
-          '      Last_t_acty = tmp.t_acty
-
-          '    End If
-          '    Select Case tmp.t_acty
-          '      Case "DESIGN"
-          '        If Not DESIGN Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, True, 0)
-          '        DESIGN = True
-          '      Case "INDT"
-          '        'Parent NOT to be loaded
-          '        'If Not INDT Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
-          '        'INDT = True
-          '      Case "RFQ-TO-PO"
-          '        If Not RFQ Then InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
-          '        RFQ = True
-          '      Case "MFG"
-          '        If Not MFG Then
-          '          If tmp.SubItem <> "" Then
-          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2)
-          '          Else
-          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
-          '          End If
-          '        End If
-          '        MFG = True
-          '      Case "DISP"
-          '        If Not DISP Then
-          '          If tmp.SubItem <> "" Then
-          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2)
-          '          Else
-          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
-          '          End If
-          '        End If
-          '        DISP = True
-          '      Case "RECPT"
-          '        If Not RECPT Then
-          '          If tmp.SubItem <> "" Then
-          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2)
-          '          Else
-          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
-          '          End If
-          '        End If
-          '        RECPT = True
-          '      Case "EREC"
-          '        If Not EREC Then
-          '          If tmp.SubItem <> "" Then
-          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 2)
-          '          Else
-          '            InsertParents(NewResults, tmp.t_pact, tmp.t_cprj, False, 1)
-          '          End If
-          '        End If
-          '        EREC = True
-          '    End Select
-          '    DESIGN = False
-          '    INDT = False
-          '    RFQ = False
-          '    MFG = False
-          '    DISP = False
-          '    RECPT = False
-          '    EREC = False
-          '  Next
-      End Select
+            ADDED = True
+        End Select
+      Next
       Results.AddRange(NewResults)
       '===========================================
       Return Results
     End Function
-    Public Shared Function InsertParents(ByRef actList As List(Of SIS.CT.DelayStatus30Days.Activities), ByVal t_pact As String, ByVal t_cprj As String, ByVal UptoTop As Boolean, ByVal UptoLevel As Integer) As List(Of SIS.CT.DelayStatus30Days.Activities)
+    Public Shared Function InsertParents(ByRef actList As List(Of SIS.CT.DelayStatus30Days.Activities), ByVal t_pact As String, ByVal t_cprj As String, ByVal UptoTop As Boolean, ByVal UptoLevel As Integer, Optional ByVal IsNext As Boolean = False) As List(Of SIS.CT.DelayStatus30Days.Activities)
       Dim LevelCount As Integer = 0
       Do While True
         LevelCount += 1
         Dim tmp As SIS.CT.DelayStatus30Days.Activities = Nothing
         If Not actList.Exists(Function(x) x.t_cact = t_pact) Then
-          tmp = GetParentActivity(t_pact, t_cprj)
+          tmp = GetParentActivity(t_pact, t_cprj, IsNext)
           actList.Add(tmp)
         End If
         If UptoTop Then
@@ -354,11 +283,18 @@ Namespace SIS.CT
       Loop
       Return actList
     End Function
-    Private Shared Function GetParentActivity(ByVal t_pact As String, ByVal t_cprj As String) As SIS.CT.DelayStatus30Days.Activities
+    Private Shared Function GetParentActivity(ByVal t_pact As String, ByVal t_cprj As String, Optional ByVal IsNext As Boolean = False) As SIS.CT.DelayStatus30Days.Activities
       Dim Results As SIS.CT.DelayStatus30Days.Activities = Nothing
       Dim Sql As String = ""
+      Dim FromDays As Integer = -30
+      If IsNext Then FromDays = 30
       Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,t_drem, t_dela, t_delf,t_otsd,t_oted, t_pprc,t_cpgv,t_acty,t_dept, t_outl, t_pact,t_actp, "
-      Sql &= " IsCurrent = case when ((t_sdst between dateadd(d,-30,getdate()) and getdate())   or   (t_sdfn between dateadd(d,-30,getdate()) and getdate())) or ((t_sdst < dateadd(d,-30,getdate()))   and   (t_sdfn > getdate())) then 1 else 0 end, "
+      'Sql &= " IsCurrent = case when ((t_sdst between dateadd(d," & FromDays & ",getdate()) and getdate())   or   (t_sdfn between dateadd(d," & FromDays & ",getdate()) and getdate())) or ((t_sdst < dateadd(d," & FromDays & ",getdate()))   and   (t_sdfn > getdate())) then 1 else 0 end, "
+      If Not IsNext Then
+        Sql &= " IsCurrent = case when ((t_sdst between dateadd(d," & FromDays & ",getdate()) and getdate())   or   (t_sdfn between dateadd(d," & FromDays & ",getdate()) and getdate())) or ((t_sdst < dateadd(d," & FromDays & ",getdate()))   and   (t_sdfn > getdate())) then 1 else 0 end, "
+      Else
+        Sql &= " IsCurrent = case when ((t_sdst between getdate() and dateadd(d," & FromDays & ",getdate()))   or   (t_sdfn between getdate() and dateadd(d," & FromDays & ",getdate()))) or ((t_sdst < getdate() )   and   (t_sdfn > dateadd(d," & FromDays & ",getdate()))) then 1 else 0 end, "
+      End If
       Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem "
       Sql &= " from ttpisg220200  "
       Sql &= " where t_cprj='" & t_cprj & "'"
@@ -496,6 +432,7 @@ Namespace SIS.CT
 
     Public Property TotalDocs As Integer = 0
     Public Property ReleasedDocs As Integer = 0
+    Public Property AnyDelay As Boolean = False
 
     Public Property Design As activityType = New activityType
     Public Property Indt As activityType = New activityType
@@ -717,9 +654,22 @@ Namespace SIS.CT
     '  '================
     '  Return Results
     'End Function
-    Public Shared Function SelectItems(ByVal t_cprj As String, Optional ByVal t_acty As String = "", Optional IsBacklog As Boolean = False) As List(Of SIS.CT.DelayStatus30Days)
-      Dim FromDays As Integer = 30
-      If IsBacklog Then FromDays = 3650
+    Public Shared Function SelectItems(ByVal t_cprj As String, Optional ByVal t_acty As String = "", Optional IsBacklog As Boolean = False, Optional ByVal IsNext As Boolean = False, Optional ByVal IsDelayed As Boolean = False) As List(Of SIS.CT.DelayStatus30Days)
+      Dim sdst As String = "t_sdst"
+      Dim sdfn As String = "t_sdfn"
+      If (HttpContext.Current.Session("BasedOn") = "OUTLOOK") Then
+        sdst = "t_otsd"
+        sdfn = "t_oted"
+      End If
+      Dim FromDays As Integer = -30
+      If IsBacklog Then FromDays = -3650
+      If IsNext Then
+        FromDays = 30
+        'if Isbacklog=>End of Project then FromDays = Upto last date of project
+      End If
+      If IsDelayed Then
+        FromDays = -3650
+      End If
       Dim Results As List(Of SIS.CT.DelayStatus30Days) = Nothing
       Dim Sql As String = ""
       Sql &= "   select distinct aa.t_sub1,aa.t_acty,"
@@ -732,7 +682,12 @@ Namespace SIS.CT
       Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountAll,   "
       Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where year(bb.t_acsd)>1753 and bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountStarted,   "
       Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where year(bb.t_acfn)>1753 and bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountFinished,   "
-      Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where (((bb.t_sdst between dateadd(d,-" & FromDays & ",getdate()) and getdate())   or   (bb.t_sdfn between dateadd(d,-" & FromDays & ",getdate()) and getdate())) OR ((bb.t_sdst < dateadd(d,-" & FromDays & ",getdate()))   and   (bb.t_sdfn > getdate())) ) and bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountMark,   "
+      If Not IsNext Then
+        Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where (((bb." & sdst & " between dateadd(d," & FromDays & ",getdate()) and getdate())   or   (bb." & sdfn & " between dateadd(d," & FromDays & ",getdate()) and getdate())) OR ((bb." & sdst & " <= dateadd(d," & FromDays & ",getdate()))   and   (bb." & sdfn & " > getdate())) ) and bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountMark,   "
+      Else
+        Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where (((bb." & sdst & " between getdate() and dateadd(d," & FromDays & ",getdate()) )   or   (bb." & sdfn & " between getdate() and dateadd(d," & FromDays & ",getdate()) )) OR ((bb." & sdst & " <= getdate())   and   (bb." & sdfn & " > dateadd(d," & FromDays & ",getdate()))) ) and bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountMark,   "
+      End If
+
       Sql &= "   (select IsNull(min(bb.t_dela),0) from ttpisg220200 as bb where bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE'"
       Sql &= "     and bb.t_otsd = (select min(cc.t_otsd) from ttpisg220200 as cc where cc.t_cprj=bb.t_cprj and cc.t_sub1=bb.t_sub1 and cc.t_acty = bb.t_acty and LEFT(UPPER(cc.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE')"
       Sql &= " ) as NotStartedDelay,   "
@@ -751,7 +706,11 @@ Namespace SIS.CT
       Sql &= "    and aa.t_sub1 in ("
       Sql &= "      select t_sub1 from ttpisg220200 as bb where bb.t_cprj=aa.t_cprj "
       Sql &= "  and bb.t_acty in ('DESIGN','INDT','RFQ-TO-PO','MFG','EREC','DISP','RECPT')"
-      Sql &= "  and (((bb.t_sdst between dateadd(d,-" & FromDays & ",getdate()) and getdate())   or   (bb.t_sdfn between dateadd(d,-" & FromDays & ",getdate()) and getdate()))  OR ((bb.t_sdst < dateadd(d,-" & FromDays & ",getdate()))   and   (bb.t_sdfn > getdate()))  ) "
+      If Not IsNext Then
+        Sql &= "  and (((bb." & sdst & " between dateadd(d," & FromDays & ",getdate()) and getdate())   or   (bb." & sdfn & " between dateadd(d," & FromDays & ",getdate()) and getdate()))  OR ((bb." & sdst & " < dateadd(d," & FromDays & ",getdate()))   and   (bb." & sdfn & " > getdate()))  ) "
+      Else
+        Sql &= "  and (((bb." & sdst & " between getdate() and dateadd(d," & FromDays & ",getdate()) )   or   (bb." & sdfn & " between getdate() and dateadd(d," & FromDays & ",getdate()) ))  OR ((bb." & sdst & " < getdate())   and   (bb." & sdfn & " > dateadd(d," & FromDays & ",getdate()) ))  ) "
+      End If
       Sql &= "  and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE'"
       Sql &= "    )"
       Sql &= "    order by t_sub1, t_acty"
@@ -803,6 +762,9 @@ Namespace SIS.CT
               If .CountAll = .CountFinished Then .Finished = True
               If .Started Then .StartDelay = tmp.StartedDelay Else .StartDelay = tmp.NotStartedDelay
               If .Finished Then .FinishDelay = tmp.FinishedDelay Else .FinishDelay = tmp.NotFinishedDelay
+              If .StartDelay > 0 Or .FinishDelay > 0 Then
+                tmp1.AnyDelay = True
+              End If
             End With
           End While
           Reader.Close()
@@ -815,18 +777,30 @@ Namespace SIS.CT
       For Each x As SIS.CT.DelayStatus30Days In Results
         x.Design.SelfStartDelay = x.Design.StartDelay
         x.Design.SelfFinishDelay = x.Design.FinishDelay
+        'x.Indt.SelfStartDelay = x.Indt.StartDelay - x.Design.StartDelay
+        'If x.Indt.FinishDelay <> 0 Then x.Indt.SelfFinishDelay = x.Indt.FinishDelay + IIf(x.Design.FinishDelay > 0, x.Design.FinishDelay, 0)
+        'x.RfqToPO.SelfStartDelay = x.RfqToPO.StartDelay - x.Indt.StartDelay
+        'If x.RfqToPO.FinishDelay <> 0 Then x.RfqToPO.SelfFinishDelay = x.RfqToPO.FinishDelay + IIf(x.Indt.FinishDelay > 0, x.Indt.FinishDelay, 0)
+        'x.Mfg.SelfStartDelay = x.Mfg.StartDelay - x.RfqToPO.StartDelay
+        'If x.Mfg.FinishDelay <> 0 Then x.Mfg.SelfFinishDelay = x.Mfg.FinishDelay + IIf(x.RfqToPO.FinishDelay > 0, x.RfqToPO.FinishDelay, 0)
+        'x.Disp.SelfStartDelay = x.Disp.StartDelay - x.Mfg.StartDelay
+        'If x.Disp.FinishDelay <> 0 Then x.Disp.SelfFinishDelay = x.Disp.FinishDelay + IIf(x.Mfg.FinishDelay > 0, x.Mfg.FinishDelay, 0)
+        'x.Recpt.SelfStartDelay = x.Recpt.StartDelay - x.Disp.StartDelay
+        'If x.Recpt.FinishDelay <> 0 Then x.Recpt.SelfFinishDelay = x.Recpt.FinishDelay + IIf(x.Disp.FinishDelay > 0, x.Disp.FinishDelay, 0)
+        'x.Erec.SelfStartDelay = x.Erec.StartDelay - x.Recpt.StartDelay
+        'If x.Erec.FinishDelay <> 0 Then x.Erec.SelfFinishDelay = x.Erec.FinishDelay + IIf(x.Recpt.FinishDelay > 0, x.Recpt.FinishDelay, 0)
         x.Indt.SelfStartDelay = x.Indt.StartDelay - x.Design.StartDelay
-        x.Indt.SelfFinishDelay = x.Indt.FinishDelay - x.Design.FinishDelay
+        x.Indt.SelfFinishDelay = x.Indt.FinishDelay - IIf(x.Design.FinishDelay > 0, x.Design.FinishDelay, 0)
         x.RfqToPO.SelfStartDelay = x.RfqToPO.StartDelay - x.Indt.StartDelay
-        x.RfqToPO.SelfFinishDelay = x.RfqToPO.FinishDelay - x.Indt.FinishDelay
+        x.RfqToPO.SelfFinishDelay = x.RfqToPO.FinishDelay - IIf(x.Indt.FinishDelay > 0, x.Indt.FinishDelay, 0)
         x.Mfg.SelfStartDelay = x.Mfg.StartDelay - x.RfqToPO.StartDelay
-        x.Mfg.SelfFinishDelay = x.Mfg.FinishDelay - x.RfqToPO.FinishDelay
+        x.Mfg.SelfFinishDelay = x.Mfg.FinishDelay - IIf(x.RfqToPO.FinishDelay > 0, x.RfqToPO.FinishDelay, 0)
         x.Disp.SelfStartDelay = x.Disp.StartDelay - x.Mfg.StartDelay
-        x.Disp.SelfFinishDelay = x.Disp.FinishDelay - x.Mfg.FinishDelay
+        x.Disp.SelfFinishDelay = x.Disp.FinishDelay - IIf(x.Mfg.FinishDelay > 0, x.Mfg.FinishDelay, 0)
         x.Recpt.SelfStartDelay = x.Recpt.StartDelay - x.Disp.StartDelay
-        x.Recpt.SelfFinishDelay = x.Recpt.FinishDelay - x.Disp.FinishDelay
+        x.Recpt.SelfFinishDelay = x.Recpt.FinishDelay - IIf(x.Disp.FinishDelay > 0, x.Disp.FinishDelay, 0)
         x.Erec.SelfStartDelay = x.Erec.StartDelay - x.Recpt.StartDelay
-        x.Erec.SelfFinishDelay = x.Erec.FinishDelay - x.Recpt.FinishDelay
+        x.Erec.SelfFinishDelay = x.Erec.FinishDelay - IIf(x.Recpt.FinishDelay > 0, x.Recpt.FinishDelay, 0)
       Next
       '================
       Return Results

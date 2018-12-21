@@ -13,7 +13,7 @@ Partial Class mGctActivityList
   Private ItemReference As String = ""
   Private ListType As String = ""
   Private IsBacklog As Boolean = False
-
+  Private IsNext As Boolean = False
   Private Sub mGctActivityList_Load(sender As Object, e As EventArgs) Handles Me.Load
     ProjectID = Request.QueryString("t_cprj")
     ClickedID = Request.QueryString("ID")
@@ -22,18 +22,26 @@ Partial Class mGctActivityList
     If Request.QueryString("all") IsNot Nothing Then IsAll = Request.QueryString("all")
     If Request.QueryString("ListType") IsNot Nothing Then ListType = Request.QueryString("ListType")
     If Request.QueryString("Backlog") IsNot Nothing Then IsBacklog = True
+    If Request.QueryString("IsNext") IsNot Nothing Then IsNext = True
 
-    Period = SIS.CT.tpisg216.StartFinish(ProjectID)
+    Period = SIS.CT.tpisg216.GetProjectPeriod(ProjectID)
     Dim lDt As DateTime = SIS.CT.DelayStatus30Days.LastUpdatedOn(ProjectID)
 
     If IsAll Then
-      Label2.Text = "(From " & Period.StDt.ToString("dd/MM/yyyy") & " Till " & DateAdd(DateInterval.Day, -31, Now).ToString("dd/MM/yyyy") & " - As On " & Now.ToString("dd/MM/yyyy") & ")"
+      If IsNext Then
+        Label2.Text = "(From " & Period.StDt.ToString("dd/MM/yyyy") & " Till " & DateAdd(DateInterval.Day, 31, Now).ToString("dd/MM/yyyy") & " - As On " & Now.ToString("dd/MM/yyyy") & ")"
+      Else
+        Label2.Text = "(From " & Period.StDt.ToString("dd/MM/yyyy") & " Till " & DateAdd(DateInterval.Day, -31, Now).ToString("dd/MM/yyyy") & " - As On " & Now.ToString("dd/MM/yyyy") & ")"
+      End If
     Else
       If IsBacklog Then
-        'Label2.Text = "(As On " & Now.ToString("dd/MM/yyyy") & ")"
         Label2.Text = "From " & Period.StDt.ToString("dd/MM/yyyy") & " Till " & Now.ToString("dd/MM/yyyy") & " - Updated On " & lDt.ToString("dd/MM/yyyy") & ""
       Else
-        Label2.Text = "(Last 30 Days - As On " & Now.ToString("dd/MM/yyyy") & ")"
+        If IsNext Then
+          Label2.Text = "(Next 30 Days - As On " & Now.ToString("dd/MM/yyyy") & ")"
+        Else
+          Label2.Text = "(Last 30 Days - As On " & Now.ToString("dd/MM/yyyy") & ")"
+        End If
       End If
     End If
     Select Case ClickedID
@@ -72,19 +80,21 @@ Partial Class mGctActivityList
 
   Private Sub irefDelay30d_PreRender(sender As Object, e As EventArgs) Handles irefDelay30d.PreRender
     Dim tbl As Table = Nothing
-    tbl = GetTable(ProjectID, ActivityID, ActivityType, ClickedID, IsAll)
+    tbl = GetTable(ProjectID, ActivityID, ActivityType, ClickedID, IsAll, IsNext)
     irefDelay30d.Controls.Add(tbl)
   End Sub
-  Private Function GetTable(ByVal t_cprj As String, ByVal t_cact As String, ByVal t_acty As String, ByVal ID As String, ByVal All As Boolean) As Table
+  Private Function GetTable(ByVal t_cprj As String, ByVal t_cact As String, ByVal t_acty As String, ByVal ID As String, ByVal All As Boolean, Optional ByVal IsNext As Boolean = False) As Table
     Dim data As List(Of SIS.CT.DelayStatus30Days.Activities) = Nothing
     Select Case ListType
       Case "OverallAgeing"
         data = SIS.CT.Ageing.OverallActivity(t_cprj, ClickedID)
-      Case ""
-        data = SIS.CT.DelayStatus30Days.SelectActivity(t_cprj, t_cact, t_acty, ID, IsAll)
+      Case "ActivityAgeing"
+        data = SIS.CT.Ageing.ActyActivity(t_cprj, t_acty, ClickedID)
+      Case Else
+        data = SIS.CT.DelayStatus30Days.SelectActivity(t_cprj, t_cact, t_acty, ID, IsAll, IsNext)
     End Select
     'Now sorting is needed as parents are inserted after Select statement
-    data.Sort(Function(x, y) x.t_actp.CompareTo(y.t_actp))
+    If data IsNot Nothing Then data.Sort(Function(x, y) x.t_actp.CompareTo(y.t_actp))
     Dim hideItem As Boolean = False
     Select Case ClickedID
       Case "ITEM", "DATA_S", "DATA_F"
@@ -96,8 +106,9 @@ Partial Class mGctActivityList
       .ID = "tbl30Days"
       .ClientIDMode = ClientIDMode.Static
       .CssClass = "table-bordered"
-      .Width = Unit.Percentage(100)
-      .Style.Add(HtmlTextWriterStyle.Margin, "5px 5px 5px 5px")
+      '.Width = Unit.Percentage(100)
+      '.Style.Add(HtmlTextWriterStyle.Margin, "5px 5px 5px 5px")
+      .Style.Add(HtmlTextWriterStyle.WhiteSpace, "nowrap")
     End With
     'Write Header
     Dim th As New TableHeaderRow
@@ -165,8 +176,6 @@ Partial Class mGctActivityList
       For I As Integer = 0 To 14
         td = New TableCell
         With td
-          '.ClientIDMode = ClientIDMode.Static
-          '.ID = dt.t_cact
           If Not dt.IsDue Then
             .CssClass = "btn-outline-secondary"
           Else

@@ -7,7 +7,7 @@ Partial Class mGctDashboard
   Private Sub mGctDashboard_Load(sender As Object, e As EventArgs) Handles Me.Load
     ProjectID = Request.QueryString("t_cprj")
     If ProjectID = "" Then Exit Sub
-    Period = SIS.CT.tpisg216.StartFinish(ProjectID)
+    Period = SIS.CT.tpisg216.GetProjectPeriod(ProjectID)
     ProjectPeriod.Text = Period.StDt.ToString("dd/MM/yyyy") & " - " & Period.FnDt.ToString("dd/MM/yyyy")
     ProjectName.Text = Request.QueryString("t_dsca")
   End Sub

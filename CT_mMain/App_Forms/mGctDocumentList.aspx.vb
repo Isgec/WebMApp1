@@ -7,13 +7,14 @@ Partial Class mGctDocumentList
   Private ClickedID As String = ""
   Private Period As SIS.CT.tpisg216.ProjectPeriod = Nothing
   Private ItemReference As String = ""
+  Private IsNext As Boolean = False
 
   Private Sub mGctActivityList_Load(sender As Object, e As EventArgs) Handles Me.Load
     ProjectID = Request.QueryString("t_cprj")
     ActivityID = Request.QueryString("t_cact")
     ClickedID = Request.QueryString("ID")
-
-    Period = SIS.CT.tpisg216.StartFinish(ProjectID)
+    If Request.QueryString("IsNext") IsNot Nothing Then IsNext = True
+    Period = SIS.CT.tpisg216.GetProjectPeriod(ProjectID)
   End Sub
 
 
@@ -23,12 +24,12 @@ Partial Class mGctDocumentList
     ItemRef.Text = ItemReference
     BaselineFinish.Text = ProjectID
     Dim tbl As Table = Nothing
-    tbl = GetTable(ProjectID, ActivityID, ClickedID)
+    tbl = GetTable(ProjectID, ActivityID, ClickedID, IsNext)
     irefDelay30d.Controls.Add(tbl)
   End Sub
-  Private Function GetTable(ByVal t_cprj As String, ByVal t_cact As String, ByVal ID As String) As Table
+  Private Function GetTable(ByVal t_cprj As String, ByVal t_cact As String, ByVal ID As String, Optional ByVal IsNext As Boolean = False) As Table
     Dim data As List(Of SIS.CT.tdmisg140) = Nothing
-    data = SIS.CT.tdmisg140.SelectDocumentList(t_cprj, t_cact, IIf(ClickedID = "DT", True, False))
+    data = SIS.CT.tdmisg140.SelectDocumentList(t_cprj, t_cact, IIf(ClickedID = "DT", True, False), IsNext)
     'data.Sort(Function(x, y) x.t_cact.CompareTo(y.t_cact))
 
     Dim mStr As String = ""

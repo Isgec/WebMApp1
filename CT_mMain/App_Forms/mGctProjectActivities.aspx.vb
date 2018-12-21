@@ -7,7 +7,7 @@ Partial Class mGctProjectActivities
   Private Sub mGctDashboard_Load(sender As Object, e As EventArgs) Handles Me.Load
     ProjectID = F_t_cprj.SelectedValue
     If ProjectID = "" Then Exit Sub
-    Period = SIS.CT.tpisg216.StartFinish(ProjectID)
+    Period = SIS.CT.tpisg216.GetProjectPeriod(ProjectID)
 
   End Sub
 

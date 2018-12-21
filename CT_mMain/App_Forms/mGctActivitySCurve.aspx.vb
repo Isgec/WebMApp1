@@ -2,12 +2,22 @@ Imports System.Web.UI.DataVisualization.Charting
 Imports System.Web.Script.Serialization
 Partial Class mGctActivitySCurve
   Inherits System.Web.UI.Page
-  Private ProjectID As String = ""
+  Public Property ProjectID As String
+    Get
+      If ViewState("ProjectID") IsNot Nothing Then
+        Return ViewState("ProjectID")
+      End If
+      Return ""
+    End Get
+    Set(value As String)
+      ViewState.Add("ProjectID", value)
+    End Set
+  End Property
   Dim Period As SIS.CT.tpisg216.ProjectPeriod = Nothing
   Private Sub mGctDashboard_Load(sender As Object, e As EventArgs) Handles Me.Load
     ProjectID = Request.QueryString("t_cprj")
     If ProjectID = "" Then Exit Sub
-    Period = SIS.CT.tpisg216.StartFinish(ProjectID)
+    Period = SIS.CT.tpisg216.GetProjectPeriod(ProjectID)
     ProjectPeriod.Text = Period.StDt.ToString("dd/MM/yyyy") & " - " & Period.FnDt.ToString("dd/MM/yyyy")
     ProjectName.Text = Request.QueryString("t_dsca")
   End Sub
@@ -19,12 +29,12 @@ Partial Class mGctActivitySCurve
   Private Sub rCharts_ItemDataBound(sender As Object, e As RepeaterItemEventArgs) Handles rCharts.ItemDataBound
     If ProjectID = "" Then Exit Sub
     If e.Item.ItemType = ListItemType.Item Or e.Item.ItemType = ListItemType.AlternatingItem Then
-      Dim Chart2 As Chart = CType(e.Item.FindControl("Chart2"), Chart)
-      AddHandler Chart2.PostPaint, AddressOf Chart2_PostPaint
-      If Period IsNot Nothing Then
-        Chart2.ChartAreas(0).AxisX.Minimum = Period.StDt.ToOADate
-        Chart2.ChartAreas(0).AxisX.Maximum = Period.FnDt.ToOADate
-      End If
+      Dim ActivityType As String = CType(e.Item.FindControl("L_t_acty"), Label).Text
+      Dim Chart1 As Chart = CType(e.Item.FindControl("Chart1"), Chart)
+      AddHandler Chart1.PostPaint, AddressOf Chart2_PostPaint
+
+      Dim Dt As SIS.CT.CTChart = SIS.CT.CTChart.GetCTChart(ProjectID, ActivityType, 10)
+      Chart1 = SIS.CT.CTChart.RenderChart(Chart1, Dt, 20, 1)
     End If
   End Sub
   Private Sub Chart2_PostPaint(sender As Object, e As ChartPaintEventArgs)
@@ -69,7 +79,8 @@ Partial Class mGctActivitySCurve
 
   Private Sub cmdBacklog_Click(sender As Object, e As EventArgs) Handles cmdBacklog.Click
     If ProjectID <> "" Then
-      Dim RedirectURL As String = "~/CT_mMain/App_Forms/mGctBacklogIref.aspx?t_cprj=" & ProjectID & "&t_dsca=" & ProjectName.Text
+      'Dim RedirectURL As String = "~/CT_mMain/App_Forms/mGctBacklogIref.aspx?t_cprj=" & ProjectID & "&t_dsca=" & ProjectName.Text
+      Dim RedirectURL As String = "~/CT_mMain/App_Forms/mGctLast30DaysIref.aspx?t_cprj=" & ProjectID & "&t_dsca=" & ProjectName.Text & "&backlog="
       Response.Redirect(RedirectURL)
     End If
   End Sub

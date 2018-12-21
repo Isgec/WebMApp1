@@ -19,6 +19,7 @@ Namespace SIS.SYS.SQLDatabase
           'Always Return BaaN Live
           Return "Data Source=192.9.200.129;Initial Catalog=inforerpdb;Integrated Security=False;User Instance=False;Persist Security Info=True;User ID=lalit;Password=scorpions"
       End Select
+      BaaNLive = Convert.ToBoolean(ConfigurationManager.AppSettings("BaaNLive"))
 
       If BaaNLive Then
         Return "Data Source=192.9.200.129;Initial Catalog=inforerpdb;Integrated Security=False;User Instance=False;Persist Security Info=True;User ID=lalit;Password=scorpions"
@@ -30,6 +31,8 @@ Namespace SIS.SYS.SQLDatabase
       Return "Data Source=192.9.200.119\autodeskvault;Initial Catalog=" & vaultDB & ";Integrated Security=False;User Instance=False;Persist Security Info=True;User ID=sa;Password=Isgec@123"
     End Function
     Public Shared Function GetConnectionString() As String
+      JoomlaLive = Convert.ToBoolean(ConfigurationManager.AppSettings("JoomlaLive"))
+
       If JoomlaLive Then
         Return "Data Source=192.9.200.150;Initial Catalog=IJTPerks;Integrated Security=False;User Instance=False;Persist Security Info=True;User ID=sa;Password=isgec12345"
       Else

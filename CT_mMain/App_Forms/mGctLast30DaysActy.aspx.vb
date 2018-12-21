@@ -8,13 +8,15 @@ Partial Class mGctLast30DaysActy
   Inherits System.Web.UI.Page
   Private ProjectID As String = ""
   Private ActivityID As String = ""
-  Dim Period As SIS.CT.tpisg216.ProjectPeriod = Nothing
+  Private Period As SIS.CT.tpisg216.ProjectPeriod = Nothing
+  Private IsBacklog As Boolean = False
   Private Sub mGctDashboard_Load(sender As Object, e As EventArgs) Handles Me.Load
     ProjectID = Request.QueryString("t_cprj")
     ActivityID = Request.QueryString("t_acty")
     If ProjectID = "" Then Exit Sub
-    Period = SIS.CT.tpisg216.StartFinish(ProjectID)
+    Period = SIS.CT.tpisg216.GetProjectPeriod(ProjectID)
     ProjectName.Text = Request.QueryString("t_dsca")
+    If Request.QueryString("backlog") IsNot Nothing Then IsBacklog = True
   End Sub
   Protected Sub abc(ByVal sender As Object, ByVal e As EventArgs)
 
@@ -27,7 +29,11 @@ Partial Class mGctLast30DaysActy
     'BaselineStart.Text = "Baseline Start: " & Period.StDt.ToString("dd/MM/yyyy")
     'BaselineFinish.Text = "Baseline Finish: " & Period.FnDt.ToString("dd/MM/yyyy")
     Dim lDt As DateTime = SIS.CT.DelayStatus30Days.LastUpdatedOn(ProjectID)
-    Label9.Text = "(Last 30 Days-As On: " & Now.ToString("dd/MM/yyyy") & "-Updated On: " & lDt.ToString("dd/MM/yyyy") & ")"
+    If IsBacklog Then
+      Label9.Text = "(Backlog-As On: " & Now.ToString("dd/MM/yyyy") & "-Updated On: " & lDt.ToString("dd/MM/yyyy") & ")"
+    Else
+      Label9.Text = "(Last 30 Days-As On: " & Now.ToString("dd/MM/yyyy") & "-Updated On: " & lDt.ToString("dd/MM/yyyy") & ")"
+    End If
     Dim x As SIS.CT.DelayStatus30Days.ProjectDates = SIS.CT.DelayStatus30Days.OverAllImpactOnCommissioning(ProjectID)
     'Initial.Text = "Baseline Commissioning: " & x.Initial.ToString("dd/MM/yyyy")
     'Contractual.Text = "Contractual Commissioning: " & x.Contractual.ToString("dd/MM/yyyy")
@@ -36,7 +42,7 @@ Partial Class mGctLast30DaysActy
     irefDelay30d.Controls.Add(GetTable(ProjectID))
   End Sub
   Private Function GetTable(ByVal t_cprj As String) As Table
-    Dim data As List(Of SIS.CT.DelayStatus30Days) = SIS.CT.DelayStatus30Days.SelectItems(t_cprj, ActivityID)
+    Dim data As List(Of SIS.CT.DelayStatus30Days) = SIS.CT.DelayStatus30Days.SelectItems(t_cprj, ActivityID, IsBacklog)
     data.Sort(Function(x, y) x.t_cact.CompareTo(y.t_cact))
     Dim mStr As String = ""
     Dim tbl As New Table
@@ -68,7 +74,7 @@ Partial Class mGctLast30DaysActy
       .ClientIDMode = ClientIDMode.Static
       .CssClass = "btn btn-dark btn-sm"
       .Attributes.Add("style", "white-space:normal;")
-      .PostBackUrl = "~/CT_mMain/App_Forms/mGctActivityList.aspx?t_cprj=" & t_cprj & "&t_cact=&ID=ACTIVITY&all=false&t_acty=" & ActivityID
+      .PostBackUrl = "~/CT_mMain/App_Forms/mGctActivityList.aspx?t_cprj=" & t_cprj & "&t_cact=&ID=ACTIVITY&all=false&t_acty=" & ActivityID & IIf(IsBacklog, "&backlog=", "")
       .Font.Bold = True
       .ID = ActivityID
       .Text = ActivityID
@@ -150,7 +156,7 @@ Partial Class mGctLast30DaysActy
         .CssClass = "btn btn-outline-light text-dark btn-sm"
         .ID = dt.t_cact
         .Attributes.Add("style", "white-space:normal;text-align:left;")
-        .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&t_acty=" & ActivityID
+        .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&t_acty=" & ActivityID & IIf(IsBacklog, "&backlog=", "")
         .Text = dt.t_sub1
       End With
       td.Controls.Add(btn)
@@ -215,7 +221,7 @@ Partial Class mGctLast30DaysActy
               .CssClass = "btn btn-danger btn-sm"
             End If
           End If
-          .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&t_acty=" & ActivityID
+          .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&t_acty=" & ActivityID & IIf(IsBacklog, "&backlog=", "")
         End With
         td.Text = "" 'xx.SelfStartDelay
         td.Font.Bold = True
@@ -251,7 +257,7 @@ Partial Class mGctLast30DaysActy
               .CssClass = "btn btn-danger btn-sm"
             End If
           End If
-          .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&t_acty=" & ActivityID
+          .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&t_acty=" & ActivityID & IIf(IsBacklog, "&backlog=", "")
         End With
         td.Text = xx.SelfFinishDelay
         td.Font.Bold = True
@@ -685,5 +691,14 @@ Partial Class mGctLast30DaysActy
   '  Return tbl
   'End Function
 #End Region
+  Private Sub cmdBase_Click(sender As Object, e As EventArgs) Handles cmdBase.Click
+    If cmdBase.Text = "BASE" Then
+      Session("BasedOn") = "OUTLOOK"
+      cmdBase.Text = "OUTLOOK"
+    Else
+      Session("BasedOn") = "BASE"
+      cmdBase.Text = "BASE"
+    End If
+  End Sub
 
 End Class
