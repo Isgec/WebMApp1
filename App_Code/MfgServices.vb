@@ -129,7 +129,11 @@ Public Class MfgServices
     Sql &= " select distinct t220.t_sub1, t220.t_sub1 + '_' + t220.t_cprj  "
     Sql &= " from ttpisg220200 as t220 "
     Sql &= " where "
-    Sql &= "     (t220.t_bohd ='" & aVal(1) & "') "
+    If aVal(1) = "CT_YNR" Then
+      Sql &= "((t220.t_bohd = 'CT_MANUFACTURING' and t220.t_dept ='ISGYNR') OR (t220.t_bohd = 'CT_INSPECTIONBLACKCONDITION' and t220.t_dept ='PROJ') )"
+    Else
+      Sql &= "     (t220.t_bohd ='" & aVal(1) & "') "
+    End If
     Sql &= "  and t220.t_cprj='" & ProjectID & "'"
     If Not aVal(0).ToLower.Contains("dummy") Then
       aVal(0) = "%" & aVal(0).ToLower & "%"

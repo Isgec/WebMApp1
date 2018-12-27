@@ -69,92 +69,173 @@ input:checked + .slider:before {
 </style>
 </asp:Content>
 <asp:Content ID="CPHdmisg121" ContentPlaceHolderID="cph1" runat="Server">
-  <div class="container">
-    <div class="container text-center">
-      <h3>
-        <asp:Label ID="Labeldmisg121" runat="server" Text="Document List"></asp:Label></h3>
-      <h5>
-        <asp:Label ID="Label1" runat="server" Text="[Please refer DOCUMENT LINKING session for documents released before 20-08-2018]"></asp:Label></h5>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <h3>
+          <asp:Label ID="Labeldmisg121" runat="server" Text="Released Document List [All Revisions]"></asp:Label></h3>
+        <h5>
+          <asp:Label ID="Label1" runat="server" Text="[Please refer DOCUMENT LINKING session for documents released before 20-08-2018]"></asp:Label></h5>
+      </div>
     </div>
-    <asp:UpdatePanel ID="UPNLdmisg121" runat="server">
-      <ContentTemplate>
-        <LGM:ToolBar0 
-          ID = "TBLdmisg121200"
-          ToolType = "lgNMGrid"
-          SVisible="false"
-          runat = "server" />
-        <div class="form-group">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Latest Released :</span>
+    <asp:Button ID="cmdDelete" ClientIDMode="static" runat="server" style="display:none;" />
+    <div class="row">
+      <div class="col-sm-12">
+        <asp:UpdatePanel ID="UPNLdmisg121" runat="server">
+          <ContentTemplate>
+            <LGM:ToolBar0
+              ID="TBLdmisg121200"
+              ToolType="lgNMGrid"
+              SVisible="false"
+              runat="server" />
+            <div class="form-group">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Latest Released :</span>
+                </div>
+                <div class="form-control" style="text-align: right; max-height: 38px !important">
+                  <label class="switch ">
+                    <asp:CheckBox ID="F_LatestRevision" runat="server" AutoPostBack="true" />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Search :</span>
+                </div>
+                <asp:TextBox
+                  ID="F_SearchText"
+                  CssClass="form-control"
+                  onfocus="return this.select();"
+                  runat="Server" />
+                <asp:Button ID="cmdSearch" runat="server" CssClass="btn btn-dark" Text="Search" />
+              </div>
             </div>
-            <div class="form-control" style="text-align:right;max-height:38px !important">
-              <label class="switch ">
-                <asp:CheckBox id="F_LatestRevision" runat="server" AutoPostBack="true" />
-                <span class="slider round"></span>
-              </label>
+            <iframe id="xFrame" name="xFrame" style="height: 20px; width: 20px; display: none;"></iframe>
+            <div class="container chartDiv">
+              <div class="row">
+                <div class="col-sm-12 text-center">
+                  <h5>
+                    Selected Documents for Download
+                  </h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 text-center" style="overflow-y:scroll; height:100px;">
+                  <asp:CheckBoxList 
+                    ID="lstSelected" 
+                    ClientIDMode="static" 
+                    Width="100%"  
+                    Height="40px"
+                    RepeatColumns="5" 
+                    RepeatDirection="Horizontal" 
+                    runat="server">
+                  </asp:CheckBoxList>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-2">
+                  <asp:Button ID="cmdRemove" runat="server" CssClass="btn-danger" Text="Remove" />
+                </div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-2">
+                  <asp:Button ID="cmdDownload" runat="server" CssClass="btn-success" Text="Download" />
+                </div>
+                <div class="col-sm-3"></div>
+              </div>
             </div>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Search :</span>
-            </div>
-            <asp:TextBox
-              ID="F_SearchText"
-              CssClass="form-control"
-              onfocus="return this.select();"
-              runat="Server" />
-            <asp:Button ID="cmdSearch" runat="server" CssClass="btn btn-dark" Text="Search" />
-          </div>
-        </div>
-        <br />
-          <iframe id="xFrame" name="xFrame" style="height:20px;width:20px;display:none;" ></iframe>
+            <asp:GridView 
+              ID="GVdmisg121" 
+              Width="98%" 
+              runat="server" 
+              AllowPaging="True" 
+              AllowSorting="True" 
+              PagerSettings-Position="Bottom" 
+              DataSourceID="ODSdmisg121" 
+              DataKeyNames="t_docn,t_revn" 
+              HeaderStyle-BackColor="Black"
+              HeaderStyle-ForeColor="White"
+              AutoGenerateColumns="False">
+              <Columns>
+                <asp:TemplateField HeaderText="Document" SortExpression="t_docn">
+                  <ItemTemplate>
+                    <%--<asp:LinkButton ID="L_t_docn" runat="server" ForeColor='<%# Eval("ForeColor") %>' Title='<%# EVal("t_docn") %>' Text='<%# Eval("t_docn") %>'  OnClientClick='<%# Eval("GetDownloadLink") %>'></asp:LinkButton>--%>
+                    <a href='<%# Eval("GetDownloadLink") %>' target="xFrame"><%# EVal("t_docn") %></a>
+                  </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="Rev" SortExpression="t_revn">
+                  <ItemTemplate>
+                    <asp:Label ID="Labelt_revn" runat="server" ForeColor='<%# Eval("ForeColor") %>' Text='<%# Bind("t_revn") %>'></asp:Label>
+                  </ItemTemplate>
+                  <ItemStyle CssClass="alignCenter" />
+                  <HeaderStyle CssClass="alignCenter" />
+                </asp:TemplateField>
+                <asp:TemplateField >
+                  <HeaderTemplate>
+                    <asp:Button ID="L_SelectAll" runat="server" Text="SelectAll" CommandArgument="SelectAll" CommandName="Sort" ></asp:Button>
+                  </HeaderTemplate>
+                  <ItemTemplate>
+                    <asp:Button ID="cmdSelect" runat="server" ForeColor='<%# Eval("ForeColor") %>' Text="Select" CommandName="cmdSelect" CommandArgument='<%# Container.DataItemIndex %>' ></asp:Button>
+                  </ItemTemplate>
+                  <ItemStyle CssClass="alignCenter" />
+                  <HeaderStyle CssClass="alignCenter" />
+                </asp:TemplateField>
+                <asp:TemplateField>
+                  <HeaderTemplate>
+                    <div class="row">
+                      <div class="col-sm-6 text-left">
+                         <asp:Label ID="L_Desc" runat="server" Text="Description"></asp:Label>
+                      </div>
+                      <div class="col-sm-4 text-right">
+                        <h6>Page Size:</h6>
+                      </div>
+                      <div class="col-sm-2 text-right">
+                        <asp:DropDownList ID="D_PageSize" runat="server" AutoPostBack="True" OnSelectedIndexChanged="PageSizeChanged" >
+                          <asp:ListItem Text="--" Value="0"></asp:ListItem>
+                          <asp:ListItem Text="10" Value="10"></asp:ListItem>
+                          <asp:ListItem Text="25" Value="25"></asp:ListItem>
+                          <asp:ListItem Text="50" Value="50"></asp:ListItem>
+                          <asp:ListItem Text="75" Value="75"></asp:ListItem>
+                          <asp:ListItem Text="100" Value="100"></asp:ListItem>
+                        </asp:DropDownList>
+                      </div>
+                    </div>
+                  </HeaderTemplate>
+                  <ItemTemplate>
+                    <asp:Label ID="Labelt_dsca" runat="server" ForeColor='<%# Eval("ForeColor") %>' Text='<%# Bind("t_dsca") %>'></asp:Label>
+                  </ItemTemplate>
+                </asp:TemplateField>
+              </Columns>
+              <EmptyDataTemplate>
+                <asp:Label ID="LabelEmpty" runat="server" Font-Size="Small" ForeColor="Red" Text="No record found !!!"></asp:Label>
+              </EmptyDataTemplate>
+            </asp:GridView>
+            <asp:ObjectDataSource
+              ID="ODSdmisg121"
+              runat="server"
+              DataObjectTypeName="SIS.DMISG.dmisg121200"
+              OldValuesParameterFormatString="original_{0}"
+              SelectMethod="UZ_dmisg121200SelectList"
+              SelectCountMethod="UZ_dmisg121200Count"
+              TypeName="SIS.DMISG.dmisg121200"
+              SortParameterName="OrderBy"
+              EnablePaging="True">
+              <SelectParameters>
+                <asp:ControlParameter ControlID="F_SearchText" PropertyName="Text" Name="SearchText" Type="String" DefaultValue="" Size="250" />
+                <asp:ControlParameter ControlID="F_LatestRevision" PropertyName="Checked" Name="LatestRevision" Type="Boolean" DefaultValue="False" Direction="Input" Size="3" />
+                <asp:Parameter Name="SearchState" Type="Boolean" Direction="Input" DefaultValue="false" />
+              </SelectParameters>
+            </asp:ObjectDataSource>
+          </ContentTemplate>
+          <Triggers>
+            <asp:AsyncPostBackTrigger ControlID="cmdSearch" />
+            <asp:PostBackTrigger ControlID="cmdDownload" />
+          </Triggers>
+        </asp:UpdatePanel>
 
-        <asp:GridView ID="GVdmisg121" SkinID="gv_bs1" runat="server" AllowPaging="True" PagerSettings-Position="Bottom" DataSourceID="ODSdmisg121" DataKeyNames="t_docn,t_revn" AutoGenerateColumns="False">
-          <Columns>
-            <asp:TemplateField HeaderText="Document" SortExpression="t_docn">
-              <ItemTemplate>
-                <%--<asp:LinkButton ID="L_t_docn" runat="server"  ForeColor='<%# Eval("ForeColor") %>' Title='<%# EVal("t_docn") %>' Text='<%# Eval("t_docn") %>'  OnClientClick='<%# Eval("GetDownloadLink") %>'></asp:LinkButton>--%>
-                <a href='<%# Eval("GetDownloadLink") %>' target="xFrame"><%# EVal("t_docn") %></a>
-              </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Rev" SortExpression="t_revn">
-              <ItemTemplate>
-                <asp:Label ID="Labelt_revn" runat="server"  ForeColor='<%# EVal("ForeColor") %>' Text='<%# Bind("t_revn") %>'></asp:Label>
-              </ItemTemplate>
-              <ItemStyle CssClass="alignCenter" />
-              <HeaderStyle CssClass="alignCenter"  />
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Description" SortExpression="t_dsca">
-              <ItemTemplate>
-                <asp:Label ID="Labelt_dsca" runat="server"  ForeColor='<%# EVal("ForeColor") %>' Text='<%# Bind("t_dsca") %>'></asp:Label>
-              </ItemTemplate>
-            </asp:TemplateField>
-          </Columns>
-          <EmptyDataTemplate>
-            <asp:Label ID="LabelEmpty" runat="server" Font-Size="Small" ForeColor="Red" Text="No record found !!!"></asp:Label>
-          </EmptyDataTemplate>
-        </asp:GridView>
-        <asp:ObjectDataSource
-          ID="ODSdmisg121"
-          runat="server"
-          DataObjectTypeName="SIS.DMISG.dmisg121200"
-          OldValuesParameterFormatString="original_{0}"
-          SelectMethod="UZ_dmisg121200SelectList"
-          SelectCountMethod = "UZ_dmisg121200Count"
-          TypeName="SIS.DMISG.dmisg121200"
-          SortParameterName="OrderBy"
-          EnablePaging="True">
-          <SelectParameters>
-            <asp:ControlParameter ControlID="F_SearchText" PropertyName="Text" Name="SearchText" Type="String" DefaultValue="" Size="250" />
-            <asp:ControlParameter ControlID="F_LatestRevision" PropertyName="Checked" Name="LatestRevision" Type="Boolean" DefaultValue="False" Direction="Input" Size="3" />
-            <asp:Parameter Name="SearchState" Type="Boolean" Direction="Input" DefaultValue="false" />
-          </SelectParameters>
-        </asp:ObjectDataSource>
-      </ContentTemplate>
-      <Triggers>
-        <asp:AsyncPostBackTrigger ControlID="cmdSearch" />
-      </Triggers>
-    </asp:UpdatePanel>
+      </div>
+    </div>
   </div>
 </asp:Content>

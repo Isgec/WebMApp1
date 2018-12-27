@@ -1,6 +1,27 @@
-<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" EnableEventValidation = "false" CodeFile="mGctMfgActivityYNR.aspx.vb" Inherits="mGctMfgActivityYNR" title="Maintain List: Project Activity" %>
+<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" ClientIDMode="Static" EnableEventValidation = "false" CodeFile="mGctMatActivity.aspx.vb" Inherits="mGctMatActivity" title="Maintain List: Projects Activity" %>
 <asp:Content ID="None" ContentPlaceHolderID="cphMain" runat="server">
+        <script type="text/javascript">
+          function apply_filter() {
+            var txt = $get('F_FilterText').value;
+            var cde = $find("bcF_t_iref");
+            cde.set_contextKey(txt + '|CT_MATL');
+            var parent = $get(cde.get_ParentControlID());
+            var index = parent.selectedIndex;
+            parent.selectedIndex = -1;
+            cde._onParentChange(null, false);
+            parent.selectedIndex = index;
+            cde._onParentChange(null, false);
+            return false;
+          }
+        </script>
 <style>
+  .LSEPrompt {
+    font-style: italic;
+    text-align: left;
+    color: lime;
+    background-color: black;
+    border: solid 1pt gray;
+  }
 .switch {
   position: relative;
   display: inline-block;
@@ -72,7 +93,7 @@ input:checked + .slider:before {
   <div class="container">
     <div class="container text-center">
       <h3>
-        <asp:Label ID="LabelctPActivity" runat="server" Text="Project Progress Update-Manufacturing [YNR]"></asp:Label></h3>
+        <asp:Label ID="LabelctPActivity" runat="server" Text="Project Progress Update-Material"></asp:Label></h3>
     </div>
     <asp:UpdatePanel ID="UPNLctPActivity" runat="server">
       <ContentTemplate>
@@ -84,6 +105,7 @@ input:checked + .slider:before {
             <asp:DropDownList
               ID="F_t_cprj"
               CssClass="form-control"
+              ClientIDMode="Static"
               runat="Server">
             </asp:DropDownList>
             <AJX:CascadingDropDown
@@ -99,45 +121,15 @@ input:checked + .slider:before {
           </div>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text">Supplier :</span>
+              <span class="input-group-text">Filter Item Reference :</span>
             </div>
-            <asp:DropDownList
-              ID="F_t_bpid"
+            <asp:TextBox
+              ID="F_FilterText"
+              ClientIDMode="Static"
               CssClass="form-control"
-              runat="Server">
-            </asp:DropDownList>
-            <AJX:CascadingDropDown
-              ID="cF_t_bpid" 
-              TargetControlID="F_t_bpid" 
-              ParentControlID="F_t_cprj"
-              PromptText="Select Suppliers"
-              PromptValue=""
-              ServicePath="~/App_Services/MfgServices.asmx" 
-              ServiceMethod="GetYNRSuppliers"
-              Category="t_bpid"
-              LoadingText="Loading. . ."
-              runat="server" />
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Purchase Order :</span>
-            </div>
-            <asp:DropDownList
-              ID="F_t_orno"
-              CssClass="form-control"
-              runat="Server">
-            </asp:DropDownList>
-            <AJX:CascadingDropDown
-              id="cF_t_orno" 
-              TargetControlID="F_t_orno" 
-              ParentControlID="F_t_bpid"
-              PromptText="Select Order"
-              PromptValue=""
-              ServicePath="~/App_Services/MfgServices.asmx" 
-              ServiceMethod="GetOrders"
-              Category="t_orno"
-              LoadingText="Loading. . ."
-              runat="server" />
+              onfocus="return this.select();"
+              runat="Server" />
+            <asp:Button ID="cmdSearch" runat="server" CssClass="btn btn-dark" OnClientClick="return apply_filter();" Text="Apply" />
           </div>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -146,18 +138,23 @@ input:checked + .slider:before {
             <asp:DropDownList
               ID="F_t_iref"
               CssClass="form-control"
+              ClientIDMode="Static"
               runat="Server">
             </asp:DropDownList>
             <AJX:CascadingDropDown
               id="cF_t_iref" 
+              BehaviorID="bcF_t_iref"
+              ClientIDMode="Static"
               TargetControlID="F_t_iref" 
-              ParentControlID="F_t_orno"
+              ParentControlID="F_t_cprj"
               PromptText="Select Item Ref."
               PromptValue=""
               ServicePath="~/App_Services/MfgServices.asmx" 
-              ServiceMethod="GetIrefs"
+              ServiceMethod="GetProjectIrefs"
               Category="t_iref"
               LoadingText="Loading. . ."
+              ContextKey="dummy|CT_MATL"
+              UseContextKey="True" 
               runat="server" />
           </div>
           <div class="input-group mb-3">
@@ -176,7 +173,7 @@ input:checked + .slider:before {
               PromptText="Select Sub Item"
               PromptValue=""
               ServicePath="~/App_Services/MfgServices.asmx" 
-              ServiceMethod="GetMfgSubItems"
+              ServiceMethod="GetSubItems"
               Category="t_sitm"
               LoadingText="Loading. . ."
               runat="server" />
@@ -225,13 +222,12 @@ input:checked + .slider:before {
           runat="server"
           DataObjectTypeName="SIS.CT.ctPActivity"
           OldValuesParameterFormatString="original_{0}"
-          SelectMethod="UZ_ctMfgActivityYNRSelectList"
+          SelectMethod="UZ_ctMatActivitySelectList"
           TypeName="SIS.CT.ctPActivity"
           SortParameterName="OrderBy"
           EnablePaging="False">
           <SelectParameters>
             <asp:ControlParameter ControlID="F_t_cprj" PropertyName="SelectedValue" Name="t_cprj" Type="String" DefaultValue="" Size="6" />
-            <asp:ControlParameter ControlID="F_t_orno" PropertyName="SelectedValue" Name="t_orno" Type="String" DefaultValue="" Size="9" />
             <asp:ControlParameter ControlID="F_t_iref" PropertyName="SelectedValue" Name="t_iref" Type="String" DefaultValue="" />
             <asp:ControlParameter ControlID="F_t_sitm" PropertyName="SelectedValue" Name="t_sitm" Type="String" DefaultValue="" />
           </SelectParameters>

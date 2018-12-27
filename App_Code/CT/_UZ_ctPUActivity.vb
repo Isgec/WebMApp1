@@ -351,6 +351,7 @@ Namespace SIS.CT
     Public Property AddNewUpdate As Boolean = True
     Public Shared Function GetctPUActivityForUpdate(ByVal t_cprj As String, ByVal t_cact As String, Optional ByVal t_orno As String = "", Optional ByVal t_bohd As String = "") As SIS.CT.ctPUActivity
       Dim tmpA As SIS.CT.ctPActivity = SIS.CT.ctPActivity.ctPActivityGetByID(t_cprj, t_cact)
+      t_bohd = tmpA.t_bohd
       Dim tmpL As SIS.CT.ctPUActivity = SIS.CT.ctPUActivity.GetLastUpdate(t_cprj, t_cact, t_orno)
       Dim tmpU As SIS.CT.ctPUActivity = Nothing
       Dim tmpLFound As Boolean = False

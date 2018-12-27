@@ -516,15 +516,13 @@ Namespace SIS.CT
       'Only in case of Erec & Commissioning NOT for MFG
       Dim tmpPA As SIS.CT.ctPActivity = SIS.CT.ctPActivity.ctPActivityGetByID(Record.t_cprj, Record.t_atid)
       Select Case tmpPA.t_bohd
-        Case "CT_ERECTION", "CT_COMMISSIONING", "CT_ESTIMATION", "CT_LOGISTIC", "CT_MARKETING", "CT_PROJECT"
+        Case "CT_ERECTION", "CT_COMMISSIONING", "CT_ESTIMATION", "CT_LOGISTIC", "CT_MARKETING", "CT_PROJECT", "CT_MATL", "CT_ENGG"
           If Record.t_tpgv + Record.t_cpgv < 100 Then Record.t_aced = ""
           If Record.t_tpgv + Record.t_cpgv = 0 Then Record.t_acsd = ""
           Dim Sql As String = ""
           Sql &= " UPDATE ttpisg220200 SET "
           Sql &= " t_acsd=convert(datetime,'" & IIf(Record.t_acsd = "", "01/01/1753", Record.t_acsd) & "',103), "
           Sql &= " t_acfn=convert(datetime,'" & IIf(Record.t_aced = "", "01/01/1753", Record.t_aced) & "',103), "
-          'Sql &= " t_otsd=convert(datetime,'" & IIf(Record.t_otsd = "", "01/01/1970", Record.t_otsd) & "',103), "
-          'Sql &= " t_oted=convert(datetime,'" & IIf(Record.t_oted = "", "01/01/1970", Record.t_oted) & "',103), "
           Sql &= " t_mosd=convert(datetime,'" & IIf(Record.t_otsd = "", "01/01/1753", Record.t_otsd) & "',103), "
           Sql &= " t_moed=convert(datetime,'" & IIf(Record.t_oted = "", "01/01/1753", Record.t_oted) & "',103), "
           Sql &= " t_rmks='" & Record.t_rmks & "',"
