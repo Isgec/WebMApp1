@@ -48,13 +48,19 @@ Namespace SIS.CT
     Public Shared Function OverallActivity(ByVal t_cprj As String, ByVal ID As String) As List(Of SIS.CT.DelayStatus30Days.Activities)
       Dim Results As List(Of SIS.CT.DelayStatus30Days.Activities) = Nothing
       Dim t_date As String = Now.ToString("dd/MM/yyyy")
+      Dim NoParent As Boolean = False
 
+      Select Case ID
+        Case "STE", "ST0", "ST10", "ST20", "ST30", "STZ", "NST0", "NST10", "NST20", "NST30", "NSTZ", "FDE", "FD0", "FD10", "FD20", "FD30", "FDZ", "NFD0", "NFD10", "NFD20", "NFD30", "NFDZ"
+          NoParent = True
+      End Select
       Dim Sql As String = ""
       Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,t_drem, t_dela, t_delf,t_otsd,t_oted, t_pprc,t_cpgv,t_acty,t_dept,t_pact, t_outl,t_actp, "
       Sql &= " IsCurrent = case when ((t_sdst between dateadd(d,-30,getdate()) and getdate())   or   (t_sdfn between dateadd(d,-30,getdate()) and getdate())) or ((t_sdst < dateadd(d,-30,getdate()))   and   (t_sdfn > getdate())) then 1 else 0 end, "
-      Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem "
+      Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub4 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem "
       Sql &= " from ttpisg220200  "
       Sql &= " where t_cprj='" & t_cprj & "'"
+      Sql &= " and t_acty <> 'PARENT' "
 
       Select Case ID
         Case "STE"
@@ -149,6 +155,7 @@ Namespace SIS.CT
           Reader.Close()
         End Using
       End Using
+      If NoParent Then Return Results
       '===========================================
       'Process List to Include Parent As Per Logic
       '===========================================
@@ -198,26 +205,32 @@ Namespace SIS.CT
       Dim Sql As String = ""
       Sql &= "select "
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_acfn < t_sdfn then 1 else 0 end) as EARLY,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf = 0  then 1 else 0 end ) as DELAY0,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf between 1 and 30  then 1 else 0 end) as DELAY10,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf between 31 and 60  then 1 else 0 end) as DELAY20,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf between 61 and 90  then 1 else 0 end) as DELAY30,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf >= 91  then 1 else 0 end) as DELAYZZ"
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
@@ -244,22 +257,27 @@ Namespace SIS.CT
       Sql &= "(0) as EARLY,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf = 0  then 1 else 0 end ) as DELAY0,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf between 1 and 30  then 1 else 0 end) as DELAY10,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf between 31 and 60  then 1 else 0 end) as DELAY20,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf between 61 and 90  then 1 else 0 end) as DELAY30,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf >= 91  then 1 else 0 end) as DELAYZZ"
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
@@ -285,26 +303,32 @@ Namespace SIS.CT
       Dim Sql As String = ""
       Sql &= "select "
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_acsd < t_sdst then 1 else 0 end) as EARLY,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela = 0  then 1 else 0 end ) as DELAY0,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela between 1 and 30  then 1 else 0 end) as DELAY10,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela between 31 and 60  then 1 else 0 end) as DELAY20,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <=  convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela between 61 and 90  then 1 else 0 end) as DELAY30,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <=  convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela >= 91  then 1 else 0 end) as DELAYZZ"
 
@@ -332,22 +356,27 @@ Namespace SIS.CT
       Sql &= "(0) as EARLY,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela = 0  then 1 else 0 end ) as DELAY0,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela between 1 and 30  then 1 else 0 end) as DELAY10,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela between 31 and 60  then 1 else 0 end) as DELAY20,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela between 61 and 90  then 1 else 0 end) as DELAY30,"
 
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "'"
+      Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela >= 91  then 1 else 0 end) as DELAYZZ"
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
@@ -453,8 +482,6 @@ Namespace SIS.CT
       End Using
       Return Results
     End Function
-
-
     Public Shared Function ActyStarted(ByVal t_cprj As String, ByVal t_acty As String, ByVal AsOn As String) As List(Of SIS.CT.Ageing)
       Dim Results As List(Of SIS.CT.Ageing) = Nothing
       Dim t_date As String = IIf(AsOn = "", Now.ToString("dd/MM/yyyy"), AsOn)
@@ -536,6 +563,12 @@ Namespace SIS.CT
     Public Shared Function ActyActivity(ByVal t_cprj As String, ByVal t_acty As String, ByVal ID As String) As List(Of SIS.CT.DelayStatus30Days.Activities)
       Dim Results As List(Of SIS.CT.DelayStatus30Days.Activities) = Nothing
       Dim t_date As String = Now.ToString("dd/MM/yyyy")
+      Dim NoParent As Boolean = False
+
+      Select Case ID
+        Case "STE", "ST0", "ST10", "ST20", "ST30", "STZ", "NST0", "NST10", "NST20", "NST30", "NSTZ", "FDE", "FD0", "FD10", "FD20", "FD30", "FDZ", "NFD0", "NFD10", "NFD20", "NFD30", "NFDZ"
+          NoParent = True
+      End Select
 
       Dim Sql As String = ""
       Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,t_drem, t_dela, t_delf,t_otsd,t_oted, t_pprc,t_cpgv,t_acty,t_dept,t_pact, t_outl,t_actp, "
@@ -546,72 +579,61 @@ Namespace SIS.CT
       Sql &= " And (t_acty='" & t_acty & "' )"
 
       Select Case ID
+        Case "STE", "ST0", "ST10", "ST20", "ST30", "STZ", "NST0", "NST10", "NST20", "NST30", "NSTZ"
+          'Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
+          Sql &= " and t_sdst between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) and convert(datetime,'" & t_date & "',103)"
+      End Select
+      Select Case ID
+        Case "FDE", "FD0", "FD10", "FD20", "FD30", "FDZ", "NFD0", "NFD10", "NFD20", "NFD30", "NFDZ"
+          'Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
+          Sql &= " and t_sdfn between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) and convert(datetime,'" & t_date & "',103)"
+      End Select
+
+      Select Case ID
         Case "STE"
-          Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
           Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_acsd < t_sdst then 1 else 0 end "
         Case "ST0"
-          Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
           Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela = 0  then 1 else 0 end "
         Case "ST10"
-          Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
-          Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela between 1 and 30  then 1 else 0 end "
+          Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela between 1 and 10  then 1 else 0 end "
         Case "ST20"
-          Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
-          Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela between 31 and 60  then 1 else 0 end "
+          Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela between 11 and 20  then 1 else 0 end "
         Case "ST30"
-          Sql &= "and t_sdst <=  convert(datetime,'" & t_date & "',103)"
-          Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela between 61 and 90  then 1 else 0 end "
+          Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela between 21 and 30  then 1 else 0 end "
         Case "STZ"
-          Sql &= "and t_sdst <=  convert(datetime,'" & t_date & "',103)"
-          Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela >= 91  then 1 else 0 end "
+          Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela >= 31  then 1 else 0 end "
         Case "NST0"
-          Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
           Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela = 0  then 1 else 0 end "
         Case "NST10"
-          Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
-          Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela between 1 and 30  then 1 else 0 end "
+          Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela between 1 and 10  then 1 else 0 end "
         Case "NST20"
-          Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
-          Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela between 31 and 60  then 1 else 0 end "
+          Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela between 11 and 20  then 1 else 0 end "
         Case "NST30"
-          Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
-          Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela between 61 and 90  then 1 else 0 end "
+          Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela between 21 and 30  then 1 else 0 end "
         Case "NSTZ"
-          Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
-          Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela >= 91  then 1 else 0 end "
+          Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela >= 31  then 1 else 0 end "
         Case "FDE"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
           Sql &= " and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_acfn < t_sdfn then 1 else 0 end "
         Case "FD0"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
           Sql &= " and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf = 0  then 1 else 0 end "
         Case "FD10"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
-          Sql &= " and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf between 1 and 30  then 1 else 0 end "
+          Sql &= " and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf between 1 and 10  then 1 else 0 end "
         Case "FD20"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
-          Sql &= " and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf between 31 and 60  then 1 else 0 end "
+          Sql &= " and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf between 11 and 20  then 1 else 0 end "
         Case "FD30"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
-          Sql &= " and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf between 61 and 90  then 1 else 0 end "
+          Sql &= " and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf between 21 and 30  then 1 else 0 end "
         Case "FDZ"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
-          Sql &= " and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf >= 91  then 1 else 0 end "
+          Sql &= " and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf >= 31  then 1 else 0 end "
         Case "NFD0"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
           Sql &= " and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf = 0  then 1 else 0 end "
         Case "NFD10"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
-          Sql &= " and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf between 1 and 30  then 1 else 0 end "
+          Sql &= " and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf between 1 and 10  then 1 else 0 end "
         Case "NFD20"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
-          Sql &= " and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf between 31 and 60  then 1 else 0 end "
+          Sql &= " and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf between 11 and 20  then 1 else 0 end "
         Case "NFD30"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
-          Sql &= " and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf between 61 and 90  then 1 else 0 end "
+          Sql &= " and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf between 21 and 30  then 1 else 0 end "
         Case "NFDZ"
-          Sql &= " and t_sdfn <= convert(datetime,'" & t_date & "',103)"
-          Sql &= " and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf >= 91  then 1 else 0 end "
+          Sql &= " and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf >= 31  then 1 else 0 end "
       End Select
       Sql &= " order by t_actp "
 
@@ -638,6 +660,7 @@ Namespace SIS.CT
           Reader.Close()
         End Using
       End Using
+      If NoParent Then Return Results
       '===========================================
       'Process List to Include Parent As Per Logic
       '===========================================

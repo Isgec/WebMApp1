@@ -101,11 +101,10 @@
   </style>
   <style>
     .chartDiv {
-      overflow-x: scroll;
+      overflow:hidden;
       margin: 15px auto;
       padding: 0px 0px 6px 0px;
       text-align: center;
-      /*background: #e3e3e3;*/
       color: #333333;
       -moz-border-radius: 5px;
       -webkit-border-radius: 5px;

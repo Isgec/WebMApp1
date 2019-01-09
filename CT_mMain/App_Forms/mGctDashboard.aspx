@@ -62,6 +62,15 @@
       <h6>(<asp:Label ID="ProjectPeriod" runat="server"></asp:Label>)</h6>
       </div>
     </div>
+    <div class="row">
+      <div class="col-sm-4 text-center">
+      </div>
+      <div class="col-sm-4 text-center">
+      <h6><asp:Label ID="LUpdated" runat="server"></asp:Label></h6>
+      </div>
+      <div class="col-sm-4 text-center">
+      </div>
+    </div>
     <%--Main Graph Row--%>
     <div class="row">
       <div class="col-sm-12 text-center ">

@@ -260,6 +260,9 @@ Namespace SIS.CT
         If Not actList.Exists(Function(x) x.t_cact = t_pact) Then
           tmp = GetParentActivity(t_pact, t_cprj, IsNext)
           actList.Add(tmp)
+        Else
+          '================04/01/2018===============
+          Return actList
         End If
         If UptoTop Then
           If tmp.t_cact = tmp.t_pact Then

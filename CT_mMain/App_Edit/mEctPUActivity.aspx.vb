@@ -87,6 +87,7 @@ Partial Class mEctPUActivity
   <System.Web.Services.WebMethod()>
   Public Shared Function validate_acsd(ByVal value As String) As String
     Dim aVal() As String = value.Split("|".ToCharArray)
+    Dim AllowedDays As Integer = ConfigurationManager.AppSettings("AllowedDays")
     Dim mRet As String = "0|Success"
     Dim acsd As DateTime = Nothing
     Dim aced As DateTime = Nothing
@@ -96,8 +97,8 @@ Partial Class mEctPUActivity
         If acsd.Date > Now.Date Then
           Return "1|Future Date NOT allowed.|F_t_acsd"
         End If
-        If acsd.Date < Now.AddDays(-10).Date Then
-          mRet = "1|Update older than 10 days NOT Allowed.|F_t_acsd"
+        If acsd.Date < Now.AddDays(-1 * AllowedDays).Date Then
+          mRet = "1|Update older than " & AllowedDays & " days NOT Allowed.|F_t_acsd"
         End If
       End If
       If aVal(1) <> "" Then
@@ -117,14 +118,15 @@ Partial Class mEctPUActivity
     Dim mRet As String = "0|Success"
     Dim acsd As DateTime = Nothing
     Dim aced As DateTime = Nothing
+    Dim AllowedDays As Integer = ConfigurationManager.AppSettings("AllowedDays")
     Try
       If aVal(1) <> "" Then
         aced = aVal(1)
         If aced.Date > Now.Date Then
           Return "1|Future Date NOT allowed.|F_t_aced"
         End If
-        If aced.Date < Now.AddDays(-10).Date Then
-          mRet = "1|Update older than 10 days NOT Allowed.|F_t_aced"
+        If aced.Date < Now.AddDays(-1 * AllowedDays).Date Then
+          mRet = "1|Update older than " & AllowedDays & " days NOT Allowed.|F_t_aced"
         End If
         If aVal(0) <> "" Then
           acsd = aVal(0)

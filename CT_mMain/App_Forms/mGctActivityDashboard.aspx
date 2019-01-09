@@ -55,7 +55,7 @@
         margin-bottom: 6px;
       }
     </style>
-    <div class="row chartDiv">
+    <div class="row chartDiv" >
       <div class="col-sm-6 text-center">
             <h5><asp:Label ID="Label2" runat="server" Text="Activity - Due for Start "></asp:Label></h5>
             <h6><asp:Label ID="Label3" runat="server" Font-Underline="true" Text=""></asp:Label></h6>

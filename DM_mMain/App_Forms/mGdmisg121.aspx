@@ -113,7 +113,7 @@ input:checked + .slider:before {
               </div>
             </div>
             <iframe id="xFrame" name="xFrame" style="height: 20px; width: 20px; display: none;"></iframe>
-            <div class="container chartDiv">
+            <div class="container-fluid chartDiv">
               <div class="row">
                 <div class="col-sm-12 text-center">
                   <h5>
@@ -122,17 +122,18 @@ input:checked + .slider:before {
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 text-center" style="overflow-y:scroll; height:100px;">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10 text-center" style="overflow-y:scroll;height:100px;">
                   <asp:CheckBoxList 
                     ID="lstSelected" 
                     ClientIDMode="static" 
-                    Width="100%"  
-                    Height="40px"
+                    Width="100%"
                     RepeatColumns="5" 
                     RepeatDirection="Horizontal" 
                     runat="server">
                   </asp:CheckBoxList>
                 </div>
+                <div class="col-sm-1"></div>
               </div>
               <div class="row">
                 <div class="col-sm-3"></div>
@@ -152,7 +153,7 @@ input:checked + .slider:before {
               runat="server" 
               AllowPaging="True" 
               AllowSorting="True" 
-              PagerSettings-Position="Bottom" 
+              PagerSettings-Position="TopAndBottom" 
               DataSourceID="ODSdmisg121" 
               DataKeyNames="t_docn,t_revn" 
               HeaderStyle-BackColor="Black"

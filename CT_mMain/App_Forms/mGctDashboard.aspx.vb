@@ -24,6 +24,7 @@ Partial Class mGctDashboard
     ProjectPeriod.Text = Period.StDt.ToString("dd/MM/yyyy") & " - " & Period.FnDt.ToString("dd/MM/yyyy")
     ProjectName.Text = F_t_cprj.SelectedItem.Text
     LastUpdated = SIS.CT.DelayStatus30Days.LastUpdatedOn(ProjectID)
+    LUpdated.Text = "(Last Updated On: " & LastUpdated & ")"
   End Sub
 #Region "  Delayed Activity Count Ageing Start & Finish"
   Private Sub ReviewSheetStart_PreRender(sender As Object, e As EventArgs) Handles ReviewSheetStart.PreRender
@@ -117,26 +118,26 @@ Partial Class mGctDashboard
   Private Sub Chart1_Customize(sender As Object, e As EventArgs) Handles Chart1.Customize
     If ProjectID = "" Then Exit Sub
     Try
-      Dim xVal As Double = Chart1.Series("Actual").Points.Last.XValue
-      For Each pt As DataPoint In Chart1.Series("Planned").Points
-        If pt.XValue = xVal Then
-          pt.Label = "#VALX{dd-MM-yyyy}, #VALY{##0.00}"
-          pt.LabelBorderColor = Drawing.Color.Pink
-          pt.LabelBorderWidth = 1
-          pt.LabelBorderDashStyle = ChartDashStyle.Solid
-          pt.LabelForeColor = Drawing.Color.OrangeRed
-          pt.IsValueShownAsLabel = True
-        End If
-      Next
-      Dim xt As DataPoint = Chart1.Series("Actual").Points.Last
-      With xt
-        .IsValueShownAsLabel = True
-        .Label = "#VALY{##0.00}"
-        .LabelBorderColor = Drawing.Color.CadetBlue
-        .LabelBorderWidth = 1
-        .LabelBorderDashStyle = ChartDashStyle.Solid
-        .LabelForeColor = Drawing.Color.DarkBlue
-      End With
+      'Dim xVal As Double = Chart1.Series("Actual").Points.Last.XValue
+      'For Each pt As DataPoint In Chart1.Series("Planned").Points
+      '  If pt.XValue = xVal Then
+      '    pt.Label = "#VALX{dd-MM-yyyy}, #VALY{##0.00}"
+      '    pt.LabelBorderColor = Drawing.Color.Pink
+      '    pt.LabelBorderWidth = 1
+      '    pt.LabelBorderDashStyle = ChartDashStyle.Solid
+      '    pt.LabelForeColor = Drawing.Color.OrangeRed
+      '    pt.IsValueShownAsLabel = True
+      '  End If
+      'Next
+      'Dim xt As DataPoint = Chart1.Series("Actual").Points.Last
+      'With xt
+      '  .IsValueShownAsLabel = True
+      '  .Label = "#VALY{##0.00}"
+      '  .LabelBorderColor = Drawing.Color.CadetBlue
+      '  .LabelBorderWidth = 1
+      '  .LabelBorderDashStyle = ChartDashStyle.Solid
+      '  .LabelForeColor = Drawing.Color.DarkBlue
+      'End With
     Catch ex As Exception
 
     End Try

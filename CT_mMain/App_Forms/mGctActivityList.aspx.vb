@@ -108,7 +108,7 @@ Partial Class mGctActivityList
       .CssClass = "table-bordered"
       '.Width = Unit.Percentage(100)
       '.Style.Add(HtmlTextWriterStyle.Margin, "5px 5px 5px 5px")
-      .Style.Add(HtmlTextWriterStyle.WhiteSpace, "nowrap")
+      '.Style.Add(HtmlTextWriterStyle.WhiteSpace, "nowrap")
     End With
     'Write Header
     Dim th As New TableHeaderRow

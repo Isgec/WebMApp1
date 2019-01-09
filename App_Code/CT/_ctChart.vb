@@ -60,6 +60,7 @@ Namespace SIS.CT
     Public Property OutlookY As Decimal()
     Public Property LastUpdatedOn As DateTime = Nothing
     Public Property LastUpdatedIndex As Integer = 0
+    Public Property LastProcessed As DateTime
     Public ReadOnly Property GetDataTable As String
       Get
         Dim mStr As String = ""
@@ -69,14 +70,44 @@ Namespace SIS.CT
           Dim row3 As String = "<td><b>ACTUAL / OUTLOOK %</b></td>"
           Dim row4 As String = "<td style='background-color:gray;color:white;'><b>VARIANCE</b></td>"
           For I As Integer = 0 To PlannedX.Length - 1
-            row1 &= "<td style='text-align:center;background-color:black;color:white;'>" & PlannedX(I).ToString("dd-MMM") & "</td>"
-            row2 &= "<td style='text-align:center;color:maroon;'>" & Math.Truncate(Math.Round(PlannedY(I), 0)) & "</td>"
-            If I > ActualY.Length - 1 Then
-              row3 &= "<td style='text-align:center;color:orange;'>" & Math.Truncate(Math.Round(OutlookY(I - ActualY.Length), 0)) & "</td>"
-              row4 &= "<td style='text-align:center;background-color:gray;color:white;'>" & Math.Truncate((Math.Round(PlannedY(I), 0) - Math.Round(OutlookY(I - ActualY.Length), 0))) & "</td>"
+            Dim isCurrent As Boolean = False
+            If PlannedX(I).Date = LastProcessed.Date Then
+              isCurrent = True
+            End If
+            row1 &= "<td style='text-align:center;background-color:black;" & IIf(isCurrent, "color:yellow;", "color:white;") & "'>" & PlannedX(I).ToString("dd-MMM") & "</td>"
+            Dim actual As Decimal = 0.00
+            Try
+              actual = ActualY(I)
+            Catch ex As Exception
+              actual = 0
+            End Try
+            If PlannedY(I) > 1 And actual > 1 Then
+              row2 &= "<td style='text-align:center;color:maroon;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & Math.Truncate(Math.Round(PlannedY(I), 0)) & "</td>"
             Else
-              row3 &= "<td style='text-align:center;color:blue'>" & Math.Truncate(Math.Round(ActualY(I), 0)) & "</td>"
-              row4 &= "<td style='text-align:center;background-color:gray;color:white;'>" & Math.Truncate((Math.Round(PlannedY(I), 0) - Math.Round(ActualY(I), 0))) & "</td>"
+              row2 &= "<td style='text-align:center;color:maroon;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & Math.Round(PlannedY(I), 2) & "</td>"
+            End If
+            If I > ActualY.Length - 1 Then
+              Dim Value As Decimal = 0.00
+              Try
+                Value = OutlookY(I - ActualY.Length)
+              Catch ex As Exception
+                Value = 0.00
+              End Try
+              If Value > 1 Then
+                row3 &= "<td style='text-align:center;color:orange;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & Math.Truncate(Math.Round(Value, 0)) & "</td>"
+                row4 &= "<td style='text-align:center;background-color:gray;color:white;'>" & Math.Truncate((Math.Round(PlannedY(I), 0) - Math.Round(Value, 0))) & "</td>"
+              Else
+                row3 &= "<td style='text-align:center;color:orange;'>" & Math.Round(Value, 2) & "</td>"
+                row4 &= "<td style='text-align:center;background-color:gray;" & IIf(isCurrent, "color:yellow;", "color:white;") & "'>" & (Math.Round(PlannedY(I), 2) - Math.Round(Value, 2)) & "</td>"
+              End If
+            Else
+              If ActualY(I) > 1 Then
+                row3 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & Math.Truncate(Math.Round(ActualY(I), 0)) & "</td>"
+                row4 &= "<td style='text-align:center;background-color:gray;" & IIf(isCurrent, "color:yellow;", "color:white;") & "'>" & Math.Truncate((Math.Round(PlannedY(I), 0) - Math.Round(ActualY(I), 0))) & "</td>"
+              Else
+                row3 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & Math.Round(ActualY(I), 2) & "</td>"
+                row4 &= "<td style='text-align:center;background-color:gray;" & IIf(isCurrent, "color:yellow;", "color:white;") & "'>" & (Math.Round(PlannedY(I), 2) - Math.Round(ActualY(I), 2)) & "</td>"
+              End If
             End If
           Next
           mStr &= "<table class='table-bordered' style='width:100%;margin:5px 5px 5px 5px;'>"
@@ -122,6 +153,7 @@ Namespace SIS.CT
         .ChartArea = "ChartArea1"
         .BorderWidth = Border
         .Color = Drawing.Color.OrangeRed
+        .ToolTip = "#VALY"
       End With
       s = New Series("Actual")
       Chart1.Series.Add(s)
@@ -131,6 +163,7 @@ Namespace SIS.CT
         .ChartArea = "ChartArea1"
         .BorderWidth = Border
         .Color = System.Drawing.Color.Blue
+        .ToolTip = "#VALY"
       End With
       s = New Series("Outlook")
       Chart1.Series.Add(s)
@@ -141,6 +174,7 @@ Namespace SIS.CT
         .BorderDashStyle = ChartDashStyle.DashDotDot
         .BorderWidth = Border
         .Color = Drawing.Color.Gold
+        .ToolTip = "#VALY"
       End With
       Return Chart1
     End Function
@@ -181,7 +215,8 @@ Namespace SIS.CT
         '2. Get Planned
         Sql = ""
         Sql &= " declare @LastUpdated Datetime "
-        Sql &= " select top 1 @LastUpdated=convert(date,dateadd(d,-1,getdate()))"  't_limp from ttpisg220200 where t_cprj='" & ProjectID & "'"
+        'Sql &= " select top 1 @LastUpdated=convert(date,dateadd(d,-1,getdate()))"  't_limp from ttpisg220200 where t_cprj='" & ProjectID & "'"
+        Sql &= " select @LastUpdated=t_curr from ttpisg216200 where t_proa>0"
         If ActivityType = "" Then
           Sql &= " select aa.t_curr as ValX, aa.t_prop as ValY from ttpisg216200 as aa where aa.t_cprj='" & ProjectID & "'"
           Sql &= " and ( (aa.t_curr = (select min(dd.t_curr) from ttpisg216200 as dd where dd.t_cprj=aa.t_cprj)) "
@@ -214,11 +249,12 @@ Namespace SIS.CT
           Reader.Close()
         End Using
         mRet.PlannedX = aData.Select(Function(x) x.ValX).ToArray
-        mRet.PlannedY = aData.Select(Function(x) x.ValY).ToArray
+        mRet.PlannedY = aData.Select(Function(x) Math.Round(x.ValY, 2)).ToArray
         '3. Get Actual
         Sql = ""
         Sql &= " declare @LastUpdated Datetime "
-        Sql &= " select top 1 @LastUpdated=convert(date,dateadd(d,-1,getdate()))"  't_limp from ttpisg220200 where t_cprj='" & ProjectID & "'"
+        'Sql &= " select top 1 @LastUpdated=convert(date,dateadd(d,-1,getdate()))"  't_limp from ttpisg220200 where t_cprj='" & ProjectID & "'"
+        Sql &= " select @LastUpdated=t_curr from ttpisg216200 where t_proa>0"
         If ActivityType = "" Then
           Sql &= " select aa.t_curr as ValX, aa.t_proa as ValY from ttpisg216200 as aa where aa.t_cprj='" & ProjectID & "' and aa.t_curr <= @LastUpdated"
           Sql &= " and ( (aa.t_curr = (select min(dd.t_curr) from ttpisg216200 as dd where dd.t_cprj=aa.t_cprj and dd.t_curr<=@LastUpdated)) "
@@ -247,7 +283,7 @@ Namespace SIS.CT
           Reader.Close()
         End Using
         mRet.ActualX = aData.Select(Function(x) x.ValX).ToArray
-        mRet.ActualY = aData.Select(Function(x) x.ValY).ToArray
+        mRet.ActualY = aData.Select(Function(x) Math.Round(x.ValY, 2)).ToArray
         '4. Get Outlook
         Sql = ""
         Sql &= " declare @LastUpdated Datetime "
@@ -280,7 +316,15 @@ Namespace SIS.CT
           Reader.Close()
         End Using
         mRet.OutlookX = aData.Select(Function(x) x.ValX).ToArray
-        mRet.OutlookY = aData.Select(Function(x) x.ValY).ToArray
+        mRet.OutlookY = aData.Select(Function(x) Math.Round(x.ValY, 2)).ToArray
+        'Last Processed
+        Sql = ""
+        Sql &= " select isnull(max(t_curr),getdate()) from ttpisg216200 where t_proa>0"
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          mRet.LastProcessed = Cmd.ExecuteScalar
+        End Using
       End Using
       Return mRet
     End Function

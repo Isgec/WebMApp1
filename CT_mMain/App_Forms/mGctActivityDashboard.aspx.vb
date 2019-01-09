@@ -51,39 +51,39 @@ Partial Class mGctActivityDashboard
   Private Sub Chart1_Customize(sender As Object, e As EventArgs) Handles Chart1.Customize
     If ProjectID = "" Then Exit Sub
     Try
-      Dim xVal As Double = Chart1.Series("Actual").Points.Last.XValue
-      Chart1.Series("Planned").SmartLabelStyle.Enabled = False
-      Chart1.Series("Planned").SmartLabelStyle.AllowOutsidePlotArea = LabelOutsidePlotAreaStyle.Yes
-      Chart1.Series("Planned").SmartLabelStyle.IsMarkerOverlappingAllowed = False
-      Chart1.Series("Planned").SmartLabelStyle.MovingDirection = LabelAlignmentStyles.Left
-      Chart1.Series("Planned").SmartLabelStyle.CalloutStyle = LabelCalloutStyle.Box
-      Chart1.Series("Planned").SmartLabelStyle.CalloutLineWidth = 1
+      'Dim xVal As Double = Chart1.Series("Actual").Points.Last.XValue
+      'Chart1.Series("Planned").SmartLabelStyle.Enabled = False
+      'Chart1.Series("Planned").SmartLabelStyle.AllowOutsidePlotArea = LabelOutsidePlotAreaStyle.Yes
+      'Chart1.Series("Planned").SmartLabelStyle.IsMarkerOverlappingAllowed = False
+      'Chart1.Series("Planned").SmartLabelStyle.MovingDirection = LabelAlignmentStyles.Left
+      'Chart1.Series("Planned").SmartLabelStyle.CalloutStyle = LabelCalloutStyle.Box
+      'Chart1.Series("Planned").SmartLabelStyle.CalloutLineWidth = 1
 
-      For Each pt As DataPoint In Chart1.Series("Planned").Points
-        If pt.XValue = xVal Then
-          pt.Label = "#VALX{dd-MM-yyyy}, #VALY{##0.00}"
-          pt.LabelBorderColor = Drawing.Color.Pink
-          pt.LabelBorderWidth = 1
-          pt.LabelBorderDashStyle = ChartDashStyle.Solid
-          pt.LabelForeColor = Drawing.Color.OrangeRed
-          pt.IsValueShownAsLabel = True
-        End If
-      Next
-      Chart1.Series("Actual").SmartLabelStyle.Enabled = False
-      Chart1.Series("Actual").SmartLabelStyle.AllowOutsidePlotArea = LabelOutsidePlotAreaStyle.Yes
-      Chart1.Series("Actual").SmartLabelStyle.IsMarkerOverlappingAllowed = False
-      Chart1.Series("Actual").SmartLabelStyle.MovingDirection = LabelAlignmentStyles.TopRight
-      Chart1.Series("Actual").SmartLabelStyle.CalloutStyle = LabelCalloutStyle.Box
-      Chart1.Series("Actual").SmartLabelStyle.CalloutLineWidth = 1
-      Dim xt As DataPoint = Chart1.Series("Actual").Points.Last
-      With xt
-        .IsValueShownAsLabel = True
-        .Label = "#VALY{##0.00}"
-        .LabelBorderColor = Drawing.Color.CadetBlue
-        .LabelBorderWidth = 1
-        .LabelBorderDashStyle = ChartDashStyle.Solid
-        .LabelForeColor = Drawing.Color.DarkBlue
-      End With
+      'For Each pt As DataPoint In Chart1.Series("Planned").Points
+      '  If pt.XValue = xVal Then
+      '    pt.Label = "#VALX{dd-MM-yyyy}, #VALY{##0.00}"
+      '    pt.LabelBorderColor = Drawing.Color.Pink
+      '    pt.LabelBorderWidth = 1
+      '    pt.LabelBorderDashStyle = ChartDashStyle.Solid
+      '    pt.LabelForeColor = Drawing.Color.OrangeRed
+      '    pt.IsValueShownAsLabel = True
+      '  End If
+      'Next
+      'Chart1.Series("Actual").SmartLabelStyle.Enabled = False
+      'Chart1.Series("Actual").SmartLabelStyle.AllowOutsidePlotArea = LabelOutsidePlotAreaStyle.Yes
+      'Chart1.Series("Actual").SmartLabelStyle.IsMarkerOverlappingAllowed = False
+      'Chart1.Series("Actual").SmartLabelStyle.MovingDirection = LabelAlignmentStyles.TopRight
+      'Chart1.Series("Actual").SmartLabelStyle.CalloutStyle = LabelCalloutStyle.Box
+      'Chart1.Series("Actual").SmartLabelStyle.CalloutLineWidth = 1
+      'Dim xt As DataPoint = Chart1.Series("Actual").Points.Last
+      'With xt
+      '  .IsValueShownAsLabel = True
+      '  .Label = "#VALY{##0.00}"
+      '  .LabelBorderColor = Drawing.Color.CadetBlue
+      '  .LabelBorderWidth = 1
+      '  .LabelBorderDashStyle = ChartDashStyle.Solid
+      '  .LabelForeColor = Drawing.Color.DarkBlue
+      'End With
     Catch ex As Exception
 
     End Try
