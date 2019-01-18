@@ -175,7 +175,7 @@
   <form id="form1" runat="server">
     <asp:ScriptManager ID="ToolkitScriptManager1" EnableScriptGlobalization="true" runat="server" EnablePageMethods="true" AsyncPostBackTimeout="3600" EnableScriptLocalization="True" ScriptMode="Auto">
       <Scripts>
-        <asp:ScriptReference Path="/../UserRights/jquery/webkit.js" />
+        <asp:ScriptReference Path="/../UserRights/JQuery/webkit.js" />
       </Scripts>
     </asp:ScriptManager>
     <LGM:BSLoading ID="LGLoadingM" runat="server" />

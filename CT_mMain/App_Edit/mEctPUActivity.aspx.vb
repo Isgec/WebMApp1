@@ -1,6 +1,17 @@
 Imports System.Web.Script.Serialization
 Partial Class mEctPUActivity
   Inherits SIS.SYS.UpdateBase
+  Public Property Confirmation() As Boolean
+    Get
+      If ViewState("Confirmation") IsNot Nothing Then
+        Return CType(ViewState("Confirmation"), Boolean)
+      End If
+      Return True
+    End Get
+    Set(ByVal value As Boolean)
+      ViewState.Add("Confirmation", value)
+    End Set
+  End Property
   Public Property Editable() As Boolean
     Get
       If ViewState("Editable") IsNot Nothing Then
@@ -48,11 +59,15 @@ Partial Class mEctPUActivity
   Protected Sub ODSctPUActivity_Selected(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.ObjectDataSourceStatusEventArgs) Handles ODSctPUActivity.Selected
     Dim tmp As SIS.CT.ctPUActivity = CType(e.ReturnValue, SIS.CT.ctPUActivity)
     If tmp.t_acsd <> "" Then
-      'If tmp.t_bohd <> "CT_MANUFACTURING" Then
       If Year(Convert.ToDateTime(tmp.t_acsd)) > 2015 Then
         Editable = False
       End If
-      'End If
+    End If
+    Confirmation = False
+    Dim x As SIS.CT.ctPActivity = SIS.CT.ctPActivity.ctPActivityGetByID(tmp.t_cprj, tmp.t_atid)
+    If x.t_rmcm = 1 Then
+      'disable confirmation in all the cases 
+      'Confirmation = True
     End If
     Deleteable = tmp.Deleteable
     PrimaryKey = tmp.PrimaryKey
@@ -69,6 +84,16 @@ Partial Class mEctPUActivity
       If Request.QueryString("ed") = "N" Then
         CType(FVctPUActivity.FindControl("cmdSubmit"), Button).Visible = False
       End If
+    End If
+    Dim pnlConf As Control = FVctPUActivity.FindControl("PnlConfirmation")
+    Dim oted As TextBox = FVctPUActivity.FindControl("F_t_oted")
+    Dim ofpr As TextBox = FVctPUActivity.FindControl("OnlyFullProgress")
+    pnlConf.Visible = False
+    oted.Enabled = True
+    If Confirmation Then
+      pnlConf.Visible = True
+      'To Enable Any % Progress in case of confirmation, following line is commented.
+      'ofpr.Text = "yes"
     End If
   End Sub
   Private Sub FVctPUActivity_ItemCommand(sender As Object, e As FormViewCommandEventArgs) Handles FVctPUActivity.ItemCommand

@@ -54,10 +54,4 @@ Partial Class mGctMktActivity
     GVctPActivity.DataBind()
   End Sub
 
-  Private Sub GVctPActivity_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles GVctPActivity.RowDataBound
-    If e.Row.RowType = DataControlRowType.DataRow Then
-      e.Row.CssClass = CType(e.Row.DataItem, SIS.CT.ctPActivity).bgCssClass
-    End If
-  End Sub
-
 End Class

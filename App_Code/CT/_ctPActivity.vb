@@ -8,6 +8,8 @@ Namespace SIS.CT
   Partial Public Class ctPActivity
     'checking Modification in Git Hub
     Private Shared _RecordCount As Integer
+    Public Property t_rmcm As Integer = 0
+    Public Property t_manu As Integer = 2
     Private _t_cprj As String = ""
     Private _t_acty As String = ""
     Private _t_amod As String = ""
@@ -53,6 +55,7 @@ Namespace SIS.CT
     Public Property SubItem As String = ""
     Public Property t_days As Integer = 0
     Public Property t_type As String = ""
+
     Public ReadOnly Property ForeColor() As System.Drawing.Color
       Get
         Dim mRet As System.Drawing.Color = Drawing.Color.Blue

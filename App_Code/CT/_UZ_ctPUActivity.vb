@@ -366,10 +366,19 @@ Namespace SIS.CT
         If tmpL.t_cpgv + tmpL.t_tpgv >= 100 Then
           mayAddNewUpdate = False
         End If
+        If tmpA.t_rmcm = 1 Then
+          If tmpL.t_cpgv + tmpL.t_tpgv >= 100 Then
+            mayAddNewUpdate = False
+          Else
+            mayAddNewUpdate = True
+          End If
+        Else
+          If tmpL.t_tpgv = 0 Then
+            mayAddNewUpdate = True
+          End If
+        End If
       End If
       If Not mayAddNewUpdate Then
-        tmpU = tmpL
-      ElseIf tmpL IsNot Nothing AndAlso tmpL.t_tpgv = 0 Then
         tmpU = tmpL
       Else
         tmpU = New SIS.CT.ctPUActivity
@@ -392,18 +401,23 @@ Namespace SIS.CT
           .t_rmks = ""
           .t_orno = t_orno
           .t_bohd = t_bohd
+          .t_wipd = 3
           If tmpLFound Then
             .t_acsd = tmpL.t_acsd
             .t_aced = tmpL.t_aced
             .t_otsd = tmpL.t_otsd
             .t_oted = tmpL.t_oted
             .t_cpgv = tmpL.t_cpgv + tmpL.t_tpgv
+            If Not mayAddNewUpdate Then
+              .t_wipd = tmpL.t_wipd
+            End If
           Else
             .t_acsd = ""
             .t_aced = ""
             .t_otsd = ""
             .t_oted = ""
             .t_cpgv = 0.00
+            .t_wipd = 3
           End If
         End With
         tmpU.AddNewUpdate = mayAddNewUpdate

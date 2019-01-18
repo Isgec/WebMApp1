@@ -1,6 +1,6 @@
 <%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="True" ClientIDMode="Static" CodeFile="mEctPUActivity.aspx.vb" Inherits="mEctPUActivity" title="Activity Progress Updates" %>
 <asp:Content ID="CPHctPUActivity" ContentPlaceHolderID="cph1" runat="Server">
-  <div class="container">
+  <div class="container-fluid">
     <div class="container text-center">
       <h3>
         <asp:Label ID="LabelctPActivity" runat="server" Text="Activity Progress Update"></asp:Label></h3>
@@ -79,6 +79,22 @@
                   }
                   return true;
                 },
+                validate_wipd: function(){
+                  var oted = $get('F_t_oted');
+                  var wipd = $get('F_t_wipd');
+                  oted.disabled = true;
+                  ValidatorEnable($get('RFVF_t_oted'), false);
+                  if (wipd.value == '2') {
+                    oted.disabled = false;
+                    ValidatorEnable($get('RFVF_t_oted'), true);
+                    return false;
+                  }
+                  if (wipd.value == '1') {
+                    oted.value = '';
+                  }
+                  return true;
+
+                },
                 validate_acsd: function () {
                   var mRet = true;
                   var tpgv = $get('F_t_tpgv');
@@ -132,7 +148,7 @@
             <asp:TextBox ID="OnlyFullProgress" runat="server" Text='<%# Eval("OnlyFullProgress") %>' style="display:none;"></asp:TextBox>
             <div class="form-group">
               <h6><span class="badge badge-secondary">Project</span></h6>
-              <div class="input-group mb-3">
+              <div class="input-group mb-1">
                 <asp:Label
                   ID="F_t_cprj"
                   Text='<%# Bind("t_cprj") %>'
@@ -150,7 +166,7 @@
                   runat="Server" />
               </div>
               <h6><span class="badge badge-secondary">Activity</span></h6>
-              <div class="input-group mb-3">
+              <div class="input-group mb-1">
                 <asp:Label
                   ID="F_t_atid"
                   Text='<%# Bind("t_atid") %>'
@@ -168,7 +184,7 @@
                   runat="Server" />
               </div>
               <h6><span class="badge badge-secondary">System driven outlook Start & Finish Date</span></h6>
-              <div class="input-group mb-3">
+              <div class="input-group mb-1">
                 <asp:TextBox
                   ID="Label3"
                   Text='<%# Eval("dt_ctsd") %>'
@@ -185,10 +201,10 @@
                   runat="Server" />
               </div>
               <h6><span class="badge badge-secondary">% Progress :</span></h6>
-              <div class="input-group mb-3">
+              <div class="input-group mb-1">
                 <asp:TextBox ID="F_t_tpgv"
                   Text='<%# Bind("t_tpgv") %>'
-                  CssClass = "form-control"
+                  CssClass="form-control"
                   type="number"
                   onblur="return script_pu.validate_pp();"
                   runat="server" 
@@ -203,18 +219,18 @@
                  ValidationGroup="pp" />
                 <asp:Label ID="F_t_puom"
                   Text="<b>Cumulative % As On date: </b>"
-                  CssClass = "form-control"
+                  CssClass="form-control"
                   runat="server" />
                 <asp:Label ID="F_t_cpgv"
                   Text='<%# Bind("t_cpgv") %>'
-                  CssClass = "form-control"
+                  CssClass="form-control"
                   runat="server" />
               </div>
               <h6><span class="badge badge-secondary">Actual Start Date :</span></h6>
-              <div class="input-group mb-3">
+              <div class="input-group mb-1">
               <asp:TextBox ID="F_t_acsd"
                 Text='<%# Bind("dt_acsd") %>'
-                CssClass = "form-control"
+                CssClass="form-control"
                 Enabled='<%# Editable %>'
                 onblur="return script_pu.validate_acsd();"
                 type="date"
@@ -231,43 +247,61 @@
                  ValidationGroup="pp" />
               </div>
               <h6><span class="badge badge-secondary">Outlook Start Date :</span></h6>
-              <div class="input-group mb-3">
+              <div class="input-group mb-1">
               <asp:TextBox ID="F_t_otsd"
                 Text='<%# Bind("dt_otsd") %>'
-                CssClass = "form-control"
+                Enabled='<%# Editable %>'
+                CssClass="form-control"
                 type="date"
                 runat="server" />
               </div>
+              <div id="pnlconfirmation" runat="server">
+                <h6><span class="badge badge-danger">Pl. Confirm Base Line/System Outlook Dates are OK :</span></h6>
+                <div class="input-group mb-1">
+                  <asp:DropDownList
+                    ID="F_t_wipd"
+                    SelectedValue='<%# Bind("lg_t_wipd") %>'
+                    CssClass="form-control"
+                    ValidationGroup="pp"
+                    onblur="return script_pu.validate_wipd();"
+                    runat="server">
+                  <asp:ListItem Value="" Text="---"></asp:ListItem>
+                  <asp:ListItem Value="1" Text="YES"></asp:ListItem>
+                  <asp:ListItem Value="2" Text="NO"></asp:ListItem>
+                  </asp:DropDownList>
+                 <asp:RequiredFieldValidator 
+                   ID="RFVlg_t_wipd" 
+                   ControlToValidate="F_t_wipd"
+                   runat="server"
+                   ErrorMessage="<div class='btn-danger align-middle'>Confirmation is Required.</div>" 
+                   EnableClientScript="true"
+                   ValidationGroup="pp" />
+                </div>
+              </div>
               <h6><span class="badge badge-secondary">Outlook Finish Date :</span></h6>
-              <div class="input-group mb-3">
+              <div class="input-group mb-1">
                 <asp:TextBox ID="F_t_oted"
                   Text='<%# Bind("dt_oted") %>'
-                  CssClass = "form-control"
+                  CssClass="form-control"
+                  Enabled="false"
                   type="date"
                   runat="server" />
+               <asp:RequiredFieldValidator 
+                 ID="RFVF_t_oted" 
+                 ControlToValidate="F_t_oted"
+                 runat="server"
+                 Enabled="False"
+                 ErrorMessage="<div class='btn-danger'>Enter outlook finish date.</div>" 
+                 ForeColor="Red" 
+                 EnableClientScript="true"
+                 ValidationGroup="pp" />
               </div>
-
-<%--
-              <h6><span class="badge badge-secondary">Cumulative % As on Date :</span></h6>
-              <div class="input-group mb-3">
-                <asp:TextBox ID="F_t_cpgv"
-                  Text='<%# Bind("t_cpgv") %>'
-                  CssClass = "form-control"
-                  type="number"
-                  runat="server" />
-                <asp:TextBox ID="TextBox2"
-                  Text='<%# Eval("t_puom") %>'
-                  Enabled = "False"
-                  CssClass = "form-control"
-                  runat="server" />
-              </div>
---%>
 
               <h6><span class="badge badge-secondary">Actual Finish Date :</span></h6>
-              <div class="input-group mb-3">
+              <div class="input-group mb-1">
                 <asp:TextBox ID="F_t_aced"
                   Text='<%# Bind("dt_aced") %>'
-                  CssClass = "form-control"
+                  CssClass="form-control"
                   type="date"
                   Enabled="False"
                   onblur="return script_pu.validate_aced();"
@@ -284,10 +318,10 @@
                  ValidationGroup="pp" />
               </div>
               <h6><span class="badge badge-secondary">Remarks :</span></h6>
-              <div class="input-group mb-3">
+              <div class="input-group mb-1">
                 <asp:TextBox ID="F_t_rmks"
                   Text='<%# Bind("t_rmks") %>'
-                  CssClass = "form-control"
+                  CssClass="form-control"
                   TextMode="Multiline"
                   Height="80px"
                   MaxLength="500"

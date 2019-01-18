@@ -53,11 +53,4 @@ Partial Class mGctYNRActivity
   Private Sub cmdSubmit_Click(sender As Object, e As EventArgs) Handles cmdSubmit.Click
     GVctPActivity.DataBind()
   End Sub
-
-  Private Sub GVctPActivity_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles GVctPActivity.RowDataBound
-    If e.Row.RowType = DataControlRowType.DataRow Then
-      e.Row.CssClass = CType(e.Row.DataItem, SIS.CT.ctPActivity).bgCssClass
-    End If
-  End Sub
-
 End Class

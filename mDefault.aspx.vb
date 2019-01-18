@@ -26,6 +26,32 @@ Partial Class mLGDefault
       ViewState.Add("QString", value)
     End Set
   End Property
+  Protected Sub AuthenticateAndRedirect(ByVal UserID As String)
+    HttpContext.Current.Session("LoginID") = UserID
+    Try
+      Dim pw As String = SIS.SYS.Utilities.SessionManager.GetPassword(UserID)
+      If Membership.ValidateUser(UserID, pw) Then
+      End If
+      HttpContext.Current.Session("IsAuthenticated") = True
+      Dim isPersistent As Boolean = True
+      Dim userData As String = "ApplicationSpecific data for this user."
+      Dim ticket As FormsAuthenticationTicket = New FormsAuthenticationTicket(1,
+                UserID,
+                DateTime.Now,
+                DateTime.Now.AddMinutes(1),
+                isPersistent,
+                userData,
+                FormsAuthentication.FormsCookiePath)
+      ' Encrypt the ticket.
+      Dim encTicket As String = FormsAuthentication.Encrypt(ticket)
+      ' Create the cookie. 
+      HttpContext.Current.Response.Cookies.Add(New HttpCookie(FormsAuthentication.FormsCookieName, encTicket))
+      SIS.SYS.Utilities.SessionManager.InitializeEnvironment(UserID)
+      Response.Redirect("~/mMenu.aspx")
+    Catch ex As Exception
+      L_Err.Text = "Err: " & ex.Message
+    End Try
+  End Sub
   Protected Sub AuthenticateAndRedirect(ByVal UserID As String, ByVal AppID As String)
     HttpContext.Current.Session("LoginID") = UserID
     Dim tmpApl As SIS.MAPP.mappApplications = SIS.MAPP.mappApplications.mappApplicationsGetByID(AppID)
@@ -148,6 +174,9 @@ Partial Class mLGDefault
         Dim UserID As String = Request.QueryString("UserID")
         Dim AppID As String = Request.QueryString("AppID")
         AuthenticateAndRedirect(UserID, AppID)
+      ElseIf Request.QueryString("UserID") IsNot Nothing AndAlso Request.QueryString("AppID") Is Nothing Then
+        Dim UserID As String = Request.QueryString("UserID")
+        AuthenticateAndRedirect(UserID)
       ElseIf Request.QueryString("deviceID") Is Nothing Then
         Me.invalidDevice.Visible = True
       Else

@@ -1,10 +1,10 @@
-<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" ClientIDMode="Static" EnableEventValidation = "false" CodeFile="mGctMktActivity.aspx.vb" Inherits="mGctMktActivity" title="Maintain List: Marketing Activity" %>
+<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" ClientIDMode="Static" EnableEventValidation = "false" CodeFile="mGctApcActivity.aspx.vb" Inherits="mGctApcActivity" title="List: APCE-MFG Activity" %>
 <asp:Content ID="None" ContentPlaceHolderID="cphMain" runat="server">
         <script type="text/javascript">
           function apply_filter() {
             var txt = $get('F_FilterText').value;
             var cde = $find("bcF_t_iref");
-            cde.set_contextKey(txt + '|CT_MARKETING');
+            cde.set_contextKey(txt + '|CT_MANUFACTURING');
             var parent = $get(cde.get_ParentControlID());
             var index = parent.selectedIndex;
             parent.selectedIndex = -1;
@@ -93,7 +93,7 @@ input:checked + .slider:before {
   <div class="container">
     <div class="container text-center">
       <h3>
-        <asp:Label ID="LabelctPActivity" runat="server" Text="Project Progress Update-Marketing"></asp:Label></h3>
+        <asp:Label ID="LabelctPActivity" runat="server" Text="Project Progress Update-APCE"></asp:Label></h3>
     </div>
     <asp:UpdatePanel ID="UPNLctPActivity" runat="server">
       <ContentTemplate>
@@ -153,7 +153,7 @@ input:checked + .slider:before {
               ServiceMethod="GetProjectIrefs"
               Category="t_iref"
               LoadingText="Loading. . ."
-              ContextKey="dummy|CT_MARKETING"
+              ContextKey="dummy|CT_MANUFACTURING"
               UseContextKey="True" 
               runat="server" />
           </div>
@@ -190,12 +190,12 @@ input:checked + .slider:before {
               <ItemTemplate>
                 <asp:ImageButton ID="cmdNotes" runat="server" AlternateText='<%# Eval("PrimaryKey") %>' ToolTip="View/reply Notes" SkinID="notes" CommandName="lgNotes" CommandArgument='<%# Container.DataItemIndex %>' />
               </ItemTemplate>
-              <ItemStyle CssClass="align-middle" />
+              <ItemStyle CssClass="alignCenter" />
               <HeaderStyle HorizontalAlign="Center" Width="30px" />
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Activity" SortExpression="t_desc">
               <ItemTemplate>
-                <asp:LinkButton ID="L_t_cact" runat="server" Enabled='<%# Eval("EnableLink") %>' ForeColor='<%# Eval("ForeColor") %>' CssClass="form-control border-0" Title='<%# Eval("t_cact") %>' Text='<%# Eval("t_desc") %>' CommandName="lgEdit" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
+                <asp:LinkButton ID="L_t_cact" runat="server"  ForeColor='<%# EVal("ForeColor") %>' CssClass="form-control border-0" Title='<%# EVal("t_cact") %>' Text='<%# Eval("t_desc") %>' CommandName="lgEdit" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
               </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="% Progress" SortExpression="tot_cpgv">
@@ -203,18 +203,18 @@ input:checked + .slider:before {
                 <asp:Label ID="Labelt_cpgv" runat="server"  ForeColor='<%# Eval("ForeColor") %>' CssClass="form-control border-0" Text='<%# Bind("tot_cpgv") %>'></asp:Label>
               </ItemTemplate>
               <ItemStyle CssClass="alignCenter" />
-              <HeaderStyle CssClass="alignCenter" />
+              <HeaderStyle CssClass="alignCenter"  />
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Schd. Start" SortExpression="t_sdst">
+            <asp:TemplateField HeaderText="Schd. Start Date" SortExpression="t_sdst">
               <ItemTemplate>
-                <asp:Label ID="Labelt_sdst" runat="server"  ForeColor='<%# Eval("ForeColor") %>' CssClass="form-control border-0" Text='<%# Bind("t_sdst") %>'></asp:Label>
+                <asp:Label ID="Labelt_sdst" runat="server"  ForeColor='<%# EVal("ForeColor") %>' CssClass="form-control border-0" Text='<%# Bind("t_sdst") %>'></asp:Label>
               </ItemTemplate>
               <ItemStyle CssClass="alignCenter" />
               <HeaderStyle CssClass="alignCenter"  />
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Schd. Finish" SortExpression="t_sdfn">
+            <asp:TemplateField HeaderText="Schd. Finish Date" SortExpression="t_sdfn">
               <ItemTemplate>
-                <asp:Label ID="Labelt_sdfn" runat="server"  ForeColor='<%# Eval("ForeColor") %>' CssClass="form-control border-0" Text='<%# Bind("t_sdfn") %>'></asp:Label>
+                <asp:Label ID="Labelt_sdfn" runat="server"  ForeColor='<%# EVal("ForeColor") %>' CssClass="form-control border-0" Text='<%# Bind("t_sdfn") %>'></asp:Label>
               </ItemTemplate>
               <ItemStyle CssClass="alignCenter" />
               <HeaderStyle CssClass="alignCenter"  />
@@ -229,7 +229,7 @@ input:checked + .slider:before {
           runat="server"
           DataObjectTypeName="SIS.CT.ctPActivity"
           OldValuesParameterFormatString="original_{0}"
-          SelectMethod="UZ_ctMktActivitySelectList"
+          SelectMethod="UZ_ctApcActivitySelectList"
           TypeName="SIS.CT.ctPActivity"
           SortParameterName="OrderBy"
           EnablePaging="False">

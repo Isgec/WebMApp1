@@ -2,14 +2,14 @@ Imports System.Data
 Imports System.Data.SqlClient
 Imports AjaxControlToolkit
 Imports System.Web.Script.Serialization
-Partial Class mGctLogActivity
+Partial Class mGctApcActivity
   Inherits System.Web.UI.Page
   Protected Sub GVctPActivity_RowCommand(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.GridViewCommandEventArgs) Handles GVctPActivity.RowCommand
     If e.CommandName.ToLower = "lgedit".ToLower Then
       Try
         Dim t_cprj As String = GVctPActivity.DataKeys(e.CommandArgument).Values("t_cprj")
         Dim t_cact As String = GVctPActivity.DataKeys(e.CommandArgument).Values("t_cact")
-        Dim tmpU As SIS.CT.ctPUActivity = SIS.CT.ctPUActivity.GetctPUActivityForUpdate(t_cprj, t_cact, "", "CT_LOGISTIC")
+        Dim tmpU As SIS.CT.ctPUActivity = SIS.CT.ctPUActivity.GetctPUActivityForUpdate(t_cprj, t_cact, "", "CT_MANUFACTURING")
         If tmpU IsNot Nothing Then
           Dim t_srno As String = tmpU.t_srno
           Dim RedirectUrl As String = "~/CT_mMain/App_Edit/mEctPUActivity.aspx" & "?t_cprj=" & t_cprj & "&t_cact=" & t_cact & "&t_srno=" & t_srno & "&ed=" & IIf(tmpU.AddNewUpdate, "Y", "N")

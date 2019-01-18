@@ -190,24 +190,31 @@ input:checked + .slider:before {
               <ItemTemplate>
                 <asp:ImageButton ID="cmdNotes" runat="server" AlternateText='<%# Eval("PrimaryKey") %>' ToolTip="View/reply Notes" SkinID="notes" CommandName="lgNotes" CommandArgument='<%# Container.DataItemIndex %>' />
               </ItemTemplate>
-              <ItemStyle CssClass="alignCenter" />
+              <ItemStyle CssClass="align-middle" />
               <HeaderStyle HorizontalAlign="Center" Width="30px" />
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Activity" SortExpression="t_desc">
               <ItemTemplate>
-                <asp:LinkButton ID="L_t_cact" runat="server"  ForeColor='<%# EVal("ForeColor") %>' Title='<%# EVal("t_cact") %>' Text='<%# Eval("t_desc") %>' CommandName="lgEdit" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
+                <asp:LinkButton ID="L_t_cact" runat="server" Enabled='<%# Eval("EnableLink") %>' ForeColor='<%# Eval("ForeColor") %>' CssClass="form-control border-0" Title='<%# Eval("t_cact") %>' Text='<%# Eval("t_desc") %>' CommandName="lgEdit" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
               </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Schd. Start Date" SortExpression="t_sdst">
+            <asp:TemplateField HeaderText="% Progress" SortExpression="tot_cpgv">
               <ItemTemplate>
-                <asp:Label ID="Labelt_sdst" runat="server"  ForeColor='<%# EVal("ForeColor") %>' Text='<%# Bind("t_sdst") %>'></asp:Label>
+                <asp:Label ID="Labelt_cpgv" runat="server"  ForeColor='<%# Eval("ForeColor") %>' CssClass="form-control border-0" Text='<%# Bind("tot_cpgv") %>'></asp:Label>
+              </ItemTemplate>
+              <ItemStyle CssClass="alignCenter" />
+              <HeaderStyle CssClass="alignCenter" />
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="Schd. Start" SortExpression="t_sdst">
+              <ItemTemplate>
+                <asp:Label ID="Labelt_sdst" runat="server"  ForeColor='<%# Eval("ForeColor") %>' CssClass="form-control border-0" Text='<%# Bind("t_sdst") %>'></asp:Label>
               </ItemTemplate>
               <ItemStyle CssClass="alignCenter" />
               <HeaderStyle CssClass="alignCenter"  />
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Schd. Finish Date" SortExpression="t_sdfn">
+            <asp:TemplateField HeaderText="Schd. Finish" SortExpression="t_sdfn">
               <ItemTemplate>
-                <asp:Label ID="Labelt_sdfn" runat="server"  ForeColor='<%# EVal("ForeColor") %>' Text='<%# Bind("t_sdfn") %>'></asp:Label>
+                <asp:Label ID="Labelt_sdfn" runat="server"  ForeColor='<%# Eval("ForeColor") %>' CssClass="form-control border-0" Text='<%# Bind("t_sdfn") %>'></asp:Label>
               </ItemTemplate>
               <ItemStyle CssClass="alignCenter" />
               <HeaderStyle CssClass="alignCenter"  />

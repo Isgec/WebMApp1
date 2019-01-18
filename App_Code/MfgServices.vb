@@ -19,7 +19,7 @@ Public Class MfgServices
     Dim UserID As String = HttpContext.Current.Session("LoginID")
     Dim tmpPs As List(Of SIS.CT.ctUserProject) = SIS.CT.ctUserProject.ctUserProjectSelectList(0, 9999, "", False, "", UserID, "")
     For Each tmpP As SIS.CT.ctUserProject In tmpPs
-      Projects.Add(New CascadingDropDownNameValue() With {.name = tmpP.IDM_Projects2_Description, .value = tmpP.ProjectID})
+      Projects.Add(New CascadingDropDownNameValue() With {.name = tmpP.ProjectID & "-" & tmpP.IDM_Projects2_Description, .value = tmpP.ProjectID})
     Next
     Return Projects.ToArray()
   End Function

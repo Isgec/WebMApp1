@@ -33,11 +33,28 @@ Namespace SIS.CT
     Private _t_cted As String = ""
     Private _t_ctsd As String = ""
     Public Property OnlyFullProgress As String = "no"
+    Public Property wipd As Integer = 3
 
     Private _ttcmcs0522001_t_dsca As String = ""
     Private _ttpisg2202002_t_desc As String = ""
     Private _FK_ttpisg183200_t_cprj As SIS.CT.ctProjects = Nothing
     Private _FK_ttpisg183200_t_atid As SIS.CT.ctPActivity = Nothing
+    Public Property t_wipd As Integer
+      Get
+        Return wipd
+      End Get
+      Set(value As Integer)
+        wipd = value
+      End Set
+    End Property
+    Public Property lg_t_wipd As String
+      Get
+        If wipd = 3 Then Return "" Else Return wipd
+      End Get
+      Set(value As String)
+        If value = "" Then wipd = 3 Else wipd = value
+      End Set
+    End Property
     Public ReadOnly Property ForeColor() As System.Drawing.Color
       Get
         Dim mRet As System.Drawing.Color = Drawing.Color.Blue
@@ -439,6 +456,7 @@ Namespace SIS.CT
         .t_rmks = Record.t_rmks
         .t_orno = Record.t_orno
         .t_bohd = Record.t_bohd
+        .t_wipd = Record.t_wipd
       End With
       Return SIS.CT.ctPUActivity.InsertData(_Rec)
     End Function
@@ -470,6 +488,7 @@ Namespace SIS.CT
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_rmks", SqlDbType.VarChar, 501, Record.t_rmks)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_orno", SqlDbType.VarChar, 10, Record.t_orno)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_bohd", SqlDbType.VarChar, 50, Record.t_bohd)
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_wipd", SqlDbType.Int, 11, Record.t_wipd)
           Cmd.Parameters.Add("@Return_t_cprj", SqlDbType.NVarChar, 7)
           Cmd.Parameters("@Return_t_cprj").Direction = ParameterDirection.Output
           Cmd.Parameters.Add("@Return_t_atid", SqlDbType.VarChar, 31)
@@ -511,6 +530,7 @@ Namespace SIS.CT
         .t_Refcntu = Record.t_Refcntu
         .t_rmks = Record.t_rmks
         .t_orno = IIf(.t_orno = "", Record.t_orno, .t_orno)
+        .t_wipd = Record.t_wipd
       End With
       'Update CT 
       'Only in case of Erec & Commissioning NOT for MFG
@@ -565,6 +585,9 @@ Namespace SIS.CT
           If mayUpdate Then
             Dim Sql As String = ""
             Sql &= " UPDATE ttpisg220200 SET "
+            Sql &= " t_mosd=convert(datetime,'" & IIf(Record.t_otsd = "", "01/01/1753", Record.t_otsd) & "',103), "
+            Sql &= " t_moed=convert(datetime,'" & IIf(Record.t_oted = "", "01/01/1753", Record.t_oted) & "',103), "
+            Sql &= " t_rmks='" & Record.t_rmks & "',"
             Sql &= " t_acsd=convert(datetime,'" & IIf(Record.t_acsd = "", "01/01/1753", Record.t_acsd) & "',103) "
             Sql &= " WHERE t_cprj ='" & Record.t_cprj & "' AND t_cact ='" & Record.t_atid & "'"
             Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
@@ -610,6 +633,7 @@ Namespace SIS.CT
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_rmks", SqlDbType.VarChar, 501, Record.t_rmks)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_orno", SqlDbType.VarChar, 10, Record.t_orno)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_bohd", SqlDbType.VarChar, 50, Record.t_bohd)
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_wipd", SqlDbType.Int, 11, Record.t_wipd)
           Cmd.Parameters.Add("@RowCount", SqlDbType.Int)
           Cmd.Parameters("@RowCount").Direction = ParameterDirection.Output
           _RecordCount = -1
