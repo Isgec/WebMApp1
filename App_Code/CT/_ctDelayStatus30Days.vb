@@ -40,6 +40,7 @@ Namespace SIS.CT
         End Try
       End Sub
 
+      Public Property PredClosed As Boolean = True
       Public Property t_cprj As String = ""
       Public Property t_sub1 As String = ""
       Public Property t_cact As String = ""
@@ -175,8 +176,18 @@ Namespace SIS.CT
       Else
         Sql &= " IsCurrent = case when ((t_sdst between getdate() and dateadd(d," & FromDays & ",getdate()))   or   (t_sdfn between getdate() and dateadd(d," & FromDays & ",getdate()))) or ((t_sdst < getdate() )   and   (t_sdfn > dateadd(d," & FromDays & ",getdate()))) then 1 else 0 end, "
       End If
-      Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem "
-      Sql &= " from ttpisg220200  "
+      'SQL For PredClosed
+      Sql &= " (case ( "
+      Sql &= "     select top 1 xx.t_cpgv  "
+      Sql &= " 	from ttpisg220200 as xx "
+      Sql &= " 	where xx.t_cprj='" & t_cprj & "' "
+      Sql &= " 	and xx.t_cact = (select top 1 yy.t_pact from ttpisg221200 as yy "
+      Sql &= " 	where yy.t_cprj='" & t_cprj & "' "
+      Sql &= " 	and yy.t_cact=zz.t_cact)) "
+      Sql &= "  when 100 then 1 else 0 end) as PredClosed, "
+
+      Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=zz.t_pcod and aa.t_iref=zz.t_sub1 and aa.t_sitm=zz.t_sitm ) as SubItem "
+      Sql &= " from ttpisg220200 as zz "
       Sql &= " where t_cprj='" & t_cprj & "'"
       Sql &= " And t_acty <> 'PARENT'"
       Select Case ID

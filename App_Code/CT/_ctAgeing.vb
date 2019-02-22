@@ -57,8 +57,19 @@ Namespace SIS.CT
       Dim Sql As String = ""
       Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,t_drem, t_dela, t_delf,t_otsd,t_oted, t_pprc,t_cpgv,t_acty,t_dept,t_pact, t_outl,t_actp, "
       Sql &= " IsCurrent = case when ((t_sdst between dateadd(d,-30,getdate()) and getdate())   or   (t_sdfn between dateadd(d,-30,getdate()) and getdate())) or ((t_sdst < dateadd(d,-30,getdate()))   and   (t_sdfn > getdate())) then 1 else 0 end, "
-      Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub4 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem "
-      Sql &= " from ttpisg220200  "
+
+      Sql &= " (case ( "
+      Sql &= "     select top 1 xx.t_cpgv  "
+      Sql &= " 	from ttpisg220200 as xx "
+      Sql &= " 	where xx.t_cprj='" & t_cprj & "' "
+      Sql &= " 	and xx.t_cact = (select top 1 yy.t_pact from ttpisg221200 as yy "
+      Sql &= " 	where yy.t_cprj='" & t_cprj & "' "
+      Sql &= " 	and yy.t_cact=zz.t_cact)) "
+      Sql &= "  when 100 then 1 else 0 end) as PredClosed, "
+
+
+      Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub4 from ttpisg243200 as aa where aa.t_cprd=zz.t_pcod and aa.t_iref=zz.t_sub1 and aa.t_sitm=zz.t_sitm ) as SubItem "
+      Sql &= " from ttpisg220200 as zz "
       Sql &= " where t_cprj='" & t_cprj & "'"
       Sql &= " and t_acty <> 'PARENT' "
 
@@ -573,8 +584,19 @@ Namespace SIS.CT
       Dim Sql As String = ""
       Sql &= " select t_cprj, t_cact, t_desc, t_sdst, t_acsd, t_sdfn, t_acfn, t_sub1,t_drem, t_dela, t_delf,t_otsd,t_oted, t_pprc,t_cpgv,t_acty,t_dept,t_pact, t_outl,t_actp, "
       Sql &= " IsCurrent = case when ((t_sdst between dateadd(d,-30,getdate()) and getdate())   or   (t_sdfn between dateadd(d,-30,getdate()) and getdate())) or ((t_sdst < dateadd(d,-30,getdate()))   and   (t_sdfn > getdate())) then 1 else 0 end, "
-      Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=ttpisg220200.t_pcod and aa.t_iref=ttpisg220200.t_sub1 and aa.t_sitm=ttpisg220200.t_sitm ) as SubItem "
-      Sql &= " from ttpisg220200  "
+
+      Sql &= " (case ( "
+      Sql &= "     select top 1 xx.t_cpgv  "
+      Sql &= " 	from ttpisg220200 as xx "
+      Sql &= " 	where xx.t_cprj='" & t_cprj & "' "
+      Sql &= " 	and xx.t_cact = (select top 1 yy.t_pact from ttpisg221200 as yy "
+      Sql &= " 	where yy.t_cprj='" & t_cprj & "' "
+      Sql &= " 	and yy.t_cact=zz.t_cact)) "
+      Sql &= "  when 100 then 1 else 0 end) as PredClosed, "
+
+
+      Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=zz.t_pcod and aa.t_iref=zz.t_sub1 and aa.t_sitm=zz.t_sitm ) as SubItem "
+      Sql &= " from ttpisg220200 as zz  "
       Sql &= " where t_cprj='" & t_cprj & "'"
       Sql &= " And (t_acty='" & t_acty & "' )"
 

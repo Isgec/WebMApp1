@@ -185,7 +185,11 @@ Partial Class mGctActivityList
               ElseIf dt.IsStarted And Not dt.IsFinished Then
                 .CssClass = "btn-outline-info"
               Else
-                .CssClass = "btn-outline-danger"
+                If dt.PredClosed Then
+                  .CssClass = "btn-outline-danger"
+                Else
+                  .CssClass = "btn-outline-warning"
+                End If
               End If
             Else
               If dt.IsStarted And dt.IsFinished Then
@@ -193,7 +197,11 @@ Partial Class mGctActivityList
               ElseIf dt.IsStarted And Not dt.IsFinished Then
                 .CssClass = "btn-info"
               Else
-                .CssClass = "btn-danger"
+                If dt.PredClosed Then
+                  .CssClass = "btn-danger"
+                Else
+                  .CssClass = "btn-warning"
+                End If
               End If
             End If
           End If
