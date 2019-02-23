@@ -121,43 +121,21 @@
             </thead>
             <tr>
               <td style='text-align: center; font-weight: bold;'>STARTED</td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="STE" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="ST0" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="ST10" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="ST20" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="ST30" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="STZ" runat="server" OnClick="abc"></asp:Button>
-              </td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-success fix" ID="STE" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-success fix" ID="ST0" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="ST10" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="ST20" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="ST30" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="STZ" runat="server" OnClick="abc"></asp:Button></td>
             </tr>
             <tr>
               <td style='text-align: center; font-weight: bold;'>NOT STARTED</td>
               <td style='text-align: center;'>-</td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="NST0" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NST10" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NST20" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NST30" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NSTZ" runat="server" OnClick="abc"></asp:Button>
-              </td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-success fix" ID="NST0" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NST10" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NST20" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NST30" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NSTZ" runat="server" OnClick="abc"></asp:Button></td>
             </tr>
           </table>
         </div>
@@ -185,43 +163,21 @@
             </thead>
             <tr>
               <td style='text-align: center; font-weight: bold;'>FINISHED</td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="FDE" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="FD0" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="FD10" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="FD20" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="FD30" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="FDZ" runat="server" OnClick="abc"></asp:Button>
-              </td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-success fix" ID="FDE" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-success fix" ID="FD0" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="FD10" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="FD20" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="FD30" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="FDZ" runat="server" OnClick="abc"></asp:Button></td>
             </tr>
             <tr>
               <td style='text-align: center; font-weight: bold;'>NOT FINISHED</td>
               <td style='text-align: center;'>-</td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-success fix" ID="NFD0" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NFD10" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NFD20" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NFD30" runat="server" OnClick="abc"></asp:Button>
-              </td>
-              <td style='text-align: center;'>
-                <asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NFDZ" runat="server" OnClick="abc"></asp:Button>
-              </td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-success fix" ID="NFD0" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NFD10" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-warning fix" ID="NFD20" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NFD30" runat="server" OnClick="abc"></asp:Button></td>
+              <td style='text-align: center;'><asp:Button CssClass="btn btn-sm btn btn-danger fix" ID="NFDZ" runat="server" OnClick="abc"></asp:Button></td>
             </tr>
           </table>
         </div>

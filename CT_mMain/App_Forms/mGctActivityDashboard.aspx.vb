@@ -93,41 +93,45 @@ Partial Class mGctActivityDashboard
 #Region " Ageing Tables "
   Private Sub ReviewSheetStart_PreRender(sender As Object, e As EventArgs) Handles ReviewSheetStart.PreRender
     If ProjectID = "" Or ActivityID = "" Then Exit Sub
-    Label3.Text = "(Last 30 Days - As On " & Now.ToString("dd/MM/yyyy") & ")"
-    Dim xx As List(Of SIS.CT.Ageing) = SIS.CT.Ageing.ActyStarted(ProjectID, ActivityID, "")
+    'Label3.Text = "(Last 30 Days - As On " & Now.ToString("dd/MM/yyyy") & ")"
+    Dim xx As List(Of SIS.CT.Ageing) = SIS.CT.Ageing.OAActyStarted(ProjectID, ActivityID, "")
     For Each x As SIS.CT.Ageing In xx
       STE.Text = x.EARLY
       ST0.Text = x.DELAY0
       ST10.Text = x.DELAY10
       ST20.Text = x.DELAY20
       ST30.Text = x.DELAY30
+      STZ.Text = x.DELAYZZ
     Next
-    xx = SIS.CT.Ageing.ActyNOTStarted(ProjectID, ActivityID, "")
+    xx = SIS.CT.Ageing.OAActyNOTStarted(ProjectID, ActivityID, "")
     For Each x As SIS.CT.Ageing In xx
       NST0.Text = x.DELAY0
       NST10.Text = x.DELAY10
       NST20.Text = x.DELAY20
       NST30.Text = x.DELAY30
+      NSTZ.Text = x.DELAYZZ
     Next
 
   End Sub
   Private Sub ReviewSheetFinish_PreRender(sender As Object, e As EventArgs) Handles ReviewSheetFinish.PreRender
     If ProjectID = "" Or ActivityID = "" Then Exit Sub
-    Label5.Text = "(Last 30 Days - As On " & Now.ToString("dd/MM/yyyy") & ")"
-    Dim xx As List(Of SIS.CT.Ageing) = SIS.CT.Ageing.ActyFinished(ProjectID, ActivityID, "")
+    'Label5.Text = "(Last 30 Days - As On " & Now.ToString("dd/MM/yyyy") & ")"
+    Dim xx As List(Of SIS.CT.Ageing) = SIS.CT.Ageing.OAActyFinished(ProjectID, ActivityID, "")
     For Each x As SIS.CT.Ageing In xx
       FDE.Text = x.EARLY
       FD0.Text = x.DELAY0
       FD10.Text = x.DELAY10
       FD20.Text = x.DELAY20
       FD30.Text = x.DELAY30
+      FDZ.Text = x.DELAYZZ
     Next
-    xx = SIS.CT.Ageing.ActyNOTFinished(ProjectID, ActivityID, "")
+    xx = SIS.CT.Ageing.OAActyNOTFinished(ProjectID, ActivityID, "")
     For Each x As SIS.CT.Ageing In xx
       NFD0.Text = x.DELAY0
       NFD10.Text = x.DELAY10
       NFD20.Text = x.DELAY20
       NFD30.Text = x.DELAY30
+      NFDZ.Text = x.DELAYZZ
     Next
   End Sub
   Protected Sub abc(ByVal sender As Object, ByVal e As EventArgs)

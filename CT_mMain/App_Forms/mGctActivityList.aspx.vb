@@ -88,8 +88,10 @@ Partial Class mGctActivityList
     Select Case ListType
       Case "OverallAgeing"
         data = SIS.CT.Ageing.OverallActivity(t_cprj, ClickedID)
-      Case "ActivityAgeing"
+      Case "ActivityAgeing30"
         data = SIS.CT.Ageing.ActyActivity(t_cprj, t_acty, ClickedID)
+      Case "ActivityAgeing" 'OverAll
+        data = SIS.CT.Ageing.OAActyActivity(t_cprj, t_acty, ClickedID)
       Case Else
         data = SIS.CT.DelayStatus30Days.SelectActivity(t_cprj, t_cact, t_acty, ID, IsAll, IsNext)
     End Select
