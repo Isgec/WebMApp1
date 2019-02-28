@@ -142,15 +142,15 @@ Namespace SIS.CT
     Public Shared Function ctUserProjectGetNewRecord() As SIS.CT.ctUserProject
       Return New SIS.CT.ctUserProject()
     End Function
-    <DataObjectMethod(DataObjectMethodType.Select)> _
+    <DataObjectMethod(DataObjectMethodType.Select)>
     Public Shared Function ctUserProjectGetByID(ByVal UserID As String, ByVal ProjectID As String) As SIS.CT.ctUserProject
       Dim Results As SIS.CT.ctUserProject = Nothing
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.StoredProcedure
           Cmd.CommandText = "spctUserProjectSelectByID"
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@UserID",SqlDbType.NVarChar,UserID.ToString.Length, UserID)
-          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@ProjectID",SqlDbType.NVarChar,ProjectID.ToString.Length, ProjectID)
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@UserID", SqlDbType.NVarChar, UserID.ToString.Length, UserID)
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@ProjectID", SqlDbType.NVarChar, ProjectID.ToString.Length, ProjectID)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@LoginID", SqlDbType.NvarChar, 9, HttpContext.Current.Session("LoginID"))
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
@@ -162,6 +162,24 @@ Namespace SIS.CT
       End Using
       Return Results
     End Function
+    Public Shared Function ctGetFreezedProjectsFromERP() As List(Of String)
+      Dim Results As List(Of String) = Nothing
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = "select distinct t_cprj as ProjectID from ttpisg220200 where t_frez=1"
+          Results = New List(Of String)()
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            Results.Add(Reader("ProjectID"))
+          End While
+          Reader.Close()
+        End Using
+      End Using
+      Return Results
+    End Function
+
     <DataObjectMethod(DataObjectMethodType.Select)> _
     Public Shared Function ctUserProjectSelectList(ByVal StartRowIndex As Integer, ByVal MaximumRows As Integer, ByVal OrderBy As String, ByVal SearchState As Boolean, ByVal SearchText As String, ByVal UserID As String, ByVal ProjectID As String) As List(Of SIS.CT.ctUserProject)
       Dim Results As List(Of SIS.CT.ctUserProject) = Nothing
@@ -173,8 +191,8 @@ Namespace SIS.CT
             SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@KeyWord", SqlDbType.NVarChar, 250, SearchText)
           Else
             Cmd.CommandText = "spctUserProjectSelectListFilteres"
-            SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@Filter_UserID",SqlDbType.NVarChar,8, IIf(UserID Is Nothing, String.Empty,UserID))
-            SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@Filter_ProjectID",SqlDbType.NVarChar,6, IIf(ProjectID Is Nothing, String.Empty,ProjectID))
+            SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@Filter_UserID", SqlDbType.NVarChar, 8, IIf(UserID Is Nothing, String.Empty, UserID))
+            SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@Filter_ProjectID", SqlDbType.NVarChar, 6, IIf(ProjectID Is Nothing, String.Empty, ProjectID))
           End If
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@StartRowIndex", SqlDbType.Int, -1, StartRowIndex)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@MaximumRows", SqlDbType.Int, -1, MaximumRows)
@@ -193,6 +211,19 @@ Namespace SIS.CT
           _RecordCount = Cmd.Parameters("@RecordCount").Value
         End Using
       End Using
+      Dim tmp As List(Of String) = ctGetFreezedProjectsFromERP()
+      For I As Integer = Results.Count - 1 To 0 Step -1
+        Dim Found As Boolean = False
+        For Each ActPrj As String In tmp
+          If ActPrj = Results(I).ProjectID Then
+            Found = True
+            Exit For
+          End If
+        Next
+        If Not Found Then
+          Results.RemoveAt(I)
+        End If
+      Next
       Return Results
     End Function
     Public Shared Function ctUserProjectSelectCount(ByVal SearchState As Boolean, ByVal SearchText As String, ByVal UserID As String, ByVal ProjectID As String) As Integer
