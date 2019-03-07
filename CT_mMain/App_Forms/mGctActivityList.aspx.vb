@@ -242,7 +242,8 @@ Partial Class mGctActivityList
               End If
               tmpStr &= "      class='fa fa-cog' style='" & cogStyle & "'></i>"
               tmpStr &= "    </td>"
-              tmpStr &= "    <td style='border-collapse:collapse;border:none;'>" & dt.t_desc
+              tmpStr &= "    <td style='border-collapse:collapse;border:none;'>"
+              tmpStr &= "    <a href='" & dt.GetDrildownLink & "' style='hover:inherit;color:inherit;' >" & dt.t_desc & "</a>"
               tmpStr &= "    </td>"
               tmpStr &= "  </tr>"
               tmpStr &= "</table>"

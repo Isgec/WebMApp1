@@ -161,6 +161,13 @@ Namespace SIS.CT
           End If
         End Set
       End Property
+      Public ReadOnly Property GetDrildownLink As String
+        Get
+          Dim mRet As String = HttpContext.Current.Request.Url.Scheme & Uri.SchemeDelimiter & HttpContext.Current.Request.Url.Authority & HttpContext.Current.Request.ApplicationPath
+
+          Return mRet & "/CT_mMain/App_Forms/mGctActivityDetails.aspx?t_cprj=" & t_cprj & "&t_cact=" & t_cact & "&t_acty=" & t_acty
+        End Get
+      End Property
 
     End Class
 
