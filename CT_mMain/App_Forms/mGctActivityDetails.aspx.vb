@@ -142,7 +142,9 @@ Partial Class mGctActivityDetails
                   .Text = dt.ItemDescription
                 Case 8
                   .Text = dt.PurchaseOrder
-                  .Attributes.Add("style", "text-align:center;")
+                  .Font.Underline = True
+                  .Attributes.Add("style", "text-align:center;cursor:pointer;")
+                  .Attributes.Add("onclick", dt.GetPrintLink)
                 Case 9
                   .Text = dt.PurchaseOrderLine
                   .Attributes.Add("style", "text-align:center;")
@@ -186,7 +188,9 @@ Partial Class mGctActivityDetails
                       .Text = dt.SupplierName
                     Case 8
                       .Text = dt.PurchaseOrder
-                      .Attributes.Add("style", "text-align:center;")
+                      .Font.Underline = True
+                      .Attributes.Add("style", "text-align:center;cursor:pointer;")
+                      .Attributes.Add("onclick", dt.GetPrintLink)
                     Case 9
                       .Text = dt.PurchaseOrderLine
                       .Attributes.Add("style", "text-align:center;")
@@ -201,7 +205,9 @@ Partial Class mGctActivityDetails
                   Select Case I
                     Case 0
                       .Text = dt.PurchaseOrder
-                      .Attributes.Add("style", "text-align:center;")
+                      .Font.Underline = True
+                      .Attributes.Add("style", "text-align:center;cursor:pointer;")
+                      .Attributes.Add("onclick", dt.GetPrintLink)
                     Case 1
                       .Text = dt.PurchaseOrderLine
                       .Attributes.Add("style", "text-align:center;")
@@ -903,6 +909,18 @@ Partial Class mGctActivityDetails
       End Set
     End Property
 
+    Public ReadOnly Property GetPrintLink() As String
+      Get
+        Dim UrlAuthority As String = HttpContext.Current.Request.Url.Authority
+        If UrlAuthority.ToLower <> "cloud.isgec.co.in" Then
+          UrlAuthority = "192.9.200.146"
+        End If
+        Dim mRet As String = HttpContext.Current.Request.Url.Scheme & Uri.SchemeDelimiter & UrlAuthority
+        mRet &= "/PurchaseOrderReceipt/PurchaseOrder?PO=" & PurchaseOrder & "&Revision=00"   ' & PORevision
+        mRet = "javascript:window.open('" & mRet & "', 'win" & PurchaseOrder & "', 'left=20,top=20,width=1100,height=600,toolbar=1,resizable=1,scrollbars=1,toolbar=no,status=no,menu=no, directories=no,titlebar=no,location=no,addressbar=no'); return false;"
+        Return mRet
+      End Get
+    End Property
 
 
     Public Shared Function GetMetaData(ByVal t_cprj As String, ByVal t_cact As String) As DetailData

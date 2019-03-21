@@ -1041,5 +1041,56 @@ Namespace SIS.CT
       End Using
       Return Results
     End Function
+    Public Shared Function UZ_ctCivActivitySelectList(ByVal t_cprj As String, ByVal t_iref As String, ByVal t_sitm As String, ByVal OrderBy As String) As List(Of SIS.CT.ctPActivity)
+      Dim Departments As String = ""
+      Dim UserID As String = HttpContext.Current.Session("LoginID")
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = "Select * from CT_UserDepartment where userid='" & UserID & "'"
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            If Departments = "" Then
+              Departments = "'" & Reader("DepartmentID") & "'"
+            Else
+              Departments &= ",'" & Reader("DepartmentID") & "'"
+            End If
+          End While
+          Reader.Close()
+        End Using
+      End Using
+      Dim ItemRef As String = ""
+      Try
+        Dim aVal() As String = t_iref.Split("_".ToCharArray)
+        ItemRef = aVal(0)
+      Catch ex As Exception
+      End Try
+      'Get Mapped Department and format string to be used in SQL IN Clause
+      Dim Results As List(Of SIS.CT.ctPActivity) = Nothing
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.StoredProcedure
+          Cmd.CommandText = "spct_LG_CIVActivitySelectListFilteres"
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_cprj", SqlDbType.NVarChar, 6, IIf(t_cprj Is Nothing, String.Empty, t_cprj))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_iref", SqlDbType.NVarChar, 200, IIf(ItemRef Is Nothing, String.Empty, ItemRef))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@t_sitm", SqlDbType.NVarChar, 9, IIf(t_sitm Is Nothing, String.Empty, t_sitm))
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@Departments", SqlDbType.NVarChar, 250, Departments)
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@LoginID", SqlDbType.NVarChar, 9, UserID)
+          Cmd.Parameters.Add("@RecordCount", SqlDbType.Int)
+          Cmd.Parameters("@RecordCount").Direction = ParameterDirection.Output
+          _RecordCount = -1
+          Results = New List(Of SIS.CT.ctPActivity)()
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            Results.Add(New SIS.CT.ctPActivity(Reader))
+          End While
+          Reader.Close()
+          _RecordCount = Cmd.Parameters("@RecordCount").Value
+        End Using
+      End Using
+      Return Results
+    End Function
   End Class
 End Namespace
