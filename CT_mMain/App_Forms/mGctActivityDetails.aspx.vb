@@ -154,7 +154,7 @@ Partial Class mGctActivityDetails
           Next
         Case "RFQ-TO-PO"
           Select Case dMeta.t_bohd
-            Case "CT_RFQRAISED", "CT_RFQOFFERECEIVED", "CT_RFQCOMMERCIALFINALISED"
+            Case "CT_RFQRAISED", "CT_RFQOFFERECEIVED", "CT_RFQCOMMERCIALFINALISED", "CT_PREORDERTECHCLEAR"
               Dim bgClass As System.Drawing.Color = IIf(dt.SupplierName <> "", Drawing.Color.White, Drawing.Color.Cyan)
               If dt.WFStatus = "Technical Specification Released Returned" Then
                 bgClass = Drawing.Color.MistyRose
@@ -246,7 +246,7 @@ Partial Class mGctActivityDetails
       Select Case dMeta.t_acty
         Case "RFQ-TO-PO"
           Select Case dMeta.t_bohd
-            Case "CT_RFQRAISED", "CT_RFQOFFERECEIVED", "CT_RFQCOMMERCIALFINALISED"
+            Case "CT_RFQRAISED", "CT_RFQOFFERECEIVED", "CT_RFQCOMMERCIALFINALISED", "CT_PREORDERTECHCLEAR"
               If dt.WFStatus = "Technical offer Received" Then
                 If dt.ReceiptNo <> "" Then
                   tr = New TableRow
@@ -947,9 +947,33 @@ Partial Class mGctActivityDetails
       End Using
       Return tmp
     End Function
+    Private Class DocList
+      Public Property Doc As String = ""
+      Public Property Rev As String = ""
+      Public Shared Function GetStr(ByVal dList As List(Of DocList)) As String
+        Dim mRet As String = ""
+        For Each x As DocList In dList
+          If mRet = "" Then
+            mRet = "'" & x.Doc & "'"
+          Else
+            mRet = mRet & ",'" & x.Doc & "'"
+          End If
+        Next
+        Return mRet
+      End Function
+      Sub New()
+      End Sub
+      Sub New(ByVal d As String, ByVal r As String)
+        Doc = d
+        Rev = r
+      End Sub
+    End Class
 
     Public Shared Function GetData(ByVal MetaData As DetailData) As List(Of DetailData)
       Dim tmp As New List(Of DetailData)
+      Dim strDoc As String = ""
+      Dim dList As New List(Of DocList)
+
       Dim Sql As String = ""
       Select Case MetaData.t_acty
         Case "DESIGN"
@@ -970,7 +994,7 @@ Partial Class mGctActivityDetails
           Sql &= "   t_acdt, "
           Sql &= "   t_mosd, "
           Sql &= "   t_moed  "
-          Sql &= "  from tdmisg140200 where t_cprj='" & MetaData.t_cprj & "' and t_iref='" & MetaData.t_iref & "'"
+          Sql &= "  from tdmisg140200 where t_cprj='" & MetaData.t_cprj & "' and (t_iref='" & MetaData.t_iref & "' or t_iref='" & MetaData.t_cact & "')"
         Case "INDT"
           Sql &= "  select distinct  "
           Sql &= "   tdpur200.t_rdat As IndentDate, "
@@ -995,30 +1019,72 @@ Partial Class mGctActivityDetails
           Sql &= "  where  "
           Sql &= "   tdpur200.t_rqst in (3,5,7,8)  "
           Sql &= "   and tdisg003.t_docn in "
-          Sql &= "   (select t_docn from tdmisg140200 where t_cprj='" & MetaData.t_cprj & "' and t_iref='" & MetaData.t_iref & "')"
+          Sql &= "   (select t_docn from tdmisg140200 where t_cprj='" & MetaData.t_cprj & "' and (t_iref='" & MetaData.t_iref & "' or t_iref='" & MetaData.t_cact & "'))"
         Case "RFQ-TO-PO"
           Select Case MetaData.t_bohd
-            Case "CT_RFQRAISED", "CT_RFQOFFERECEIVED", "CT_RFQCOMMERCIALFINALISED"
+            Case "CT_RFQRAISED", "CT_RFQOFFERECEIVED", "CT_RFQCOMMERCIALFINALISED", "CT_PREORDERTECHCLEAR"
+              '=====Commented to be pick from Joomla================
+              'Sql &= "  select distinct "
+              'Sql &= "  (case when t_pwfd=0 then str(dmisg168.t_wfid) else str(dmisg168.t_pwfd) end)+'|'+str(dmisg168.t_wfid) as ForOrder, "
+              'Sql &= "  dmisg168.t_stat as WFStatus, "
+              'Sql &= "  dmisg168.t_user as Created, "
+              'Sql &= "  cr_tccom001.t_nama as CreatedName, "
+              'Sql &= "  convert(nvarchar(10),dmisg168.t_date,103) as CreatedOn, "
+              'Sql &= "  dmisg168.t_bpid as Buyer, "
+              'Sql &= "  by_tccom001.t_nama as BuyerName, "
+              'Sql &= "  dmisg140.t_docn as DcoumentID, "
+              'Sql &= "  dmisg140.t_revn as DocumentRev  "
+              'Sql &= "  from tdmisg169200 as dmisg168  "
+              'Sql &= "  inner join tdmisg167200 as dmisg167 on (dmisg168.t_pwfd=dmisg167.t_wfid or dmisg168.t_wfid=dmisg167.t_wfid) "
+              'Sql &= "  inner join tdmisg140200 as dmisg140 on dmisg167.t_docn=dmisg140.t_docn "
+              'Sql &= "  inner join ttccom001200 as cr_tccom001 on dmisg168.t_user=cr_tccom001.t_emno "
+              'Sql &= "  inner join ttccom001200 as by_tccom001 on dmisg168.t_bpid=by_tccom001.t_emno "
+              'Sql &= "  where  "
+              'Sql &= "      dmisg168.t_stat <> 'Enquiry in progress'  "
+              'Sql &= "  and dmisg140.t_cprj='" & MetaData.t_cprj & "' "
+              'Sql &= "  and dmisg140.t_iref='" & MetaData.t_iref & "' "
+              'Sql &= "  order by (case when t_pwfd=0 then str(dmisg168.t_wfid) else str(dmisg168.t_pwfd) end)+'|'+str(dmisg168.t_wfid) "
+              '================End Commented============================
+              '========To Pick from Joola===================
+              '1. Make List of PMDL Documents to be used in SQL IN Clause [Max. 20 Documents]
+              dList = New List(Of DocList)
+              Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+                Sql = " select top 20 isnull(t_docn,'') as t_docn, isnull(t_revn,'') as t_revn from tdmisg140200 where t_cprj='" & MetaData.t_cprj & "' and (t_iref='" & MetaData.t_iref & "' or t_iref='" & MetaData.t_cact & "')"
+                Using Cmd As SqlCommand = Con.CreateCommand()
+                  Cmd.CommandType = CommandType.Text
+                  Cmd.CommandText = Sql
+                  Con.Open()
+                  Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+                  While (Reader.Read())
+                    dList.Add(New DocList(Reader("t_docn"), Reader("t_revn")))
+                  End While
+                  Reader.Close()
+                End Using
+              End Using
+              '2. Get In String form
+              strDoc = DocList.GetStr(dList)
+              '3. Pass In SQL
+              Sql = ""
               Sql &= "  select distinct "
-              Sql &= "  (case when t_pwfd=0 then str(dmisg168.t_wfid) else str(dmisg168.t_pwfd) end)+'|'+str(dmisg168.t_wfid) as ForOrder, "
-              Sql &= "  dmisg168.t_stat as WFStatus, "
-              Sql &= "  dmisg168.t_user as Created, "
-              Sql &= "  cr_tccom001.t_nama as CreatedName, "
-              Sql &= "  convert(nvarchar(10),dmisg168.t_date,103) as CreatedOn, "
-              Sql &= "  dmisg168.t_bpid as Buyer, "
-              Sql &= "  by_tccom001.t_nama as BuyerName, "
-              Sql &= "  dmisg140.t_docn as DcoumentID, "
-              Sql &= "  dmisg140.t_revn as DocumentRev  "
-              Sql &= "  from tdmisg169200 as dmisg168  "
-              Sql &= "  inner join tdmisg167200 as dmisg167 on (dmisg168.t_pwfd=dmisg167.t_wfid or dmisg168.t_wfid=dmisg167.t_wfid) "
-              Sql &= "  inner join tdmisg140200 as dmisg140 on dmisg167.t_docn=dmisg140.t_docn "
-              Sql &= "  inner join ttccom001200 as cr_tccom001 on dmisg168.t_user=cr_tccom001.t_emno "
-              Sql &= "  inner join ttccom001200 as by_tccom001 on dmisg168.t_bpid=by_tccom001.t_emno "
+              Sql &= "  (case when wfH.parent_wfid=0 then str(wfH.wfid) else str(wfH.parent_wfid) end)+'|'+str(wfH.wfid) as ForOrder, "
+              Sql &= "  wfH.wf_status as WFStatus, "
+              Sql &= "  isnull(wf.indentno,'') as IndentNo, "
+              Sql &= "  ltrim(str(isnull(wf.IndentLine,'0'))) as IndentLineNo, "
+              Sql &= "  isnull(wf.SupplierCode,'') As SupplierCode, "
+              Sql &= "  isnull(wf.SupplierName,'') As SupplierName, "
+              Sql &= "  isnull(wf.ReceiptNo,'') as ReceiptNo, "
+              Sql &= "  wfH.userid as Created, "
+              Sql &= "  convert(nvarchar(10),[wfH].[DateTime],103) as CreatedOn, "
+              Sql &= "  wfH.buyer as Buyer, "
+              Sql &= "  pmdl.PMDLDocNo as DcoumentID "
+              Sql &= "  from wf1_preorder_history as wfH  "
+              Sql &= "  inner join wf1_preorderPmdl as pmdl on (wfH.parent_wfid=pmdl.wfid or wfH.wfid=pmdl.wfid) "
+              Sql &= "  inner join wf1_preorder as wf on wfH.wfid=wf.wfid "
               Sql &= "  where  "
-              Sql &= "      dmisg168.t_stat <> 'Enquiry in progress'  "
-              Sql &= "  and dmisg140.t_cprj='" & MetaData.t_cprj & "' "
-              Sql &= "  and dmisg140.t_iref='" & MetaData.t_iref & "' "
-              Sql &= "  order by (case when t_pwfd=0 then str(dmisg168.t_wfid) else str(dmisg168.t_pwfd) end)+'|'+str(dmisg168.t_wfid) "
+              Sql &= "    wfH.wf_status not in ('Enquiry in progress','Change Buyer/Manager')  "
+              Sql &= "  and pmdl.PMDLDocNo in (" & strDoc & ")"
+              Sql &= "  order by (case when wfH.parent_wfid=0 then str(wfH.wfid) else str(wfH.parent_wfid) end)+'|'+str(wfH.wfid) "
+
             Case "CT_POAPPROVED", "CT_POSENTFORAPPROVAL"
               Sql &= " select distinct      "
               Sql &= " tdpur400.t_ccon as Buyer,  "
@@ -1063,67 +1129,117 @@ Partial Class mGctActivityDetails
         Case "RECPT"
         Case "OTHERS"
       End Select
-
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
-        Using Cmd As SqlCommand = Con.CreateCommand()
-          Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = Sql
-          Con.Open()
-          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
-          While (Reader.Read())
-            Dim x As DetailData = New DetailData(Reader)
-            If x.ForOrder <> "" Then
-              Dim y() As String = x.ForOrder.Split("|".ToCharArray)
-              x.WorkFlowID = y(1)
-              x.EnquiryID = IIf(y(0) = y(1), "-", y(1))
-              x.dWorkFlowID = IIf(y(0) <> y(1), "-", y(1))
-            End If
-            tmp.Add(x)
-          End While
-          Reader.Close()
-        End Using
-      End Using
-      If MetaData.t_acty = "RFQ-TO-PO" Then
-        Select Case MetaData.t_bohd
-          Case "CT_RFQRAISED", "CT_RFQOFFERECEIVED", "CT_RFQCOMMERCIALFINALISED"
-            'Populate Indent No From Joomla : Outer Join
-            Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetConnectionString())
+      If Sql <> "" Then
+        If MetaData.t_acty <> "RFQ-TO-PO" Then
+          Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+            Using Cmd As SqlCommand = Con.CreateCommand()
+              Cmd.CommandType = CommandType.Text
+              Cmd.CommandText = Sql
               Con.Open()
-              For Each wf As DetailData In tmp
+              Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+              While (Reader.Read())
+                Dim x As DetailData = New DetailData(Reader)
+                tmp.Add(x)
+              End While
+              Reader.Close()
+            End Using
+          End Using
+        Else
+          Select Case MetaData.t_bohd
+            Case "CT_RFQRAISED", "CT_RFQOFFERECEIVED", "CT_RFQCOMMERCIALFINALISED", "CT_PREORDERTECHCLEAR"
+              Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetConnectionString())
                 Using Cmd As SqlCommand = Con.CreateCommand()
                   Cmd.CommandType = CommandType.Text
-                  Cmd.CommandText = "Select isnull(indentno,'') +'|'+ ltrim(str(isnull(IndentLine,'0'))) +'|'+ isnull(SupplierCode,'') +'|'+ isnull(SupplierName,'') +'|'+ isnull(ReceiptNo,'') as x  from wf1_preorder where wfid=" & wf.WorkFlowID
-                  Dim x As String = Cmd.ExecuteScalar
-                  If x IsNot Nothing Then
-                    Dim a() As String = x.Split("|".ToCharArray)
-                    wf.IndentNo = a(0)
-                    wf.IndentLineNo = a(1)
-                    wf.SupplierCode = a(2)
-                    wf.SupplierName = a(3)
-                    wf.ReceiptNo = a(4)
-                  End If
+                  Cmd.CommandText = Sql
+                  Con.Open()
+                  Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+                  While (Reader.Read())
+                    Dim x As DetailData = New DetailData(Reader)
+                    If x.ForOrder <> "" Then
+                      Dim y() As String = x.ForOrder.Split("|".ToCharArray)
+                      x.WorkFlowID = y(1)
+                      x.EnquiryID = IIf(y(0) = y(1), "-", y(1))
+                      x.dWorkFlowID = IIf(y(0) <> y(1), "-", y(1))
+                    End If
+                    tmp.Add(x)
+                  End While
+                  Reader.Close()
                 End Using
-              Next
-            End Using
-            'Populate PO No
-            Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
-              Con.Open()
-              For Each wf As DetailData In tmp
-                If wf.IndentNo <> "" Then
+              End Using
+              '====This is not required when Initially Picking From Joomla=======
+              'Populate Indent No From Joomla : Outer Join
+              'Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetConnectionString())
+              '  Con.Open()
+              '  For Each wf As DetailData In tmp
+              '    Using Cmd As SqlCommand = Con.CreateCommand()
+              '      Cmd.CommandType = CommandType.Text
+              '      Cmd.CommandText = "Select isnull(indentno,'') +'|'+ ltrim(str(isnull(IndentLine,'0'))) +'|'+ isnull(SupplierCode,'') +'|'+ isnull(SupplierName,'') +'|'+ isnull(ReceiptNo,'') as x  from wf1_preorder where wfid=" & wf.WorkFlowID
+              '      Dim x As String = Cmd.ExecuteScalar
+              '      If x IsNot Nothing Then
+              '        Dim a() As String = x.Split("|".ToCharArray)
+              '        wf.IndentNo = a(0)
+              '        wf.IndentLineNo = a(1)
+              '        wf.SupplierCode = a(2)
+              '        wf.SupplierName = a(3)
+              '        wf.ReceiptNo = a(4)
+              '      End If
+              '    End Using
+              '  Next
+              'End Using
+              '============Not Required========================
+              'Populate PO No
+              '=======Also Other Values ==========
+              Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+                Con.Open()
+                For Each wf As DetailData In tmp
+                  Sql = " select "
+                  Sql &= " isnull((select t_nama from ttccom001200 where t_emno='" & wf.Created & "'),'') as CreatedName, "
+                  Sql &= " isnull((select t_nama from ttccom001200 where t_emno='" & wf.Buyer & "'),'') as BuyerName "
+                  If wf.IndentNo <> "" Then
+                    Sql &= ", isnull((Select isnull(t_prno,'') +'|'+ ltrim(str(isnull(t_ppon,'0'))) from ttdpur202200 where t_rqno='" & wf.IndentNo & "' and t_pono=" & wf.IndentLineNo & "),'') as po "
+                  End If
                   Using Cmd As SqlCommand = Con.CreateCommand()
                     Cmd.CommandType = CommandType.Text
-                    Cmd.CommandText = "Select isnull(t_prno,'') +'|'+ ltrim(str(isnull(t_ppon,'0'))) as x from ttdpur202200 where t_rqno='" & wf.IndentNo & "' and t_pono=" & wf.IndentLineNo
-                    Dim x As String = Cmd.ExecuteScalar
-                    If x IsNot Nothing Then
-                      Dim a() As String = x.Split("|".ToCharArray)
-                      wf.PurchaseOrder = a(0)
-                      wf.PurchaseOrderLine = a(1)
+                    Cmd.CommandText = Sql
+                    Dim x As SqlDataReader = Cmd.ExecuteReader
+                    If x.Read() Then
+                      wf.CreatedName = x("CreatedName")
+                      wf.BuyerName = x("BuyerName")
+                      If wf.IndentNo <> "" Then
+                        Dim a() As String = x("po").Split("|".ToCharArray)
+                        wf.PurchaseOrder = a(0)
+                        wf.PurchaseOrderLine = a(1)
+                      End If
                     End If
+                    x.Close()
                   End Using
-                End If
-              Next
-            End Using
-        End Select
+                  'Update Document Revision from Dlist
+                  For Each dc As DocList In dList
+                    If wf.DcoumentID = dc.Doc Then
+                      wf.DocumentRev = dc.Rev
+                      Exit For
+                    End If
+                  Next
+                  '=========
+                Next
+              End Using
+            Case Else
+              Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+                Using Cmd As SqlCommand = Con.CreateCommand()
+                  Cmd.CommandType = CommandType.Text
+                  Cmd.CommandText = Sql
+                  Con.Open()
+                  Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+                  While (Reader.Read())
+                    Dim x As DetailData = New DetailData(Reader)
+                    tmp.Add(x)
+                  End While
+                  Reader.Close()
+                End Using
+              End Using
+
+          End Select
+        End If
       End If
       Return tmp
     End Function
@@ -1195,7 +1311,7 @@ Partial Class mGctActivityDetails
           Next
         Case "RFQ-TO-PO"
           Select Case mData.t_bohd
-            Case "CT_RFQRAISED", "CT_RFQOFFERECEIVED", "CT_RFQCOMMERCIALFINALISED"
+            Case "CT_RFQRAISED", "CT_RFQOFFERECEIVED", "CT_RFQCOMMERCIALFINALISED", "CT_PREORDERTECHCLEAR"
               For i As Integer = -1 To 9
                 Dim thc As New TableHeaderCell
                 With thc

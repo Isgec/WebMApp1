@@ -176,7 +176,7 @@ Namespace SIS.CT
       Sql &= " From tdmisg140200 "
       Sql &= " where "
       Sql &= " t_cprj = '" & t_cprj & "'"
-      Sql &= " and t_iref = (Select top 1 t_sub1 from ttpisg220200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "' )"
+      Sql &= " and (t_iref = (Select top 1 t_sub1 from ttpisg220200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "' ) or t_iref='" & t_cact & "')"
       If Not All Then
         Sql &= " and year(t_adct) > 1970 "
       End If

@@ -150,6 +150,14 @@ Partial Class mGctDashboard
     End If
   End Sub
 
+  Private Sub cmdFinance_Click(sender As Object, e As EventArgs) Handles cmdFinance.Click
+    If ProjectID <> "" Then
+      Dim RedirectURL As String = "~/CT_mMain/App_Forms/mGctDashboardFinancial.aspx?t_cprj=" & ProjectID & "&t_dsca=" & ProjectName.Text
+      Response.Redirect(RedirectURL)
+    End If
+
+  End Sub
+
 
 
 #End Region

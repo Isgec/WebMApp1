@@ -10,6 +10,7 @@
   <asp:LinkButton ID="cmdBacklog" runat="server" Text="Progress Status [Overall]" ToolTip="Since Project Start." />
   <asp:LinkButton ID="cmd30Next" runat="server" Text="Progress Status [Next 30 Days]" ToolTip="Next 30 days." />
   <asp:LinkButton ID="cmdDelayed" runat="server" Text="Delayed Status [Overall]" ToolTip="Delayed Since Project Start." />
+  <asp:LinkButton ID="cmdFinance" runat="server" Text="Financial Dashboard" ToolTip="Financial Dashboard." />
 </div>
 
   <%--Main Container--%>

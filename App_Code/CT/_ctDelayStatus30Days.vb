@@ -695,8 +695,8 @@ Namespace SIS.CT
       Dim Sql As String = ""
       Sql &= "   select distinct aa.t_sub1,aa.t_acty,"
       If t_acty = "DESIGN" Then
-        Sql &= "   (select isnull(count(*),0) from tdmisg140200 as bb where bb.t_cprj=aa.t_cprj and bb.t_iref=aa.t_sub1) as TotalDocs,"
-        Sql &= "   (select isnull(count(*),0) from tdmisg140200 as bb where bb.t_cprj=aa.t_cprj and bb.t_iref=aa.t_sub1 and year(t_adct)>1970) as ReleasedDocs,"
+        Sql &= "   (select isnull(count(*),0) from tdmisg140200 as bb where bb.t_cprj=aa.t_cprj and (bb.t_iref=aa.t_sub1 or bb.t_iref=aa.t_cact)) as TotalDocs,"
+        Sql &= "   (select isnull(count(*),0) from tdmisg140200 as bb where bb.t_cprj=aa.t_cprj and (bb.t_iref=aa.t_sub1 or bb.t_iref=aa.t_cact) and year(t_adct)>1970) as ReleasedDocs,"
       End If
       Sql &= "   (select top 1 t_cact from ttpisg220200 as bb where bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1) as t_cact,"
       Sql &= "   (select round(IsNull(min(t_atsk),0),0) from ttpisg220200 as bb where bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = 'EREC' and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as t_atsk,   "
