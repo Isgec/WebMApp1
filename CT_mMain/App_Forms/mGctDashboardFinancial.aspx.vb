@@ -1,3 +1,4 @@
+Imports System.Web.UI.DataVisualization.Charting
 Imports System
 Imports System.Collections.Generic
 Imports System.Data
@@ -6,664 +7,573 @@ Imports System.ComponentModel
 Imports System.Web.Script.Serialization
 Partial Class mGctDashboardFinancial
   Inherits System.Web.UI.Page
-  Private ProjectID As String = ""
-  Private Period As SIS.CT.tpisg216.ProjectPeriod = Nothing
-  Private Isbacklog As Boolean = False
-  Private IsDelayed As Boolean = False
-  Private Sub mGctDashboard_Load(sender As Object, e As EventArgs) Handles Me.Load
-    ProjectID = Request.QueryString("t_cprj")
-    If ProjectID = "" Then Exit Sub
-    Period = SIS.CT.tpisg216.GetProjectPeriod(ProjectID)
-    ProjectName.Text = Request.QueryString("t_dsca")
-    Isbacklog = IIf(Request.QueryString("backlog") IsNot Nothing, True, False)
-    IsDelayed = IIf(Request.QueryString("delayed") IsNot Nothing, True, False)
+  Public Property t_ccod As String
+    Get
+      If ViewState("t_ccod") IsNot Nothing Then
+        Return ViewState("t_ccod")
+      End If
+      Return ""
+    End Get
+    Set(value As String)
+      ViewState.Add("t_ccod", value)
+    End Set
+  End Property
+
+  Private Sub mGctDashboardFinancial_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Session("Home") = HttpContext.Current.Request.Url.AbsoluteUri
+    t_ccod = F_t_ccod.SelectedValue
+    If t_ccod = "" Then Exit Sub
+    ContractName.Text = F_t_ccod.SelectedItem.Text
   End Sub
-  Protected Sub abc(ByVal sender As Object, ByVal e As EventArgs)
+
+  Private Sub mGctDashboardFinancial_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+    '1. tpisg301
+    If t_ccod = "" Then Exit Sub
+    Dim tp301 As SIS.CT.tpisg301 = SIS.CT.tpisg301.tpisg301GetByID(t_ccod)
+    If tp301 IsNot Nothing Then
+      Ht_ccod.Text = "Contract Code:"
+      Vt_ccod.Text = tp301.t_ccod
+      Ht_ccno.Text = "Contract No.:"
+      Vt_ccno.Text = tp301.t_ccno
+      Ht_cust.Text = "Customer:"
+      Vt_cust.Text = tp301.t_cust
+      Ht_nodi.Text = "Name of Divisions involved ( if More than one Division):"
+      Vt_nodi.Text = tp301.t_nodi
+      Ht_lddn.Text = "Lead Division ( if More than one Division):"
+      Vt_lddn.Text = tp301.t_lddn
+      Ht_prod.Text = "Product:"
+      Vt_prod.Text = tp301.t_prod
+      Ht_zdat.Text = "Zero date:"
+      Vt_zdat.Text = tp301.t_zdat
+      Ht_ccdt.Text = "Contractual Completion Date :"
+      Vt_ccdt.Text = tp301.t_ccdt
+      Ht_orvl.Text = "Order Value ( in Foreign Currency):"
+      Vt_orvl.Text = tp301.t_orvl
+      Ht_exrt.Text = "Exchange Rate:"
+      Vt_exrt.Text = tp301.t_exrt
+      Ht_ordl.Text = "Order Value  (Rs. in Lac):"
+      Vt_ordl.Text = tp301.t_ordl
+      Ht_lddl.Text = "LD Details:"
+      Vt_lddl.Text = tp301.t_lddl
+    End If
+    '2. Payment Term
+    PaymentTerms.Controls.Add(GetPaymentTerms(t_ccod))
+    '3. Project Estimate
+    ProjectEstimate.Controls.Add(GetProjectEstimate(t_ccod))
+    '4. Billing
+    Vt_blal.Text = tp301.t_blal
+    Vt_blbd.Text = tp301.t_blbd
+    Vt_blvr.Text = tp301.t_blvr
+    '5. Cashflow
+    Vt_cinb.Text = tp301.t_cinb
+    Vt_cino.Text = tp301.t_cino
+    Vt_cina.Text = tp301.t_cina
+    Vt_cinv.Text = tp301.t_cinv
+    Vt_cotv.Text = tp301.t_cotv
+    Vt_coto.Text = tp301.t_coto
+    Vt_cota.Text = tp301.t_cota
+    Vt_cotv.Text = tp301.t_cotv
+    Vt_cntb.Text = tp301.t_cntb
+    Vt_cnto.Text = tp301.t_cnto
+    Vt_cnta.Text = tp301.t_cnta
+    Vt_cntv.Text = tp301.t_cntv
+    '6. Receavables
+    Vt_rsnd.Text = tp301.t_rsnd
+    Vt_rsum.Text = tp301.t_rsum
+    Vt_rsbm.Text = tp301.t_rsbm
+    Vt_rsgy.Text = tp301.t_rsgy
+    Vt_rsmy.Text = tp301.t_rsmy
+    Vt_rsur.Text = tp301.t_rsur
+    Vt_rstl.Text = tp301.t_rstl
+    Vt_rcnd.Text = tp301.t_rcnd
+    Vt_rcum.Text = tp301.t_rcum
+    Vt_rcbm.Text = tp301.t_rcbm
+    Vt_rcgy.Text = tp301.t_rcgy
+    Vt_rcmy.Text = tp301.t_rcmy
+    Vt_rcur.Text = tp301.t_rcur
+    Vt_rctl.Text = tp301.t_rctl
+    Vt_rend.Text = tp301.t_rend
+    Vt_reum.Text = tp301.t_reum
+    Vt_rebm.Text = tp301.t_rebm
+    Vt_regy.Text = tp301.t_regy
+    Vt_remy.Text = tp301.t_remy
+    Vt_reur.Text = tp301.t_reur
+    Vt_retl.Text = tp301.t_retl
+    Vt_rtnd.Text = tp301.t_rtnd
+    Vt_rtum.Text = tp301.t_rtum
+    Vt_rtbm.Text = tp301.t_rtbm
+    Vt_rtgy.Text = tp301.t_rtgy
+    Vt_rtmy.Text = tp301.t_rtmy
+    Vt_rtur.Text = tp301.t_rtur
+    Vt_rttl.Text = tp301.t_rttl
+    '7. Out BG
+    Vt_obga.Text = tp301.t_obga
+    Vt_obgc.Text = tp301.t_obgc
+    Vt_obgp.Text = tp301.t_obgp
+    Vt_obgt.Text = tp301.t_obgt
+    '8.
+    Vt_cder.Text = tp301.t_cder
+    Vt_cddr.Text = tp301.t_cddr
+    Vt_cdsr.Text = tp301.t_cdsr
+    Vt_cdds.Text = tp301.t_cdds
+
+
 
   End Sub
-
-
-#Region " Financial dashboard"
-  Private Sub irefDelay30d_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
-    If ProjectID = "" Then Exit Sub
-    BaselineStart.Text = "Baseline Start: " & Period.StDt.ToString("dd/MM/yyyy")
-    BaselineFinish.Text = "Baseline Finish: " & Period.FnDt.ToString("dd/MM/yyyy")
-    Dim lDt As DateTime = SIS.CT.DelayStatus30Days.LastUpdatedOn(ProjectID)
-    Label9.Text = "(As On: " & Now.ToString("dd/MM/yyyy") & "-Updated On: " & lDt.ToString("dd/MM/yyyy") & ")"
-    Dim x As SIS.CT.DelayStatus30Days.ProjectDates = SIS.CT.DelayStatus30Days.OverAllImpactOnCommissioning(ProjectID)
-    Initial.Text = "Baseline Commissioning: " & x.Initial.ToString("dd/MM/yyyy")
-    Contractual.Text = "Contractual Commissioning: " & x.Contractual.ToString("dd/MM/yyyy")
-    Expected.Text = "Expected Commissioning: " & x.Expected.ToString("dd/MM/yyyy")
-    Overall.Text = "Expected Delay-Commissioning: " & x.TotalDays & IIf(x.CalenderDays <> x.TotalDays, " / " & x.CalenderDays, "")
-    'irefDelay30d.Controls.Add(GetTable(ProjectID, Isbacklog, IsDelayed))
-  End Sub
-  Private Function GetTable(ByVal t_cprj As String, ByVal IbBacklog As Boolean, ByVal IsDelayed As Boolean) As Table
-    Dim data As List(Of SIS.CT.DelayStatus30Days) = SIS.CT.DelayStatus30Days.SelectItems(t_cprj, "", Isbacklog, False, IsDelayed)
-    data.Sort(Function(x, y) x.t_cact.CompareTo(y.t_cact))
-    Dim mStr As String = ""
+  Private Function GetProjectEstimate(ByVal t_ccod As String) As Table
     Dim tbl As New Table
     With tbl
-      .ID = "tbl30Days"
+      .ID = "tblProjectEstimate"
       .ClientIDMode = ClientIDMode.Static
       .CssClass = "table-bordered"
       .Width = Unit.Percentage(100)
-      .Style.Add(HtmlTextWriterStyle.Margin, "5px 5px 5px 5px")
     End With
     'Write Header
-    Dim th As New TableHeaderRow
-    Dim btn As Button = Nothing
-    th.Attributes.Add("style", "background-color:black;color:white;")
-    th.TableSection = TableRowSection.TableHeader
+    Dim th As New TableRow
+    th.Font.Bold = True
+    th.BackColor = Drawing.Color.Gainsboro
     For i As Integer = 0 To 8
-      Dim thc As New TableHeaderCell
+      Dim thc As New TableCell
       With thc
         .Attributes.Add("style", "text-align:center;")
-        .ColumnSpan = 2
-        btn = New Button
-        With btn
-          .ClientIDMode = ClientIDMode.Static
-          .CssClass = "btn btn-dark btn-sm"
-          .Attributes.Add("style", "white-space:normal;")
-          .PostBackUrl = "~/CT_mMain/App_Forms/mGctActivityList.aspx?t_cprj=" & t_cprj & IIf(Isbacklog, "&backlog=", "") & "&t_cact="
-          .Font.Bold = True
-        End With
-
+        '.Font.Bold = True
         Select Case i
           Case 0
-            .ColumnSpan = 1
-            .RowSpan = 2
-            .Text = "ITEM"
+            .Text = "PROJECT ESTIMATE"
           Case 1
-            btn.ID = "DESIGN"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "ENGINEERING"
-            thc.Controls.Add(btn)
+            .Text = "BUDGETED"
           Case 2
-            btn.ID = "INDT"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "INDENTING"
-            thc.Controls.Add(btn)
+            .Text = "ACTUAL / EXPECTED"
           Case 3
-            btn.ID = "RFQ-TO-PO"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "RFQ-TO-PO"
-            thc.Controls.Add(btn)
+            .Text = "CONSUMPTION / COMMITMENT AS ON DATE"
           Case 4
-            btn.ID = "MFG"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "MFG."
-            thc.Controls.Add(btn)
+            .Text = "COST BOOKED AS ON DATE IN ACCOUNTS"
           Case 5
-            btn.ID = "DISP"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "DISP"
-            thc.Controls.Add(btn)
+            .Text = "CONTINGENCY CONSUMPTION"
           Case 6
-            btn.ID = "RECPT"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "RECPT"
-            thc.Controls.Add(btn)
+            .Text = "SAVINGS / OVERRUN"
           Case 7
-            btn.ID = "EREC"
-            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
-            btn.Text = "ERECTION"
-            thc.Controls.Add(btn)
+            .Text = "SAVING TRANSFERRED TO CONTINGENCY-S"
           Case 8
-            .ColumnSpan = 1
-            .RowSpan = 2
-            .Text = "IMPACT ON COMMISSIONING"
+            .Text = "CONTINGENCY-S CONSUMPTION"
         End Select
         th.Cells.Add(thc)
       End With
     Next
     tbl.Rows.Add(th)
-    th = New TableHeaderRow
-    th.Attributes.Add("style", "background-color:black;color:white;")
-    th.TableSection = TableRowSection.TableHeader
-    For i As Integer = 0 To 6
-      Dim thc As New TableHeaderCell
-      With thc
-        .Attributes.Add("style", "text-align:center;")
-        .Text = "Start"
-        .Font.Bold = False
-        th.Cells.Add(thc)
-      End With
-      thc = New TableHeaderCell
-      With thc
-        .Attributes.Add("style", "text-align:center;")
-        .Text = "Finish"
-        .Font.Bold = False
-        th.Cells.Add(thc)
-      End With
-    Next
-    tbl.Rows.Add(th)
-    '==========
     'Write Data
-    '===========
     Dim RowColor As Boolean = False
     Dim tr As TableRow = Nothing
     Dim td As TableCell = Nothing
-    Dim tr2 As TableRow = Nothing
-    Dim td2 As TableCell = Nothing
-    For Each dt As SIS.CT.DelayStatus30Days In data
-      If IsDelayed Then
-        If Not dt.AnyDelay Then Continue For
-      End If
+    Dim tp305 As List(Of SIS.CT.tpisg305) = SIS.CT.tpisg305.UZ_tpisg305SelectList(0, 999, "", False, "", t_ccod)
+
+    tr = New TableRow
+    td = New TableCell
+    td.ColumnSpan = 9
+    td.Text = "SUPPLY"
+    td.Style.Add("font-weight", "bold")
+    tr.Cells.Add(td)
+    tbl.Rows.Add(tr)
+
+    For Each dt As SIS.CT.tpisg305 In tp305
       tr = New TableRow
-      tr2 = New TableRow
-      '1. Item Reference
-      tr.TableSection = TableRowSection.TableBody
-      tr2.TableSection = TableRowSection.TableBody
+      'tr.TableSection = TableRowSection.TableBody
       If RowColor Then
-        tr.BackColor = System.Drawing.Color.Honeydew
-        tr2.BackColor = System.Drawing.Color.Honeydew
+        'tr.BackColor = System.Drawing.Color.WhiteSmoke
       End If
       RowColor = Not RowColor
-      td = New TableCell
-      td.Attributes.Add("style", "text-align:left;")
-      td.Attributes.Add("rowspan", "2")
-      btn = New Button
-      With btn
-        .ClientIDMode = ClientIDMode.Static
-        .CssClass = "btn btn-outline-light text-dark btn-sm"
-        .ID = dt.t_cact
-        .Attributes.Add("style", "white-space:normal;text-align:left;")
-        .PostBackUrl = dt.GetRedirectLink & "&ID=ITEM&t_acty=&all=false" & IIf(Isbacklog, "&backlog=", "")
-        .Text = dt.t_sub1
-      End With
-      td.Controls.Add(btn)
-      tr.Cells.Add(td)
-
-      '2. Start
-      Dim actAry As Array = {"DESIGN", "INDT", "RFQ-TO-PO", "MFG", "DISP", "RECPT", "EREC"}
-      For Each act As String In actAry
-        Dim xx As SIS.CT.DelayStatus30Days.activityType = Nothing
-        Select Case act
-          Case "DESIGN"
-            xx = dt.Design
-          Case "INDT"
-            xx = dt.Indt
-          Case "RFQ-TO-PO"
-            xx = dt.RfqToPO
-          Case "MFG"
-            xx = dt.Mfg
-          Case "EREC"
-            xx = dt.Erec
-          Case "DISP"
-            xx = dt.Disp
-          Case "RECPT"
-            xx = dt.Recpt
-          Case "OTHERS"
-            xx = dt.Others
-        End Select
-
+      tr.CssClass = "btn-outline-warning"
+      tr.ForeColor = Drawing.Color.Black
+      For I As Integer = 0 To 8
         td = New TableCell
-        td2 = New TableCell
-
-        If Not xx.Initialized Then
-          td.RowSpan = 2
-          td.Text = "<i class='fa fa-close fa-2x'></i>"
-          td.Attributes.Add("style", "text-align:center;")
-          tr.Cells.Add(td)
-          td = New TableCell
-          td.RowSpan = 2
-          td.Attributes.Add("style", "text-align:center;")
-          td.Text = "<i class='fa fa-close fa-2x'></i>"
-          tr.Cells.Add(td)
-
-          Continue For
-        End If
-        If IsDelayed Then
-          If xx.StartDelay <= 0 Or xx.FinishDelay <= 0 Then
-            'td.RowSpan = 2
-            'td.Text = "<i class='fa fa-close fa-2x'></i>"
-            'td.Attributes.Add("style", "text-align:center;")
-            'tr.Cells.Add(td)
-            'td = New TableCell
-            'td.RowSpan = 2
-            'td.Attributes.Add("style", "text-align:center;")
-            'td.Text = "<i class='fa fa-close fa-2x'></i>"
-            'tr.Cells.Add(td)
-
-            'Continue For
-          End If
-        End If
-        td.Attributes.Add("style", "text-align:center;")
-        td2.Attributes.Add("style", "text-align:center;")
-        btn = New Button
-        With btn
-          .CssClass = "btn btn-outline-dark btn-sm"
-          .ClientIDMode = ClientIDMode.Static
-          .ID = dt.t_cact & "_" & act & "_S"
-          .Text = xx.StartDelay
-          If Not xx.IsCurrent Then
-            If xx.Started And xx.Finished Then
-              .CssClass = "btn btn-outline-success btn-sm"
-            ElseIf xx.Started And Not xx.Finished Then
-              .CssClass = "btn btn-outline-info btn-sm"
-            Else
-              .CssClass = "btn btn-outline-danger btn-sm"
-            End If
-          Else
-            If xx.Started And xx.Finished Then
-              .CssClass = "btn btn-success btn-sm"
-            ElseIf xx.Started And Not xx.Finished Then
-              .CssClass = "btn btn-info btn-sm"
-            Else
-              .CssClass = "btn btn-danger btn-sm"
-            End If
-          End If
-          .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&t_acty=" & act & IIf(Isbacklog, "&backlog=", "")
+        With td
+          Select Case I
+            Case 0
+              .Text = dt.t_csdc
+            Case 1
+              .Text = dt.t_bdgd.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 2
+              .Text = dt.t_aled.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 3
+              .Text = dt.t_coco.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 4
+              .Text = dt.t_cbda.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 5
+              .Text = dt.t_cysc.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 6
+              .Text = dt.t_cycn.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 7
+              .Text = dt.t_sson.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 8
+              .Text = dt.t_stcs.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+          End Select
         End With
-        td.Text = "" 'xx.SelfStartDelay
-        td.Font.Bold = True
-        td.Font.Size = FontUnit.Point(11)
-
-        td2.Controls.Add(btn)
-        tr2.Cells.Add(td2)
-        tr.Cells.Add(td)
-        td = New TableCell
-        td2 = New TableCell
-        td.Attributes.Add("style", "text-align:center;")
-        td2.Attributes.Add("style", "text-align:center;")
-        btn = New Button
-        With btn
-          .CssClass = "btn btn-outline-dark btn-sm"
-          .ClientIDMode = ClientIDMode.Static
-          .ID = dt.t_cact & "_" & act & "_F"
-          .Text = xx.FinishDelay
-          If Not xx.IsCurrent Then
-            If xx.Started And xx.Finished Then
-              .CssClass = "btn btn-outline-success btn-sm"
-            ElseIf xx.Started And Not xx.Finished Then
-              .CssClass = "btn btn-outline-info btn-sm"
-            Else
-              .CssClass = "btn btn-outline-danger btn-sm"
-            End If
-          Else
-            If xx.Started And xx.Finished Then
-              .CssClass = "btn btn-success btn-sm"
-            ElseIf xx.Started And Not xx.Finished Then
-              .CssClass = "btn btn-info btn-sm"
-            Else
-              .CssClass = "btn btn-danger btn-sm"
-            End If
-          End If
-          .PostBackUrl = dt.GetRedirectLink & "&ID=DATA_S&all=false&t_acty=" & act & IIf(Isbacklog, "&backlog=", "")
-        End With
-        td.Text = xx.SelfFinishDelay
-        td.Font.Bold = True
-        td.Font.Size = FontUnit.Point(11)
-        td2.Controls.Add(btn)
-        tr2.Cells.Add(td2)
         tr.Cells.Add(td)
       Next
-      '3.
-      td = New TableCell
-      td.Attributes.Add("style", "text-align:Center;")
-      td.Attributes.Add("rowspan", "2")
-      td.Font.Bold = True
-      td.Font.Size = FontUnit.Point(11)
-      td.Text = IIf(dt.t_atsk = 0, "", dt.t_atsk)
-      tr.Cells.Add(td)
-
       tbl.Rows.Add(tr)
-      tbl.Rows.Add(tr2)
+    Next
+    tr = New TableRow
+    td = New TableCell
+    td.ColumnSpan = 9
+    td.Text = "TOTAL"
+    td.Style.Add("font-weight", "bold")
+    tr.Cells.Add(td)
+    tbl.Rows.Add(tr)
+    Dim tp306 As List(Of SIS.CT.tpisg306) = SIS.CT.tpisg306.UZ_tpisg306SelectList(0, 999, "", False, "", t_ccod)
+    tr = New TableRow
+    td = New TableCell
+    td.ColumnSpan = 9
+    td.Text = "ERECTION"
+    td.Style.Add("font-weight", "bold")
+    tr.Cells.Add(td)
+    tbl.Rows.Add(tr)
+
+    For Each dt As SIS.CT.tpisg306 In tp306
+      tr = New TableRow
+      tr.TableSection = TableRowSection.TableBody
+      If RowColor Then
+        tr.BackColor = System.Drawing.Color.WhiteSmoke
+      End If
+      RowColor = Not RowColor
+      tr.CssClass = "btn-outline-warning"
+      tr.ForeColor = Drawing.Color.Black
+      For I As Integer = 0 To 8
+        td = New TableCell
+        With td
+          Select Case I
+            Case 0
+              .Text = dt.t_csdc
+            Case 1
+              .Text = dt.t_bdgd.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 2
+              .Text = dt.t_aled.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 3
+              .Text = dt.t_coco.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 4
+              .Text = dt.t_cbda.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 5
+              .Text = dt.t_cysc.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 6
+              .Text = dt.t_cycn.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 7
+              .Text = dt.t_sson.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 8
+              .Text = dt.t_stcs.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+          End Select
+        End With
+        tr.Cells.Add(td)
+      Next
+      tbl.Rows.Add(tr)
+    Next
+    tr = New TableRow
+    td = New TableCell
+    td.ColumnSpan = 9
+    td.Text = "TOTAL"
+    td.Style.Add("font-weight", "bold")
+    tr.Cells.Add(td)
+    tbl.Rows.Add(tr)
+    Dim tp307 As List(Of SIS.CT.tpisg307) = SIS.CT.tpisg307.UZ_tpisg307SelectList(0, 999, "", False, "", t_ccod)
+    tr = New TableRow
+    td = New TableCell
+    td.ColumnSpan = 9
+    td.Text = "CIVIL"
+    td.Style.Add("font-weight", "bold")
+    tr.Cells.Add(td)
+    tbl.Rows.Add(tr)
+    For Each dt As SIS.CT.tpisg307 In tp307
+      tr = New TableRow
+      tr.TableSection = TableRowSection.TableBody
+      If RowColor Then
+        tr.BackColor = System.Drawing.Color.WhiteSmoke
+      End If
+      RowColor = Not RowColor
+      tr.CssClass = "btn-outline-warning"
+      tr.ForeColor = Drawing.Color.Black
+      For I As Integer = 0 To 8
+        td = New TableCell
+        With td
+          Select Case I
+            Case 0
+              .Text = dt.t_csdc
+            Case 1
+              .Text = dt.t_bdgd.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 2
+              .Text = dt.t_aled.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 3
+              .Text = dt.t_coco.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 4
+              .Text = dt.t_cbda.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 5
+              .Text = dt.t_cysc.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 6
+              .Text = dt.t_cycn.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 7
+              .Text = dt.t_sson.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 8
+              .Text = dt.t_stcs.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+          End Select
+        End With
+        tr.Cells.Add(td)
+      Next
+      tbl.Rows.Add(tr)
+    Next
+    tr = New TableRow
+    td = New TableCell
+    td.ColumnSpan = 9
+    td.Text = "TOTAL"
+    td.Style.Add("font-weight", "bold")
+    tr.Cells.Add(td)
+    tbl.Rows.Add(tr)
+    Dim tp308 As List(Of SIS.CT.tpisg308) = SIS.CT.tpisg308.UZ_tpisg308SelectList(0, 999, "", False, "", t_ccod)
+    tr = New TableRow
+    td = New TableCell
+    td.ColumnSpan = 9
+    td.Text = "OVERALL"
+    td.Style.Add("font-weight", "bold")
+    tr.Cells.Add(td)
+    tbl.Rows.Add(tr)
+    For Each dt As SIS.CT.tpisg308 In tp308
+      tr = New TableRow
+      tr.TableSection = TableRowSection.TableBody
+      If RowColor Then
+        tr.BackColor = System.Drawing.Color.WhiteSmoke
+      End If
+      RowColor = Not RowColor
+      tr.CssClass = "btn-outline-warning"
+      tr.ForeColor = Drawing.Color.Black
+      For I As Integer = 0 To 8
+        td = New TableCell
+        With td
+          Select Case I
+            Case 0
+              .Text = dt.t_csdc
+            Case 1
+              .Text = dt.t_bdgd.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 2
+              .Text = dt.t_aled.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 3
+              .Text = dt.t_coco.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 4
+              .Text = dt.t_cbda.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 5
+              .Text = dt.t_cysc.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 6
+              .Text = dt.t_cycn.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 7
+              .Text = dt.t_sson.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+            Case 8
+              .Text = dt.t_stcs.ToString("n")
+              .Attributes.Add("style", "text-align:center;")
+          End Select
+        End With
+        tr.Cells.Add(td)
+      Next
+      tbl.Rows.Add(tr)
+    Next
+    tr = New TableRow
+    td = New TableCell
+    td.ColumnSpan = 9
+    td.Text = "TOTAL"
+    td.Style.Add("font-weight", "bold")
+    tr.Cells.Add(td)
+    tbl.Rows.Add(tr)
+
+    Return tbl
+
+  End Function
+
+  Private Function GetPaymentTerms(ByVal t_ccod As String) As Table
+    Dim tbl As New Table
+    With tbl
+      .ID = "tblPaymentTerms"
+      .ClientIDMode = ClientIDMode.Static
+      .CssClass = "table-bordered"
+      .Width = Unit.Percentage(100)
+    End With
+    'Write Header
+    Dim th As New TableRow
+    th.Font.Bold = True
+    th.BackColor = Drawing.Color.Gainsboro
+    For i As Integer = 0 To 6
+      Dim thc As New TableCell
+      With thc
+        .Attributes.Add("style", "text-align:center;")
+        .Font.Bold = True
+        Select Case i
+          Case 0
+            .Text = "PAYMENT TERMS"
+          Case 1
+            .Text = "SUPPLY"
+          Case 2
+            .Text = "CIVIL"
+          Case 3
+            .Text = "E&C"
+          Case 4
+            .Text = "SUPPLY"
+          Case 5
+            .Text = "CIVIL"
+          Case 6
+            .Text = "E&C"
+        End Select
+        th.Cells.Add(thc)
+      End With
+    Next
+    tbl.Rows.Add(th)
+    'Write Data
+    Dim RowColor As Boolean = False
+    Dim tr As TableRow = Nothing
+    Dim td As TableCell = Nothing
+    Dim tp302 As List(Of SIS.CT.tpisg302) = SIS.CT.tpisg302.UZ_tpisg302SelectList(0, 999, "", False, "", t_ccod)
+    For Each dt As SIS.CT.tpisg302 In tp302
+      tr = New TableRow
+      'tr.TableSection = TableRowSection.TableBody
+      If RowColor Then
+        'tr.BackColor = System.Drawing.Color.WhiteSmoke
+      End If
+      RowColor = Not RowColor
+      tr.CssClass = "btn-outline-warning"
+      tr.ForeColor = Drawing.Color.Black
+      For I As Integer = 0 To 6
+        td = New TableCell
+        With td
+          Select Case I
+            Case 0
+              .Text = dt.t_paym
+            Case 1
+              .Text = dt.t_samt
+              .Attributes.Add("style", "text-align:center;")
+            Case 2
+              .Text = dt.t_camt
+              .Attributes.Add("style", "text-align:center;")
+            Case 3
+              .Text = dt.t_eamt
+              .Attributes.Add("style", "text-align:center;")
+            Case 4
+              .Text = dt.t_srcd
+              .Attributes.Add("style", "text-align:center;")
+            Case 5
+              .Text = dt.t_crcd
+              .Attributes.Add("style", "text-align:center;")
+            Case 6
+              .Text = dt.t_ercd
+              .Attributes.Add("style", "text-align:center;")
+          End Select
+        End With
+        tr.Cells.Add(td)
+      Next
+      tbl.Rows.Add(tr)
+    Next
+    Dim tp303 As List(Of SIS.CT.tpisg303) = SIS.CT.tpisg303.UZ_tpisg303SelectList(0, 999, "", False, "", t_ccod)
+    For Each dt As SIS.CT.tpisg303 In tp303
+      tr = New TableRow
+      tr.CssClass = "btn-outline-warning"
+      tr.ForeColor = Drawing.Color.Black
+      For I As Integer = 0 To 6
+        td = New TableCell
+        With td
+          Select Case I
+            Case 0
+              .Text = dt.t_paym
+              .Attributes.Add("style", "text-align:center;")
+            Case 1
+              .Text = dt.t_samt
+              .Attributes.Add("style", "text-align:center;")
+            Case 2
+              .Text = dt.t_camt
+              .Attributes.Add("style", "text-align:center;")
+            Case 3
+              .Text = dt.t_eamt
+              .Attributes.Add("style", "text-align:center;")
+            Case 4
+              .Text = dt.t_srcd
+              .Attributes.Add("style", "text-align:center;")
+            Case 5
+              .Text = dt.t_crcd
+              .Attributes.Add("style", "text-align:center;")
+            Case 6
+              .Text = dt.t_ercd
+              .Attributes.Add("style", "text-align:center;")
+          End Select
+        End With
+        tr.Cells.Add(td)
+      Next
+      tbl.Rows.Add(tr)
+    Next
+    Dim tp304 As List(Of SIS.CT.tpisg304) = SIS.CT.tpisg304.UZ_tpisg304SelectList(0, 999, "", False, "", t_ccod)
+    For Each dt As SIS.CT.tpisg304 In tp304
+      tr = New TableRow
+      tr.CssClass = "btn-outline-warning"
+      tr.ForeColor = Drawing.Color.Black
+      For I As Integer = 0 To 6
+        td = New TableCell
+        With td
+          Select Case I
+            Case 0
+              .Text = dt.t_paym
+              .Attributes.Add("style", "text-align:center;")
+            Case 1
+              .Text = dt.t_samt
+              .Attributes.Add("style", "text-align:center;")
+            Case 2
+              .Text = dt.t_camt
+              .Attributes.Add("style", "text-align:center;")
+            Case 3
+              .Text = dt.t_eamt
+              .Attributes.Add("style", "text-align:center;")
+            Case 4
+              .Text = dt.t_srcd
+              .Attributes.Add("style", "text-align:center;")
+            Case 5
+              .Text = dt.t_crcd
+              .Attributes.Add("style", "text-align:center;")
+            Case 6
+              .Text = dt.t_ercd
+              .Attributes.Add("style", "text-align:center;")
+          End Select
+        End With
+        tr.Cells.Add(td)
+      Next
+      tbl.Rows.Add(tr)
     Next
 
     Return tbl
+
   End Function
-  'Private Function GetItemRefWiseDelay30dTable(ByVal t_cprj As String) As Table
-  '  Dim data As List(Of SIS.CT.IrefDelayDays) = SIS.CT.IrefDelayDays.SelectListItemRefWiseDelay30d(t_cprj)
-  '  Dim mStr As String = ""
-  '  Dim tbl As New Table
-  '  With tbl
-  '    .CssClass = "table-bordered"
-  '    .Width = Unit.Percentage(100)
-  '    .Style.Add(HtmlTextWriterStyle.Margin, "5px 5px 5px 5px")
-  '  End With
-  '  'Write Header
-  '  Dim th As New TableHeaderRow
-  '  Dim btn As Button = Nothing
-  '  th.Attributes.Add("style", "background-color:black;color:white;")
-  '  th.TableSection = TableRowSection.TableHeader
-  '  For i As Integer = 0 To 7
-  '    Dim thc As New TableHeaderCell
-  '    With thc
-  '      .Attributes.Add("style", "text-align:center;")
-  '      .ColumnSpan = 2
-  '      btn = New Button
-  '      With btn
-  '        .ClientIDMode = ClientIDMode.Static
-  '        .CssClass = "btn btn-dark btn-sm"
-  '        .Attributes.Add("style", "white-space:normal;")
-  '        .PostBackUrl = "~/CT_mMain/App_Forms/mGctActivityList.aspx?t_cprj=" & t_cprj & "&t_cact="
-  '      End With
 
-  '      Select Case i
-  '        Case 0
-  '          .ColumnSpan = 1
-  '          .RowSpan = 2
-  '          .Text = "ITEM"
-  '        Case 1
-  '          btn.ID = t_cprj & "_" & "DESIGN"
-  '          btn.PostBackUrl &= btn.ID & "&ID=" & btn.ID
-  '          btn.Text = "ENGINEERING"
-  '          thc.Controls.Add(btn)
-  '        Case 2
-  '          btn.ID = t_cprj & "_" & "INDT"
-  '          btn.PostBackUrl &= btn.ID & "&ID=" & btn.ID
-  '          btn.Text = "INDENTING"
-  '          thc.Controls.Add(btn)
-  '        Case 3
-  '          btn.ID = t_cprj & "_" & "RFQ-TO-PO"
-  '          btn.PostBackUrl &= btn.ID & "&ID=" & btn.ID
-  '          btn.Text = "RFQ-TO-PO"
-  '          thc.Controls.Add(btn)
-  '        Case 4
-  '          btn.ID = t_cprj & "_" & "MFG"
-  '          btn.PostBackUrl &= btn.ID & "&ID=" & btn.ID
-  '          btn.Text = "MANUFACTURING"
-  '          thc.Controls.Add(btn)
-  '        Case 5
-  '          btn.ID = t_cprj & "_" & "EREC"
-  '          btn.PostBackUrl &= btn.ID & "&ID=" & btn.ID
-  '          btn.Text = "ERECTION"
-  '          thc.Controls.Add(btn)
-  '        Case 6
-  '          btn.ID = t_cprj & "_" & "OTHERS"
-  '          btn.PostBackUrl &= btn.ID & "&ID=" & btn.ID
-  '          btn.Text = "OTHERS"
-  '          thc.Controls.Add(btn)
-  '        Case 7
-  '          .ColumnSpan = 1
-  '          .RowSpan = 2
-  '          .Text = "REASONS"
-  '      End Select
-  '      th.Cells.Add(thc)
-  '    End With
-  '  Next
-  '  tbl.Rows.Add(th)
-  '  th = New TableHeaderRow
-  '  th.Attributes.Add("style", "background-color:black;color:white;")
-  '  th.TableSection = TableRowSection.TableHeader
-  '  For i As Integer = 0 To 5
-  '    Dim thc As New TableHeaderCell
-  '    With thc
-  '      .Attributes.Add("style", "text-align:center;")
-  '      .Text = "START"
-  '      th.Cells.Add(thc)
-  '    End With
-  '    thc = New TableHeaderCell
-  '    With thc
-  '      .Attributes.Add("style", "text-align:center;")
-  '      .Text = "FINISH"
-  '      th.Cells.Add(thc)
-  '    End With
-  '  Next
-  '  tbl.Rows.Add(th)
-  '  '==========
-  '  'Write Data
-  '  '===========
-  '  Dim tr As TableRow = Nothing
-  '  Dim td As TableCell = Nothing
-  '  Dim tr2 As TableRow = Nothing
-  '  Dim td2 As TableCell = Nothing
-  '  For Each dt As SIS.CT.IrefDelayDays In data
-  '    tr = New TableRow
-  '    tr2 = New TableRow
-  '    '1. Item Reference
-  '    tr.TableSection = TableRowSection.TableBody
-  '    tr2.TableSection = TableRowSection.TableBody
-  '    td = New TableCell
-  '    td.Attributes.Add("style", "text-align:left;")
-  '    td.Attributes.Add("rowspan", "2")
-  '    btn = New Button
-  '    With btn
-  '      .ClientIDMode = ClientIDMode.Static
-  '      .CssClass = "btn btn-outline-light text-dark btn-sm"
-  '      .ID = dt.ID & "_Item"
-  '      .Attributes.Add("style", "white-space:normal;text-align:left;")
-  '      .PostBackUrl = dt.GetRedirectLink & "&ID=" & btn.ID
-  '      .Text = dt.t_sub1
-  '    End With
-  '    td.Controls.Add(btn)
-  '    tr.Cells.Add(td)
-  '    '2. Start
-  '    Dim L_s As Integer = 0
-  '    Dim L_f As Integer = 0
-  '    For i As Integer = 0 To 5
-  '      td = New TableCell
-  '      td2 = New TableCell
-  '      td.Attributes.Add("style", "text-align:center;")
-  '      td2.Attributes.Add("style", "text-align:center;")
-  '      btn = New Button
-  '      With btn
-  '        .CssClass = "btn btn-outline-dark btn-sm"
-  '        .ClientIDMode = ClientIDMode.Static
-  '        Select Case i
-  '          Case 0
-  '            .ID = dt.ID & "_D_s"
-  '            .Text = dt.D_s_delay
-  '            Select Case dt.D_t_s
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            L_s = dt.D_s_delay
-  '            tr2.Cells.Add(td2)
-  '          Case 1
-  '            .ID = dt.ID & "_I_s"
-  '            .Text = dt.I_s_delay
-  '            Select Case dt.I_t_s
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            If dt.I_s_delay - L_s <> 0 Then
-  '              td2.Text = "(" & dt.I_s_delay - L_s & ")"
-  '            End If
-  '            L_s = dt.I_s_delay
-  '            tr2.Cells.Add(td2)
-  '          Case 2
-  '            .ID = dt.ID & "_R_s"
-  '            .Text = dt.R_s_delay
-  '            Select Case dt.R_t_s
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            If dt.R_s_delay - L_s <> 0 Then
-  '              td2.Text = "(" & dt.R_s_delay - L_s & ")"
-  '            End If
-  '            L_s = dt.R_s_delay
-  '            tr2.Cells.Add(td2)
-  '          Case 3
-  '            .ID = dt.ID & "_M_s"
-  '            .Text = dt.M_s_delay
-  '            Select Case dt.M_t_s
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            If dt.M_s_delay - L_s <> 0 Then
-  '              td2.Text = "(" & dt.M_s_delay - L_s & ")"
-  '            End If
-  '            L_s = dt.M_s_delay
-  '            tr2.Cells.Add(td2)
-  '          Case 4
-  '            .ID = dt.ID & "_E_s"
-  '            .Text = dt.E_s_delay
-  '            Select Case dt.E_t_s
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            If dt.E_s_delay - L_s <> 0 Then
-  '              td2.Text = "(" & dt.E_s_delay - L_s & ")"
-  '            End If
-  '            L_s = dt.E_s_delay
-  '            tr2.Cells.Add(td2)
-  '          Case 5
-  '            .ID = dt.ID & "_O_s"
-  '            .Text = dt.O_s_delay
-  '            Select Case dt.O_t_s
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            If dt.O_s_delay - L_s <> 0 Then
-  '              td2.Text = "(" & dt.O_s_delay - L_s & ")"
-  '            End If
-  '            L_s = dt.O_s_delay
-  '            tr2.Cells.Add(td2)
-  '        End Select
-  '        .PostBackUrl = dt.GetRedirectLink & "&ID=" & btn.ID
-  '      End With
-  '      Try
-  '        If Convert.ToDecimal(btn.Text) > 0 Then
-  '          td.Controls.Add(btn)
-  '        End If
-  '      Catch ex As Exception
-  '      End Try
-  '      tr.Cells.Add(td)
-  '      td = New TableCell
-  '      td2 = New TableCell
-  '      td.Attributes.Add("style", "text-align:center;")
-  '      td2.Attributes.Add("style", "text-align:center;")
-  '      btn = New Button
-  '      With btn
-  '        .CssClass = "btn btn-outline-dark btn-sm"
-  '        .ClientIDMode = ClientIDMode.Static
-  '        Select Case i
-  '          Case 0
-  '            .ID = dt.ID & "_D_f"
-  '            .Text = dt.D_f_delay
-  '            Select Case dt.D_t_f
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            L_f = dt.D_f_delay
-  '            tr2.Cells.Add(td2)
-  '          Case 1
-  '            .ID = dt.ID & "_I_f"
-  '            .Text = dt.I_f_delay
-  '            Select Case dt.I_t_f
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            If dt.I_f_delay - L_f <> 0 Then
-  '              td2.Text = "(" & dt.I_f_delay - L_f & ")"
-  '            End If
-  '            L_f = dt.I_f_delay
-  '            tr2.Cells.Add(td2)
-  '          Case 2
-  '            .ID = dt.ID & "_R_f"
-  '            .Text = dt.R_f_delay
-  '            Select Case dt.R_t_f
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            If dt.R_f_delay - L_f <> 0 Then
-  '              td2.Text = "(" & dt.R_f_delay - L_f & ")"
-  '            End If
-  '            L_f = dt.R_f_delay
-  '            tr2.Cells.Add(td2)
-  '          Case 3
-  '            .ID = dt.ID & "_M_f"
-  '            .Text = dt.M_f_delay
-  '            Select Case dt.M_t_f
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            If dt.M_f_delay - L_f <> 0 Then
-  '              td2.Text = "(" & dt.M_f_delay - L_f & ")"
-  '            End If
-  '            L_f = dt.M_f_delay
-  '            tr2.Cells.Add(td2)
-  '          Case 4
-  '            .ID = dt.ID & "_E_f"
-  '            .Text = dt.E_f_delay
-  '            Select Case dt.E_t_f
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            If dt.E_f_delay - L_f <> 0 Then
-  '              td2.Text = "(" & dt.E_f_delay - L_f & ")"
-  '            End If
-  '            L_f = dt.E_f_delay
-  '            tr2.Cells.Add(td2)
-  '          Case 5
-  '            .ID = dt.ID & "_O_f"
-  '            .Text = dt.O_f_delay
-  '            Select Case dt.O_t_f
-  '              Case "3"
-  '                .CssClass = "btn btn-outline-success btn-sm"
-  '              Case "2"
-  '                .CssClass = "btn btn-info btn-sm"
-  '              Case "1"
-  '                .CssClass = "btn btn-outline-danger btn-sm"
-  '            End Select
-  '            If dt.O_f_delay - L_f <> 0 Then
-  '              td2.Text = "(" & dt.O_f_delay - L_f & ")"
-  '            End If
-  '            L_f = dt.O_f_delay
-  '            tr2.Cells.Add(td2)
-  '        End Select
-  '        .PostBackUrl = dt.GetRedirectLink & "&ID=" & btn.ID
-  '      End With
-  '      Try
-  '        If Convert.ToDecimal(btn.Text) > 0 Then
-  '          td.Controls.Add(btn)
-  '        End If
-  '      Catch ex As Exception
-  '      End Try
-  '      tr.Cells.Add(td)
-  '    Next
-  '    tbl.Rows.Add(tr)
-  '    tbl.Rows.Add(tr2)
-  '  Next
-
-  '  Return tbl
-  'End Function
-#End Region
-
+  Private Sub cmdBillingInfo_Click(sender As Object, e As EventArgs) Handles cmdBillingInfo.Click
+    If t_ccod = "" Then Exit Sub
+    Dim RedirectURL As String = "~/CT_mMain/App_Forms/mGctBillingInfo.aspx?t_ccod=" & t_ccod & "&t_nama=" & ContractName.Text
+    Response.Redirect(RedirectURL)
+  End Sub
 End Class

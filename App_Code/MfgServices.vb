@@ -12,6 +12,16 @@ Imports System.Collections.Generic
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Public Class MfgServices
   Inherits System.Web.Services.WebService
+  <WebMethod(EnableSession:=True)>
+  Public Function GetContracts(knownCategoryValues As String) As CascadingDropDownNameValue()
+    Dim Contracts As New List(Of CascadingDropDownNameValue)
+    Dim UserID As String = HttpContext.Current.Session("LoginID")
+    Dim tmpCs As List(Of SIS.CT.ctContracts) = SIS.CT.ctContracts.ctProjectsSelectList("")
+    For Each tmpP As SIS.CT.ctContracts In tmpCs
+      Contracts.Add(New CascadingDropDownNameValue() With {.name = tmpP.t_ccod & "-" & tmpP.t_ccno, .value = tmpP.t_ccod})
+    Next
+    Return Contracts.ToArray()
+  End Function
 
   <WebMethod(EnableSession:=True)>
   Public Function GetProjects(knownCategoryValues As String) As CascadingDropDownNameValue()

@@ -10,6 +10,16 @@ Namespace SIS.SYS.SQLDatabase
     Implements IDisposable
     Public Shared Property BaaNLive As Boolean = False
     Public Shared Property JoomlaLive As Boolean = False
+    Public Shared Function GetFDBaaNConnectionString() As String
+      Dim FDBaaNLive As Boolean = Convert.ToBoolean(ConfigurationManager.AppSettings("FDBaaNLive"))
+
+      If FDBaaNLive Then
+        Return "Data Source=192.9.200.129;Initial Catalog=inforerpdb;Integrated Security=False;User Instance=False;Persist Security Info=True;User ID=lalit;Password=scorpions"
+      Else
+        Return "Data Source=192.9.200.45;Initial Catalog=inforerpdb;Integrated Security=False;User Instance=False;Persist Security Info=True;User ID=lalit;Password=scorpions"
+      End If
+    End Function
+
     Public Shared Function GetBaaNConnectionString() As String
       'This is for CT to run on BaaN Test Server for testing as data is available on Test Server
       Dim ct As New StackTrace

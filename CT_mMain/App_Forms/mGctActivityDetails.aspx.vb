@@ -1207,8 +1207,11 @@ Partial Class mGctActivityDetails
                       wf.BuyerName = x("BuyerName")
                       If wf.IndentNo <> "" Then
                         Dim a() As String = x("po").Split("|".ToCharArray)
-                        wf.PurchaseOrder = a(0)
-                        wf.PurchaseOrderLine = a(1)
+                        Try
+                          wf.PurchaseOrder = a(0)
+                          wf.PurchaseOrderLine = a(1)
+                        Catch ex As Exception
+                        End Try
                       End If
                     End If
                     x.Close()
