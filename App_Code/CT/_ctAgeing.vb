@@ -143,7 +143,7 @@ Namespace SIS.CT
       End Select
       Sql &= " order by t_actp "
 
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -244,7 +244,7 @@ Namespace SIS.CT
       Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf >= 91  then 1 else 0 end) as DELAYZZ"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -291,7 +291,7 @@ Namespace SIS.CT
       Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf >= 91  then 1 else 0 end) as DELAYZZ"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -343,7 +343,7 @@ Namespace SIS.CT
       Sql &= "and t_sdst <=  convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela >= 91  then 1 else 0 end) as DELAYZZ"
 
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -390,7 +390,7 @@ Namespace SIS.CT
       Sql &= "and t_acty <> 'PARENT' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela >= 91  then 1 else 0 end) as DELAYZZ"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -436,7 +436,7 @@ Namespace SIS.CT
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "' and t_acty='" & t_acty & "' "
       Sql &= "and t_sdfn between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) and convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf > 30  then 1 else 0 end) as DELAYZZ"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -478,7 +478,7 @@ Namespace SIS.CT
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "' and t_acty='" & t_acty & "' "
       Sql &= "and t_sdfn between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) and convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf > 30  then 1 else 0 end) as DELAYZZ"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -518,7 +518,7 @@ Namespace SIS.CT
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "' and t_acty='" & t_acty & "' "
       Sql &= "and t_sdst between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) and convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela between 21 and 30  then 1 else 0 end) as DELAY30"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -556,7 +556,7 @@ Namespace SIS.CT
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "' and t_acty='" & t_acty & "' "
       Sql &= "and t_sdst between DATEADD(day,-30, convert(datetime,'" & t_date & "',103)) and convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela between 21 and 30  then 1 else 0 end) as DELAY30"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -659,7 +659,7 @@ Namespace SIS.CT
       End Select
       Sql &= " order by t_actp "
 
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -758,7 +758,7 @@ Namespace SIS.CT
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "' and t_acty='" & t_acty & "' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn > convert(datetime,'01/01/1753',103) and t_delf >= 91  then 1 else 0 end) as DELAYZZ"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -800,7 +800,7 @@ Namespace SIS.CT
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "' and t_acty='" & t_acty & "' "
       Sql &= "and t_sdfn <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acfn = convert(datetime,'01/01/1753',103) and t_delf >= 91  then 1 else 0 end) as DELAYZZ"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -844,7 +844,7 @@ Namespace SIS.CT
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "' and t_acty='" & t_acty & "' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd > convert(datetime,'01/01/1753',103) and t_dela >= 91  then 1 else 0 end) as DELAYZZ"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -886,7 +886,7 @@ Namespace SIS.CT
       Sql &= "(select  count(*) as Cnt from ttpisg220200 where t_cprj='" & t_cprj & "' and t_acty='" & t_acty & "' "
       Sql &= "and t_sdst <= convert(datetime,'" & t_date & "',103)"
       Sql &= "and 1 = case when t_acsd = convert(datetime,'01/01/1753',103) and t_dela >= 91  then 1 else 0 end) as DELAYZZ"
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -989,7 +989,7 @@ Namespace SIS.CT
       End Select
       Sql &= " order by t_actp "
 
-      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
