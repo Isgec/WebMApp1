@@ -158,25 +158,25 @@
         <tr style="background-color: gainsboro;">
           <td>
             <asp:Label ID="Label4" runat="server" Font-Bold="true" Font-Size="12px" Text="BILLING"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label5" runat="server" Font-Bold="true" Text="CUMULATIVE AS ON DATE"></asp:Label></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label6" runat="server" Font-Bold="true" Text="Budget"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_blbd" runat="server" Text=""></asp:Label></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label8" runat="server" Font-Bold="true" Text="Actual"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_blal" runat="server" Text=""></asp:Label></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label10" runat="server" Font-Bold="true" Text="Variance (Fevo+/Adver-)"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_blvr" runat="server" Text=""></asp:Label></td>
         </tr>
       </table>
@@ -187,49 +187,49 @@
         <tr style="background-color: gainsboro;">
           <td>
             <asp:Label ID="Label11" runat="server" Font-Bold="true" Font-Size="12px" Text="CASHFLOW"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label12" runat="server" Font-Bold="true" Text="BUDGET"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label7" runat="server" Font-Bold="true" Text="OUTLOOK"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label9" runat="server" Font-Bold="true" Text="ACTUAL"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label17" runat="server" Font-Bold="true" Text="VARIANCE"></asp:Label></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label14" runat="server" Font-Bold="true" Text="Inflow"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cinb" runat="server" Text=""></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cino" runat="server" Text=""></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cina" runat="server" Text=""></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cinv" runat="server" Text=""></asp:Label></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label19" runat="server" Font-Bold="true" Text="Outflow"></asp:Label></td>
-          <td>
-            <asp:Label ID="Vt_cotv" runat="server" Text=""></asp:Label></td>
-          <td>
+          <td class="text-center">
+            <asp:Label ID="Vt_cotb" runat="server" Text=""></asp:Label></td>
+          <td class="text-center">
             <asp:Label ID="Vt_coto" runat="server" Text=""></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cota" runat="server" Text=""></asp:Label></td>
-          <td>
-            <asp:Label ID="Vt_cotv1" runat="server" Text=""></asp:Label></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_cotv" runat="server" Text=""></asp:Label></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label24" runat="server" Font-Bold="true" Text="Net"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cntb" runat="server" Text=""></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cnto" runat="server" Text=""></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cnta" runat="server" Text=""></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cntv" runat="server" Text=""></asp:Label></td>
         </tr>
       </table>
@@ -240,91 +240,91 @@
         <tr style="background-color: gainsboro;">
           <td>
             <asp:Label ID="Label13" runat="server" Font-Bold="true" Font-Size="12px" Text="Receivables"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label15" runat="server" Font-Bold="true" Text="Not due"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label16" runat="server" Font-Bold="true" Text="Upto 2 Mths"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label18" runat="server" Font-Bold="true" Text="2 > 6 Mths"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label20" runat="server" Font-Bold="true" Text="6 > 1 Year"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label37" runat="server" Font-Bold="true" Text="More than 1 Year"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label38" runat="server" Font-Bold="true" Text="Unclaimed Retention"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label39" runat="server" Font-Bold="true" Text="Total"></asp:Label></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label21" runat="server" Font-Bold="true" Text="Supply"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rsnd" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rsum" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rsbm" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rsgy" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rsmy" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rsur" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rstl" runat="server" /></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label27" runat="server" Font-Bold="true" Text="Civil Work"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rcnd" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rcum" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rcbm" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rcgy" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rcmy" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rcur" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rctl" runat="server" /></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label32" runat="server" Font-Bold="true" Text="Erection & Commg"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rend" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_reum" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rebm" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_regy" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_remy" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_reur" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_retl" runat="server" /></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label49" runat="server" Font-Bold="true" Text="TOTAL"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rtnd" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rtum" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rtbm" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rtgy" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rtmy" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rtur" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_rttl" runat="server" /></td>
         </tr>
       </table>
@@ -335,60 +335,65 @@
         <tr>
           <td>
             <asp:Label ID="Label33" runat="server" Font-Bold="true" Text="Advance"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_obga" runat="server" /></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label44" runat="server" Font-Bold="true" Text="Contract performance"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_obgc" runat="server" /></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label53" runat="server" Font-Bold="true" Text="Product performance"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_obgp" runat="server" /></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label61" runat="server" Font-Bold="true" Text="TOTAL"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_obgt" runat="server" /></td>
         </tr>
       </table>
     </div>
-    <h4>8. Extra Claim / Clint Debits</h4>
+    <h4>8. Extra Claim / Client Debits</h4>
     <div class="chartDiv">
       <table style="width: 100%;" class="table-bordered">
         <tr style="background-color: gainsboro;">
           <td>
             <asp:Label ID="Label22" runat="server" Font-Bold="true" Text=""></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label23" runat="server" Font-Bold="true" Text="Raised Amount"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Label34" runat="server" Font-Bold="true" Text="Settled Amount"></asp:Label></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label25" runat="server" Font-Bold="true" Text="Extra Claim Raised by us on Customer"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cder" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cdsr" runat="server" /></td>
         </tr>
         <tr>
           <td>
             <asp:Label ID="Label28" runat="server" Font-Bold="true" Text="Debit Note Raised By Customer"></asp:Label></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cddr" runat="server" /></td>
-          <td>
+          <td class="text-center">
             <asp:Label ID="Vt_cdds" runat="server" /></td>
+        </tr>
+        <tr>
+          <td>
+            <asp:Label ID="Label26" runat="server" Font-Bold="true" Text="Variation Order"></asp:Label></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_cdra" runat="server" /></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_cdsa" runat="server" /></td>
         </tr>
       </table>
     </div>
-
   </div>
-
-
 </asp:Content>

@@ -178,10 +178,10 @@ Namespace SIS.CT
       Sql &= " t_cprj = '" & t_cprj & "'"
       Sql &= " and (t_iref = (Select top 1 t_sub1 from ttpisg220200 where t_cprj='" & t_cprj & "' and t_cact='" & t_cact & "' ) or t_iref='" & t_cact & "')"
       If Not All Then
-        Sql &= " and year(t_adct) > 1970 "
+        Sql &= " and year(t_acdt) > 1970 "
       End If
       If IsNext Then
-        Sql &= " and t_adct between dateadd(d,30,getdate()) and getdate() "
+        Sql &= " and t_acdt between dateadd(d,30,getdate()) and getdate() "
       End If
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()

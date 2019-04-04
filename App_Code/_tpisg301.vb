@@ -7,6 +7,8 @@ Namespace SIS.CT
   <DataObject()> _
   Partial Public Class tpisg301
     Private Shared _RecordCount As Integer
+    Public Property t_cdra As Double = 0
+    Public Property t_cdsa As Double = 0
     Private _t_user As String = ""
     Private _t_ccod As String = ""
     Private _t_ccno As String = ""

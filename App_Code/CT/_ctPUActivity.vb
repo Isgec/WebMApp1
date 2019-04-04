@@ -536,7 +536,7 @@ Namespace SIS.CT
       'Only in case of Erec & Commissioning NOT for MFG
       Dim tmpPA As SIS.CT.ctPActivity = SIS.CT.ctPActivity.ctPActivityGetByID(Record.t_cprj, Record.t_atid)
       Select Case tmpPA.t_bohd
-        Case "CT_ERECTION", "CT_COMMISSIONING", "CT_ESTIMATION", "CT_LOGISTIC", "CT_MARKETING", "CT_PROJECT", "CT_MATL", "CT_ENGG"
+        Case "CT_ERECTION", "CT_COMMISSIONING", "CT_ESTIMATION", "CT_LOGISTIC", "CT_MARKETING", "CT_PROJECT", "CT_MATL", "CT_ENGG", "CT_CIVIL"
           If Record.t_tpgv + Record.t_cpgv < 100 Then Record.t_aced = ""
           If Record.t_tpgv + Record.t_cpgv = 0 Then Record.t_acsd = ""
           Dim Sql As String = ""
@@ -580,7 +580,6 @@ Namespace SIS.CT
                 mayUpdate = True
               End If
             End If
-
           End If
           If mayUpdate Then
             Dim Sql As String = ""

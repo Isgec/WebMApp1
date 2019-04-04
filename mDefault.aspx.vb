@@ -63,12 +63,12 @@ Partial Class mLGDefault
       Dim isPersistent As Boolean = True
       Dim userData As String = "ApplicationSpecific data for this user."
       Dim ticket As FormsAuthenticationTicket = New FormsAuthenticationTicket(1,
-                UserID,
-                DateTime.Now,
-                DateTime.Now.AddMinutes(1),
-                isPersistent,
-                userData,
-                FormsAuthentication.FormsCookiePath)
+        UserID,
+        DateTime.Now,
+        DateTime.Now.AddMinutes(1),
+        isPersistent,
+        userData,
+        FormsAuthentication.FormsCookiePath)
       ' Encrypt the ticket.
       Dim encTicket As String = FormsAuthentication.Encrypt(ticket)
       ' Create the cookie. 

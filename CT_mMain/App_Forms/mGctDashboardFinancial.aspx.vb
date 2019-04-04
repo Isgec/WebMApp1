@@ -69,7 +69,7 @@ Partial Class mGctDashboardFinancial
     Vt_cino.Text = tp301.t_cino
     Vt_cina.Text = tp301.t_cina
     Vt_cinv.Text = tp301.t_cinv
-    Vt_cotv.Text = tp301.t_cotv
+    Vt_cotb.Text = tp301.t_cotb
     Vt_coto.Text = tp301.t_coto
     Vt_cota.Text = tp301.t_cota
     Vt_cotv.Text = tp301.t_cotv
@@ -116,9 +116,8 @@ Partial Class mGctDashboardFinancial
     Vt_cddr.Text = tp301.t_cddr
     Vt_cdsr.Text = tp301.t_cdsr
     Vt_cdds.Text = tp301.t_cdds
-
-
-
+    Vt_cdra.Text = tp301.t_cdra
+    Vt_cdsa.Text = tp301.t_cdsa
   End Sub
   Private Function GetProjectEstimate(ByVal t_ccod As String) As Table
     Dim tbl As New Table
