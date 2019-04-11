@@ -61,63 +61,75 @@ Partial Class mGctDashboardFinancial
     '3. Project Estimate
     ProjectEstimate.Controls.Add(GetProjectEstimate(t_ccod))
     '4. Billing
-    Vt_blal.Text = tp301.t_blal
-    Vt_blbd.Text = tp301.t_blbd
-    Vt_blvr.Text = tp301.t_blvr
+    Vt_blal.Text = tp301.t_blal.ToString("n")
+    Vt_blbd.Text = tp301.t_blbd.ToString("n")
+    Vt_blvr.Text = tp301.t_blvr.ToString("n")
     '5. Cashflow
-    Vt_cinb.Text = tp301.t_cinb
-    Vt_cino.Text = tp301.t_cino
-    Vt_cina.Text = tp301.t_cina
-    Vt_cinv.Text = tp301.t_cinv
-    Vt_cotb.Text = tp301.t_cotb
-    Vt_coto.Text = tp301.t_coto
-    Vt_cota.Text = tp301.t_cota
-    Vt_cotv.Text = tp301.t_cotv
-    Vt_cntb.Text = tp301.t_cntb
-    Vt_cnto.Text = tp301.t_cnto
-    Vt_cnta.Text = tp301.t_cnta
-    Vt_cntv.Text = tp301.t_cntv
+    Vt_cinb.Text = tp301.t_cinb.ToString("n")
+    Vt_cino.Text = tp301.t_cino.ToString("n")
+    Vt_cina.Text = tp301.t_cina.ToString("n")
+    Vt_cinv.Text = tp301.t_cinv.ToString("n")
+    Vt_cotb.Text = tp301.t_cotb.ToString("n")
+    Vt_coto.Text = tp301.t_coto.ToString("n")
+    Vt_cota.Text = tp301.t_cota.ToString("n")
+    Vt_cotv.Text = tp301.t_cotv.ToString("n")
+    Vt_cntb.Text = tp301.t_cntb.ToString("n")
+    Vt_cnto.Text = tp301.t_cnto.ToString("n")
+    Vt_cnta.Text = tp301.t_cnta.ToString("n")
+    Vt_cntv.Text = tp301.t_cntv.ToString("n")
     '6. Receavables
-    Vt_rsnd.Text = tp301.t_rsnd
-    Vt_rsum.Text = tp301.t_rsum
-    Vt_rsbm.Text = tp301.t_rsbm
-    Vt_rsgy.Text = tp301.t_rsgy
-    Vt_rsmy.Text = tp301.t_rsmy
-    Vt_rsur.Text = tp301.t_rsur
-    Vt_rstl.Text = tp301.t_rstl
-    Vt_rcnd.Text = tp301.t_rcnd
-    Vt_rcum.Text = tp301.t_rcum
-    Vt_rcbm.Text = tp301.t_rcbm
-    Vt_rcgy.Text = tp301.t_rcgy
-    Vt_rcmy.Text = tp301.t_rcmy
-    Vt_rcur.Text = tp301.t_rcur
-    Vt_rctl.Text = tp301.t_rctl
-    Vt_rend.Text = tp301.t_rend
-    Vt_reum.Text = tp301.t_reum
-    Vt_rebm.Text = tp301.t_rebm
-    Vt_regy.Text = tp301.t_regy
-    Vt_remy.Text = tp301.t_remy
-    Vt_reur.Text = tp301.t_reur
-    Vt_retl.Text = tp301.t_retl
-    Vt_rtnd.Text = tp301.t_rtnd
-    Vt_rtum.Text = tp301.t_rtum
-    Vt_rtbm.Text = tp301.t_rtbm
-    Vt_rtgy.Text = tp301.t_rtgy
-    Vt_rtmy.Text = tp301.t_rtmy
-    Vt_rtur.Text = tp301.t_rtur
-    Vt_rttl.Text = tp301.t_rttl
+    Vt_rsnd.Text = tp301.t_rsnd.ToString("n")
+    Vt_rsum.Text = tp301.t_rsum.ToString("n")
+    Vt_rsbm.Text = tp301.t_rsbm.ToString("n")
+    Vt_rscm.Text = tp301.t_rscm.ToString("n")
+    Vt_rsdm.Text = tp301.t_rsdm.ToString("n")
+    Vt_rsgy.Text = tp301.t_rsgy.ToString("n")
+    Vt_rsmy.Text = tp301.t_rsmy.ToString("n")
+    Vt_rsur.Text = tp301.t_rsur.ToString("n")
+    Vt_rstl.Text = tp301.t_rstl.ToString("n")
+    Vt_nrts.Text = tp301.t_nrts.ToString("n")
+    Vt_rcnd.Text = tp301.t_rcnd.ToString("n")
+    Vt_rcum.Text = tp301.t_rcum.ToString("n")
+    Vt_rcbm.Text = tp301.t_rcbm.ToString("n")
+    Vt_rccm.Text = tp301.t_rccm.ToString("n")
+    Vt_rcdm.Text = tp301.t_rcdm.ToString("n")
+    Vt_rcgy.Text = tp301.t_rcgy.ToString("n")
+    Vt_rcmy.Text = tp301.t_rcmy.ToString("n")
+    Vt_rcur.Text = tp301.t_rcur.ToString("n")
+    Vt_rctl.Text = tp301.t_rctl.ToString("n")
+    Vt_nrtc.Text = tp301.t_nrtc.ToString("n")
+    Vt_rend.Text = tp301.t_rend.ToString("n")
+    Vt_reum.Text = tp301.t_reum.ToString("n")
+    Vt_rebm.Text = tp301.t_rebm.ToString("n")
+    Vt_recm.Text = tp301.t_recm.ToString("n")
+    Vt_redm.Text = tp301.t_redm.ToString("n")
+    Vt_regy.Text = tp301.t_regy.ToString("n")
+    Vt_remy.Text = tp301.t_remy.ToString("n")
+    Vt_reur.Text = tp301.t_reur.ToString("n")
+    Vt_retl.Text = tp301.t_retl.ToString("n")
+    Vt_nrte.Text = tp301.t_nrte.ToString("n")
+    Vt_rtnd.Text = tp301.t_rtnd.ToString("n")
+    Vt_rtum.Text = tp301.t_rtum.ToString("n")
+    Vt_rtbm.Text = tp301.t_rtbm.ToString("n")
+    Vt_rtcm.Text = tp301.t_rtcm.ToString("n")
+    Vt_rtdm.Text = tp301.t_rtdm.ToString("n")
+    Vt_rtgy.Text = tp301.t_rtgy.ToString("n")
+    Vt_rtmy.Text = tp301.t_rtmy.ToString("n")
+    Vt_rtur.Text = tp301.t_rtur.ToString("n")
+    Vt_rttl.Text = tp301.t_rttl.ToString("n")
+    Vt_nrtl.Text = tp301.t_nrtl.ToString("n")
     '7. Out BG
-    Vt_obga.Text = tp301.t_obga
-    Vt_obgc.Text = tp301.t_obgc
-    Vt_obgp.Text = tp301.t_obgp
-    Vt_obgt.Text = tp301.t_obgt
+    Vt_obga.Text = tp301.t_obga.ToString("n")
+    Vt_obgc.Text = tp301.t_obgc.ToString("n")
+    Vt_obgp.Text = tp301.t_obgp.ToString("n")
+    Vt_obgt.Text = tp301.t_obgt.ToString("n")
     '8.
-    Vt_cder.Text = tp301.t_cder
-    Vt_cddr.Text = tp301.t_cddr
-    Vt_cdsr.Text = tp301.t_cdsr
-    Vt_cdds.Text = tp301.t_cdds
-    Vt_cdra.Text = tp301.t_cdra
-    Vt_cdsa.Text = tp301.t_cdsa
+    Vt_cder.Text = tp301.t_cder.ToString("n")
+    Vt_cddr.Text = tp301.t_cddr.ToString("n")
+    Vt_cdsr.Text = tp301.t_cdsr.ToString("n")
+    Vt_cdds.Text = tp301.t_cdds.ToString("n")
+    Vt_cdra.Text = tp301.t_cdra.ToString("n")
+    Vt_cdsa.Text = tp301.t_cdsa.ToString("n")
   End Sub
   Private Function GetProjectEstimate(ByVal t_ccod As String) As Table
     Dim tbl As New Table
@@ -424,9 +436,25 @@ Partial Class mGctDashboardFinancial
     Dim th As New TableRow
     th.Font.Bold = True
     th.BackColor = Drawing.Color.Gainsboro
+    Dim thc As New TableCell
+    thc.ColumnSpan = 4
+    thc.BorderColor = Drawing.Color.DarkGray
+    th.Cells.Add(thc)
+    thc = New TableCell
+    thc.ColumnSpan = 3
+    thc.BorderColor = Drawing.Color.DarkGray
+    thc.Text = "Amount Received"
+    thc.Attributes.Add("style", "text-align:center;")
+    thc.Font.Bold = True
+    th.Cells.Add(thc)
+    tbl.Rows.Add(th)
+
+    th = New TableRow
+    th.BackColor = Drawing.Color.Gainsboro
     For i As Integer = 0 To 6
-      Dim thc As New TableCell
+      thc = New TableCell
       With thc
+        thc.BorderColor = Drawing.Color.DarkGray
         .Attributes.Add("style", "text-align:center;")
         .Font.Bold = True
         Select Case i
@@ -470,22 +498,22 @@ Partial Class mGctDashboardFinancial
             Case 0
               .Text = dt.t_paym
             Case 1
-              .Text = dt.t_samt
+              .Text = dt.t_samt.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 2
-              .Text = dt.t_camt
+              .Text = dt.t_camt.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 3
-              .Text = dt.t_eamt
+              .Text = dt.t_eamt.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 4
-              .Text = dt.t_srcd
+              .Text = dt.t_srcd.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 5
-              .Text = dt.t_crcd
+              .Text = dt.t_crcd.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 6
-              .Text = dt.t_ercd
+              .Text = dt.t_ercd.ToString("n")
               .Attributes.Add("style", "text-align:center;")
           End Select
         End With
@@ -506,22 +534,22 @@ Partial Class mGctDashboardFinancial
               .Text = dt.t_paym
               .Attributes.Add("style", "text-align:center;")
             Case 1
-              .Text = dt.t_samt
+              .Text = dt.t_samt.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 2
-              .Text = dt.t_camt
+              .Text = dt.t_camt.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 3
-              .Text = dt.t_eamt
+              .Text = dt.t_eamt.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 4
-              .Text = dt.t_srcd
+              .Text = dt.t_srcd.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 5
-              .Text = dt.t_crcd
+              .Text = dt.t_crcd.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 6
-              .Text = dt.t_ercd
+              .Text = dt.t_ercd.ToString("n")
               .Attributes.Add("style", "text-align:center;")
           End Select
         End With
@@ -542,22 +570,22 @@ Partial Class mGctDashboardFinancial
               .Text = dt.t_paym
               .Attributes.Add("style", "text-align:center;")
             Case 1
-              .Text = dt.t_samt
+              .Text = dt.t_samt.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 2
-              .Text = dt.t_camt
+              .Text = dt.t_camt.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 3
-              .Text = dt.t_eamt
+              .Text = dt.t_eamt.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 4
-              .Text = dt.t_srcd
+              .Text = dt.t_srcd.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 5
-              .Text = dt.t_crcd
+              .Text = dt.t_crcd.ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 6
-              .Text = dt.t_ercd
+              .Text = dt.t_ercd.ToString("n")
               .Attributes.Add("style", "text-align:center;")
           End Select
         End With

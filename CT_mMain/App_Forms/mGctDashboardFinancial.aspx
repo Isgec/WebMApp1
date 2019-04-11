@@ -243,17 +243,23 @@
           <td class="text-center">
             <asp:Label ID="Label15" runat="server" Font-Bold="true" Text="Not due"></asp:Label></td>
           <td class="text-center">
-            <asp:Label ID="Label16" runat="server" Font-Bold="true" Text="Upto 2 Mths"></asp:Label></td>
+            <asp:Label ID="Label16" runat="server" Font-Bold="true" Text="31 to 60 Days"></asp:Label></td>
           <td class="text-center">
-            <asp:Label ID="Label18" runat="server" Font-Bold="true" Text="2 > 6 Mths"></asp:Label></td>
+            <asp:Label ID="Label18" runat="server" Font-Bold="true" Text="61 to 90 Days"></asp:Label></td>
           <td class="text-center">
-            <asp:Label ID="Label20" runat="server" Font-Bold="true" Text="6 > 1 Year"></asp:Label></td>
+            <asp:Label ID="Label20" runat="server" Font-Bold="true" Text="91 to 120 Days"></asp:Label></td>
           <td class="text-center">
-            <asp:Label ID="Label37" runat="server" Font-Bold="true" Text="More than 1 Year"></asp:Label></td>
+            <asp:Label ID="Label37" runat="server" Font-Bold="true" Text="121 to 180 Days"></asp:Label></td>
           <td class="text-center">
-            <asp:Label ID="Label38" runat="server" Font-Bold="true" Text="Unclaimed Retention"></asp:Label></td>
+            <asp:Label ID="Label38" runat="server" Font-Bold="true" Text="181 to 365 Days"></asp:Label></td>
           <td class="text-center">
-            <asp:Label ID="Label39" runat="server" Font-Bold="true" Text="Total"></asp:Label></td>
+            <asp:Label ID="Label39" runat="server" Font-Bold="true" Text="More than 365 Days"></asp:Label></td>
+          <td class="text-center">
+            <asp:Label ID="Label29" runat="server" Font-Bold="true" Text="Unclaimed Retention"></asp:Label></td>
+          <td class="text-center">
+            <asp:Label ID="Label30" runat="server" Font-Bold="true" Text="Total"></asp:Label></td>
+          <td class="text-center">
+            <asp:Label ID="Label31" runat="server" Font-Bold="true" Text="Net Receivable"></asp:Label></td>
         </tr>
         <tr>
           <td>
@@ -265,6 +271,10 @@
           <td class="text-center">
             <asp:Label ID="Vt_rsbm" runat="server" /></td>
           <td class="text-center">
+            <asp:Label ID="Vt_rscm" runat="server" /></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_rsdm" runat="server" /></td>
+          <td class="text-center">
             <asp:Label ID="Vt_rsgy" runat="server" /></td>
           <td class="text-center">
             <asp:Label ID="Vt_rsmy" runat="server" /></td>
@@ -272,6 +282,8 @@
             <asp:Label ID="Vt_rsur" runat="server" /></td>
           <td class="text-center">
             <asp:Label ID="Vt_rstl" runat="server" /></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_nrts" runat="server" /></td>
         </tr>
         <tr>
           <td>
@@ -283,6 +295,10 @@
           <td class="text-center">
             <asp:Label ID="Vt_rcbm" runat="server" /></td>
           <td class="text-center">
+            <asp:Label ID="Vt_rccm" runat="server" /></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_rcdm" runat="server" /></td>
+          <td class="text-center">
             <asp:Label ID="Vt_rcgy" runat="server" /></td>
           <td class="text-center">
             <asp:Label ID="Vt_rcmy" runat="server" /></td>
@@ -290,6 +306,8 @@
             <asp:Label ID="Vt_rcur" runat="server" /></td>
           <td class="text-center">
             <asp:Label ID="Vt_rctl" runat="server" /></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_nrtc" runat="server" /></td>
         </tr>
         <tr>
           <td>
@@ -301,6 +319,10 @@
           <td class="text-center">
             <asp:Label ID="Vt_rebm" runat="server" /></td>
           <td class="text-center">
+            <asp:Label ID="Vt_recm" runat="server" /></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_redm" runat="server" /></td>
+          <td class="text-center">
             <asp:Label ID="Vt_regy" runat="server" /></td>
           <td class="text-center">
             <asp:Label ID="Vt_remy" runat="server" /></td>
@@ -308,6 +330,8 @@
             <asp:Label ID="Vt_reur" runat="server" /></td>
           <td class="text-center">
             <asp:Label ID="Vt_retl" runat="server" /></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_nrte" runat="server" /></td>
         </tr>
         <tr>
           <td>
@@ -319,6 +343,10 @@
           <td class="text-center">
             <asp:Label ID="Vt_rtbm" runat="server" /></td>
           <td class="text-center">
+            <asp:Label ID="Vt_rtcm" runat="server" /></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_rtdm" runat="server" /></td>
+          <td class="text-center">
             <asp:Label ID="Vt_rtgy" runat="server" /></td>
           <td class="text-center">
             <asp:Label ID="Vt_rtmy" runat="server" /></td>
@@ -326,6 +354,8 @@
             <asp:Label ID="Vt_rtur" runat="server" /></td>
           <td class="text-center">
             <asp:Label ID="Vt_rttl" runat="server" /></td>
+          <td class="text-center">
+            <asp:Label ID="Vt_nrtl" runat="server" /></td>
         </tr>
       </table>
     </div>

@@ -7,8 +7,6 @@ Namespace SIS.CT
   <DataObject()> _
   Partial Public Class tpisg301
     Private Shared _RecordCount As Integer
-    Public Property t_cdra As Double = 0
-    Public Property t_cdsa As Double = 0
     Private _t_user As String = ""
     Private _t_ccod As String = ""
     Private _t_ccno As String = ""
@@ -76,6 +74,20 @@ Namespace SIS.CT
     Private _t_Refcntd As Int32 = 0
     Private _t_Refcntu As Int32 = 0
     Private _t_updt As String = ""
+    Private _t_cdra As Double = 0
+    Private _t_cdsa As Double = 0
+    Private _t_nrtc As Double = 0
+    Private _t_nrte As Double = 0
+    Private _t_nrtl As Double = 0
+    Private _t_nrts As Double = 0
+    Private _t_rccm As Double = 0
+    Private _t_rcdm As Double = 0
+    Private _t_recm As Double = 0
+    Private _t_redm As Double = 0
+    Private _t_rscm As Double = 0
+    Private _t_rsdm As Double = 0
+    Private _t_rtcm As Double = 0
+    Private _t_rtdm As Double = 0
     Public Property t_user() As String
       Get
         Return _t_user
@@ -140,7 +152,7 @@ Namespace SIS.CT
         Return _t_zdat
       End Get
       Set(ByVal value As String)
-         _t_zdat = value
+        _t_zdat = value
       End Set
     End Property
     Public Property t_ccdt() As String
@@ -151,7 +163,7 @@ Namespace SIS.CT
         Return _t_ccdt
       End Get
       Set(ByVal value As String)
-         _t_ccdt = value
+        _t_ccdt = value
       End Set
     End Property
     Public Property t_orvl() As Double
@@ -618,7 +630,119 @@ Namespace SIS.CT
         Return _t_updt
       End Get
       Set(ByVal value As String)
-         _t_updt = value
+        _t_updt = value
+      End Set
+    End Property
+    Public Property t_cdra() As Double
+      Get
+        Return _t_cdra
+      End Get
+      Set(ByVal value As Double)
+        _t_cdra = value
+      End Set
+    End Property
+    Public Property t_cdsa() As Double
+      Get
+        Return _t_cdsa
+      End Get
+      Set(ByVal value As Double)
+        _t_cdsa = value
+      End Set
+    End Property
+    Public Property t_nrtc() As Double
+      Get
+        Return _t_nrtc
+      End Get
+      Set(ByVal value As Double)
+        _t_nrtc = value
+      End Set
+    End Property
+    Public Property t_nrte() As Double
+      Get
+        Return _t_nrte
+      End Get
+      Set(ByVal value As Double)
+        _t_nrte = value
+      End Set
+    End Property
+    Public Property t_nrtl() As Double
+      Get
+        Return _t_nrtl
+      End Get
+      Set(ByVal value As Double)
+        _t_nrtl = value
+      End Set
+    End Property
+    Public Property t_nrts() As Double
+      Get
+        Return _t_nrts
+      End Get
+      Set(ByVal value As Double)
+        _t_nrts = value
+      End Set
+    End Property
+    Public Property t_rccm() As Double
+      Get
+        Return _t_rccm
+      End Get
+      Set(ByVal value As Double)
+        _t_rccm = value
+      End Set
+    End Property
+    Public Property t_rcdm() As Double
+      Get
+        Return _t_rcdm
+      End Get
+      Set(ByVal value As Double)
+        _t_rcdm = value
+      End Set
+    End Property
+    Public Property t_recm() As Double
+      Get
+        Return _t_recm
+      End Get
+      Set(ByVal value As Double)
+        _t_recm = value
+      End Set
+    End Property
+    Public Property t_redm() As Double
+      Get
+        Return _t_redm
+      End Get
+      Set(ByVal value As Double)
+        _t_redm = value
+      End Set
+    End Property
+    Public Property t_rscm() As Double
+      Get
+        Return _t_rscm
+      End Get
+      Set(ByVal value As Double)
+        _t_rscm = value
+      End Set
+    End Property
+    Public Property t_rsdm() As Double
+      Get
+        Return _t_rsdm
+      End Get
+      Set(ByVal value As Double)
+        _t_rsdm = value
+      End Set
+    End Property
+    Public Property t_rtcm() As Double
+      Get
+        Return _t_rtcm
+      End Get
+      Set(ByVal value As Double)
+        _t_rtcm = value
+      End Set
+    End Property
+    Public Property t_rtdm() As Double
+      Get
+        Return _t_rtdm
+      End Get
+      Set(ByVal value As Double)
+        _t_rtdm = value
       End Set
     End Property
     Public ReadOnly Property DisplayField() As String
