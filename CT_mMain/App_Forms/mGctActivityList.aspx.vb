@@ -96,7 +96,10 @@ Partial Class mGctActivityList
         data = SIS.CT.DelayStatus30Days.SelectActivity(t_cprj, t_cact, t_acty, ID, IsAll, IsNext)
     End Select
     'Now sorting is needed as parents are inserted after Select statement
-    If data IsNot Nothing Then data.Sort(Function(x, y) x.t_actp.CompareTo(y.t_actp))
+    Try
+      If data IsNot Nothing Then data.Sort(Function(x, y) x.t_actp.CompareTo(y.t_actp))
+    Catch ex As Exception
+    End Try
     Dim hideItem As Boolean = False
     Select Case ClickedID
       Case "ITEM", "DATA_S", "DATA_F"
@@ -169,6 +172,7 @@ Partial Class mGctActivityList
     Dim tr As TableRow = Nothing
     Dim td As TableCell = Nothing
     For Each dt As SIS.CT.DelayStatus30Days.Activities In data
+      If dt Is Nothing Then Continue For
       tr = New TableRow
       tr.TableSection = TableRowSection.TableBody
       If RowColor Then

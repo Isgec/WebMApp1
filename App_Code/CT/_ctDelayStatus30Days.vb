@@ -193,7 +193,7 @@ Namespace SIS.CT
       Sql &= " 	and yy.t_cact=zz.t_cact)) "
       Sql &= "  when 100 then 1 else 0 end) as PredClosed, "
 
-      Sql &= " (select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=zz.t_pcod and aa.t_iref=zz.t_sub1 and aa.t_sitm=zz.t_sitm ) as SubItem "
+      Sql &= " isnull((select aa.t_sub2 + ' ' + aa.t_sub3 + ' ' + aa.t_sub3 from ttpisg243200 as aa where aa.t_cprd=zz.t_pcod and aa.t_iref=zz.t_sub1 and aa.t_sitm=zz.t_sitm ),'') as SubItem "
       Sql &= " from ttpisg220200 as zz "
       Sql &= " where t_cprj='" & t_cprj & "'"
       Sql &= " And t_acty <> 'PARENT'"

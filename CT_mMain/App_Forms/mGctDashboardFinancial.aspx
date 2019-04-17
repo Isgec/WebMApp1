@@ -238,27 +238,27 @@
     <div class="chartDiv">
       <table style="width: 100%;" class="table-bordered">
         <tr style="background-color: gainsboro;">
-          <td>
+          <td style="border:solid 1pt darkgray;">
             <asp:Label ID="Label13" runat="server" Font-Bold="true" Font-Size="12px" Text="Receivables"></asp:Label></td>
-          <td class="text-center">
+          <td class="text-center" style="border:solid 1pt darkgray;">
             <asp:Label ID="Label15" runat="server" Font-Bold="true" Text="Not due"></asp:Label></td>
-          <td class="text-center">
+          <td class="text-center" style="border:solid 1pt darkgray;">
             <asp:Label ID="Label16" runat="server" Font-Bold="true" Text="31 to 60 Days"></asp:Label></td>
-          <td class="text-center">
+          <td class="text-center" style="border:solid 1pt darkgray;">
             <asp:Label ID="Label18" runat="server" Font-Bold="true" Text="61 to 90 Days"></asp:Label></td>
-          <td class="text-center">
+          <td class="text-center" style="border:solid 1pt darkgray;">
             <asp:Label ID="Label20" runat="server" Font-Bold="true" Text="91 to 120 Days"></asp:Label></td>
-          <td class="text-center">
+          <td class="text-center" style="border:solid 1pt darkgray;">
             <asp:Label ID="Label37" runat="server" Font-Bold="true" Text="121 to 180 Days"></asp:Label></td>
-          <td class="text-center">
+          <td class="text-center" style="border:solid 1pt darkgray;">
             <asp:Label ID="Label38" runat="server" Font-Bold="true" Text="181 to 365 Days"></asp:Label></td>
-          <td class="text-center">
+          <td class="text-center" style="border:solid 1pt darkgray;">
             <asp:Label ID="Label39" runat="server" Font-Bold="true" Text="More than 365 Days"></asp:Label></td>
-          <td class="text-center">
+          <td class="text-center" style="border:solid 1pt darkgray;">
             <asp:Label ID="Label29" runat="server" Font-Bold="true" Text="Unclaimed Retention"></asp:Label></td>
-          <td class="text-center">
+          <td class="text-center" style="border:solid 1pt darkgray;">
             <asp:Label ID="Label30" runat="server" Font-Bold="true" Text="Total"></asp:Label></td>
-          <td class="text-center">
+          <td class="text-center" style="border:solid 1pt darkgray;">
             <asp:Label ID="Label31" runat="server" Font-Bold="true" Text="Net Receivable"></asp:Label></td>
         </tr>
         <tr>
