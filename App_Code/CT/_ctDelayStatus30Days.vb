@@ -456,6 +456,7 @@ Namespace SIS.CT
     Public Property AnyDelay As Boolean = False
 
     Public Property Design As activityType = New activityType
+    Public Property Civil As activityType = New activityType
     Public Property Indt As activityType = New activityType
     Public Property RfqToPO As activityType = New activityType
     Public Property Mfg As activityType = New activityType
@@ -488,6 +489,8 @@ Namespace SIS.CT
       Select Case tmp.t_acty
         Case "DESIGN"
           Return tmp1.Design
+        Case "CIVIL"
+          Return tmp1.Civil
         Case "INDT"
           Return tmp1.Indt
         Case "RFQ-TO-PO"
@@ -708,7 +711,6 @@ Namespace SIS.CT
       Else
         Sql &= "   (select IsNull(count(*),0) from ttpisg220200 as bb where (((bb." & sdst & " between getdate() and dateadd(d," & FromDays & ",getdate()) )   or   (bb." & sdfn & " between getdate() and dateadd(d," & FromDays & ",getdate()) )) OR ((bb." & sdst & " <= getdate())   and   (bb." & sdfn & " > dateadd(d," & FromDays & ",getdate()))) ) and bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE') as CountMark,   "
       End If
-
       Sql &= "   (select IsNull(min(bb.t_dela),0) from ttpisg220200 as bb where bb.t_cprj=aa.t_cprj and bb.t_sub1=aa.t_sub1 and bb.t_acty = aa.t_acty and LEFT(UPPER(bb.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE'"
       Sql &= "     and bb.t_otsd = (select min(cc.t_otsd) from ttpisg220200 as cc where cc.t_cprj=bb.t_cprj and cc.t_sub1=bb.t_sub1 and cc.t_acty = bb.t_acty and LEFT(UPPER(cc.t_desc),30) != 'GETTING MANUFACTURING SCHEDULE')"
       Sql &= " ) as NotStartedDelay,   "
@@ -723,10 +725,10 @@ Namespace SIS.CT
       Sql &= " ) as FinishedDelay    "
       Sql &= "    from ttpisg220200  as aa"
       Sql &= "    where aa.t_cprj='" & t_cprj & "'"
-      Sql &= "    and aa.t_acty in ('DESIGN','INDT','RFQ-TO-PO','MFG','EREC','DISP','RECPT')"
+      Sql &= "    and aa.t_acty in ('DESIGN','CIVIL','INDT','RFQ-TO-PO','MFG','EREC','DISP','RECPT')"
       Sql &= "    and aa.t_sub1 in ("
       Sql &= "      select t_sub1 from ttpisg220200 as bb where bb.t_cprj=aa.t_cprj "
-      Sql &= "  and bb.t_acty in ('DESIGN','INDT','RFQ-TO-PO','MFG','EREC','DISP','RECPT')"
+      Sql &= "  and bb.t_acty in ('DESIGN','CIVIL','INDT','RFQ-TO-PO','MFG','EREC','DISP','RECPT')"
       If Not IsNext Then
         Sql &= "  and (((bb." & sdst & " between dateadd(d," & FromDays & ",getdate()) and getdate())   or   (bb." & sdfn & " between dateadd(d," & FromDays & ",getdate()) and getdate()))  OR ((bb." & sdst & " < dateadd(d," & FromDays & ",getdate()))   and   (bb." & sdfn & " > getdate()))  ) "
       Else
@@ -798,18 +800,9 @@ Namespace SIS.CT
       For Each x As SIS.CT.DelayStatus30Days In Results
         x.Design.SelfStartDelay = x.Design.StartDelay
         x.Design.SelfFinishDelay = x.Design.FinishDelay
-        'x.Indt.SelfStartDelay = x.Indt.StartDelay - x.Design.StartDelay
-        'If x.Indt.FinishDelay <> 0 Then x.Indt.SelfFinishDelay = x.Indt.FinishDelay + IIf(x.Design.FinishDelay > 0, x.Design.FinishDelay, 0)
-        'x.RfqToPO.SelfStartDelay = x.RfqToPO.StartDelay - x.Indt.StartDelay
-        'If x.RfqToPO.FinishDelay <> 0 Then x.RfqToPO.SelfFinishDelay = x.RfqToPO.FinishDelay + IIf(x.Indt.FinishDelay > 0, x.Indt.FinishDelay, 0)
-        'x.Mfg.SelfStartDelay = x.Mfg.StartDelay - x.RfqToPO.StartDelay
-        'If x.Mfg.FinishDelay <> 0 Then x.Mfg.SelfFinishDelay = x.Mfg.FinishDelay + IIf(x.RfqToPO.FinishDelay > 0, x.RfqToPO.FinishDelay, 0)
-        'x.Disp.SelfStartDelay = x.Disp.StartDelay - x.Mfg.StartDelay
-        'If x.Disp.FinishDelay <> 0 Then x.Disp.SelfFinishDelay = x.Disp.FinishDelay + IIf(x.Mfg.FinishDelay > 0, x.Mfg.FinishDelay, 0)
-        'x.Recpt.SelfStartDelay = x.Recpt.StartDelay - x.Disp.StartDelay
-        'If x.Recpt.FinishDelay <> 0 Then x.Recpt.SelfFinishDelay = x.Recpt.FinishDelay + IIf(x.Disp.FinishDelay > 0, x.Disp.FinishDelay, 0)
-        'x.Erec.SelfStartDelay = x.Erec.StartDelay - x.Recpt.StartDelay
-        'If x.Erec.FinishDelay <> 0 Then x.Erec.SelfFinishDelay = x.Erec.FinishDelay + IIf(x.Recpt.FinishDelay > 0, x.Recpt.FinishDelay, 0)
+        '=============
+        'FOR CIVIL ?
+        '=============
         x.Indt.SelfStartDelay = x.Indt.StartDelay - x.Design.StartDelay
         x.Indt.SelfFinishDelay = x.Indt.FinishDelay - IIf(x.Design.FinishDelay > 0, x.Design.FinishDelay, 0)
         x.RfqToPO.SelfStartDelay = x.RfqToPO.StartDelay - x.Indt.StartDelay
@@ -828,7 +821,7 @@ Namespace SIS.CT
     End Function
 
     Public Shared Function SelectIrefs(ByVal t_cprj As String) As List(Of SIS.CT.DelayStatus30Days)
-      Dim actAry As Array = {"DESIGN", "INDT", "RFQ-TO-PO", "MFG", "EREC", "OTHERS"}
+      Dim actAry As Array = {"DESIGN", "CIVIL", "INDT", "RFQ-TO-PO", "MFG", "EREC", "OTHERS"}
       Dim othAct As String = "('DISP','RECPT')"
       Dim Results As List(Of SIS.CT.DelayStatus30Days) = Nothing
       Dim Sql As String = ""
@@ -864,7 +857,7 @@ Namespace SIS.CT
           Sql &= "  from ttpisg220200  "
           Sql &= "  where t_cprj='" & t_cprj & "'"
           Sql &= "  and t_sub1='" & x.t_sub1 & "'"
-          Sql &= "  and t_acty in ('DESIGN','INDT','RFQ-TO-PO','MFG','EREC') "
+          Sql &= "  and t_acty in ('DESIGN','CIVIL','INDT','RFQ-TO-PO','MFG','EREC') "
           Sql &= "  and ((t_sdst between dateadd(d,-30,getdate()) and getdate()) or (t_sdfn between dateadd(d,-30,getdate()) and getdate())) "
           Sql &= "  union all "
           Sql &= "  select distinct 'OTHERS' as t_acty  "
@@ -881,6 +874,8 @@ Namespace SIS.CT
               Select Case Reader("t_acty")
                 Case "DESIGN"
                   x.Design.IsCurrent = True
+                Case "CIVIL"
+                  x.Civil.IsCurrent = True
                 Case "INDT"
                   x.Indt.IsCurrent = True
                 Case "RFQ-TO-PO"
@@ -901,6 +896,8 @@ Namespace SIS.CT
             Select Case act
               Case "DESIGN"
                 xx = x.Design
+              Case "CIVIL"
+                xx = x.Civil
               Case "INDT"
                 xx = x.Indt
               Case "RFQ-TO-PO"

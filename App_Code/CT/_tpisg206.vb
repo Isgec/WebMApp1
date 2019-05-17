@@ -37,7 +37,7 @@ Namespace SIS.CT
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = "select * from ttpisg206200 as aa where aa.t_acty = 'DESIGN' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'INDT'  UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'RFQ-TO-PO' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'MFG' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'DISP' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'RECPT' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'EREC'"
+          Cmd.CommandText = "select * from ttpisg206200 as aa where aa.t_acty = 'DESIGN' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'CIVIL'   UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'INDT'  UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'RFQ-TO-PO' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'MFG' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'DISP' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'RECPT' UNION ALL select * from ttpisg206200 as aa where aa.t_acty = 'EREC'"
           Results = New List(Of SIS.CT.tpisg206)()
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()

@@ -50,7 +50,7 @@ Namespace SIS.CT
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = "select distinct t_mnyr from ttpisg309200 where t_ccod='" & t_ccod & "'"
+          Cmd.CommandText = "select distinct t_mnyr, t_sern from ttpisg309200 where t_ccod='" & t_ccod & "' order by t_sern"
           Results = New List(Of SIS.CT.tpisg309)()
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()

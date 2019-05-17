@@ -38,7 +38,7 @@ Partial Class mLGDefault
       Dim ticket As FormsAuthenticationTicket = New FormsAuthenticationTicket(1,
                 UserID,
                 DateTime.Now,
-                DateTime.Now.AddMinutes(1),
+                DateTime.Now.AddMinutes(60),
                 isPersistent,
                 userData,
                 FormsAuthentication.FormsCookiePath)
@@ -65,7 +65,7 @@ Partial Class mLGDefault
       Dim ticket As FormsAuthenticationTicket = New FormsAuthenticationTicket(1,
         UserID,
         DateTime.Now,
-        DateTime.Now.AddMinutes(1),
+        DateTime.Now.AddMinutes(60),
         isPersistent,
         userData,
         FormsAuthentication.FormsCookiePath)
@@ -132,7 +132,7 @@ Partial Class mLGDefault
       Dim ticket As FormsAuthenticationTicket = New FormsAuthenticationTicket(1,
                 UserID,
                 DateTime.Now,
-                DateTime.Now.AddMinutes(1),
+                DateTime.Now.AddMinutes(60),
                 isPersistent,
                 userData,
                 FormsAuthentication.FormsCookiePath)

@@ -5,7 +5,7 @@
   <%--Side Menu Bar--%>
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <asp:LinkButton ID="cmdBillingInfo" runat="server" Text="Billing Information" ToolTip="Billing Information." />
+  <asp:LinkButton ID="cmdBillingInfo" runat="server" Text="Billing/Cashflow Information" ToolTip="Billing/Cashflow Information." />
 <%--  <asp:LinkButton ID="cmd30Days" runat="server" Text="Progress Status [Last 30 Days]" ToolTip="Last 30 days." />
   <asp:LinkButton ID="cmdBacklog" runat="server" Text="Progress Status [Overall]" ToolTip="Since Project Start." />
   <asp:LinkButton ID="cmd30Next" runat="server" Text="Progress Status [Next 30 Days]" ToolTip="Next 30 days." />

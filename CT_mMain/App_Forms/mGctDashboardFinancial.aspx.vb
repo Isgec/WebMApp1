@@ -231,13 +231,50 @@ Partial Class mGctDashboardFinancial
       Next
       tbl.Rows.Add(tr)
     Next
+
+    Dim tot305 As SIS.CT.tpisg305 = SIS.CT.tpisg305.UZ_tpisg305Total(t_ccod)
     tr = New TableRow
-    td = New TableCell
-    td.ColumnSpan = 9
-    td.Text = "TOTAL"
-    td.Style.Add("font-weight", "bold")
-    tr.Cells.Add(td)
+    RowColor = Not RowColor
+    tr.CssClass = "btn-outline-warning"
+    tr.ForeColor = Drawing.Color.Black
+    For I As Integer = 0 To 8
+      td = New TableCell
+      With td
+        Select Case I
+          Case 0
+            .Text = "TOTAL"
+            td.Style.Add("font-weight", "bold")
+          Case 1
+            .Text = tot305.t_bdgd.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 2
+            .Text = tot305.t_aled.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 3
+            .Text = tot305.t_coco.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 4
+            .Text = tot305.t_cbda.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 5
+            .Text = tot305.t_cysc.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 6
+            .Text = tot305.t_cycn.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 7
+            .Text = tot305.t_sson.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 8
+            .Text = tot305.t_stcs.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+        End Select
+      End With
+      tr.Cells.Add(td)
+    Next
     tbl.Rows.Add(tr)
+
+
     Dim tp306 As List(Of SIS.CT.tpisg306) = SIS.CT.tpisg306.UZ_tpisg306SelectList(0, 999, "", False, "", t_ccod)
     tr = New TableRow
     td = New TableCell
@@ -292,13 +329,49 @@ Partial Class mGctDashboardFinancial
       Next
       tbl.Rows.Add(tr)
     Next
+
+    Dim tot306 As SIS.CT.tpisg306 = SIS.CT.tpisg306.UZ_tpisg306Total(t_ccod)
     tr = New TableRow
-    td = New TableCell
-    td.ColumnSpan = 9
-    td.Text = "TOTAL"
-    td.Style.Add("font-weight", "bold")
-    tr.Cells.Add(td)
+    RowColor = Not RowColor
+    tr.CssClass = "btn-outline-warning"
+    tr.ForeColor = Drawing.Color.Black
+    For I As Integer = 0 To 8
+      td = New TableCell
+      With td
+        Select Case I
+          Case 0
+            .Text = "TOTAL"
+            td.Style.Add("font-weight", "bold")
+          Case 1
+            .Text = tot306.t_bdgd.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 2
+            .Text = tot306.t_aled.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 3
+            .Text = tot306.t_coco.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 4
+            .Text = tot306.t_cbda.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 5
+            .Text = tot306.t_cysc.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 6
+            .Text = tot306.t_cycn.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 7
+            .Text = tot306.t_sson.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 8
+            .Text = tot306.t_stcs.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+        End Select
+      End With
+      tr.Cells.Add(td)
+    Next
     tbl.Rows.Add(tr)
+
     Dim tp307 As List(Of SIS.CT.tpisg307) = SIS.CT.tpisg307.UZ_tpisg307SelectList(0, 999, "", False, "", t_ccod)
     tr = New TableRow
     td = New TableCell
@@ -352,13 +425,49 @@ Partial Class mGctDashboardFinancial
       Next
       tbl.Rows.Add(tr)
     Next
+
+    Dim tot307 As SIS.CT.tpisg307 = SIS.CT.tpisg307.UZ_tpisg307Total(t_ccod)
     tr = New TableRow
-    td = New TableCell
-    td.ColumnSpan = 9
-    td.Text = "TOTAL"
-    td.Style.Add("font-weight", "bold")
-    tr.Cells.Add(td)
+    RowColor = Not RowColor
+    tr.CssClass = "btn-outline-warning"
+    tr.ForeColor = Drawing.Color.Black
+    For I As Integer = 0 To 8
+      td = New TableCell
+      With td
+        Select Case I
+          Case 0
+            .Text = "TOTAL"
+            td.Style.Add("font-weight", "bold")
+          Case 1
+            .Text = tot307.t_bdgd.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 2
+            .Text = tot307.t_aled.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 3
+            .Text = tot307.t_coco.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 4
+            .Text = tot307.t_cbda.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 5
+            .Text = tot307.t_cysc.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 6
+            .Text = tot307.t_cycn.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 7
+            .Text = tot307.t_sson.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 8
+            .Text = tot307.t_stcs.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+        End Select
+      End With
+      tr.Cells.Add(td)
+    Next
     tbl.Rows.Add(tr)
+
     Dim tp308 As List(Of SIS.CT.tpisg308) = SIS.CT.tpisg308.UZ_tpisg308SelectList(0, 999, "", False, "", t_ccod)
     tr = New TableRow
     td = New TableCell
@@ -412,14 +521,47 @@ Partial Class mGctDashboardFinancial
       Next
       tbl.Rows.Add(tr)
     Next
+    Dim tot308 As SIS.CT.tpisg308 = SIS.CT.tpisg308.UZ_tpisg308Total(t_ccod)
     tr = New TableRow
-    td = New TableCell
-    td.ColumnSpan = 9
-    td.Text = "TOTAL"
-    td.Style.Add("font-weight", "bold")
-    tr.Cells.Add(td)
+    RowColor = Not RowColor
+    tr.CssClass = "btn-outline-warning"
+    tr.ForeColor = Drawing.Color.Black
+    For I As Integer = 0 To 8
+      td = New TableCell
+      With td
+        Select Case I
+          Case 0
+            .Text = "TOTAL"
+            td.Style.Add("font-weight", "bold")
+          Case 1
+            .Text = tot308.t_bdgd.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 2
+            .Text = tot308.t_aled.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 3
+            .Text = tot308.t_coco.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 4
+            .Text = tot308.t_cbda.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 5
+            .Text = tot308.t_cysc.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 6
+            .Text = tot308.t_cycn.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 7
+            .Text = tot308.t_sson.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+          Case 8
+            .Text = tot308.t_stcs.ToString("n")
+            .Attributes.Add("style", "text-align:center;")
+        End Select
+      End With
+      tr.Cells.Add(td)
+    Next
     tbl.Rows.Add(tr)
-
     Return tbl
 
   End Function

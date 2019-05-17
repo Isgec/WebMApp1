@@ -62,6 +62,36 @@ Namespace SIS.CT
       End Using
       Return Results
     End Function
+    Public Shared Function UZ_tpisg306Total(ByVal t_ccod As String) As SIS.CT.tpisg306
+      Dim Results As SIS.CT.tpisg306 = Nothing
+      Dim Sql As String = ""
+      Sql &= " select "
+      Sql &= " isnull(sum(t_bdgd),0) as t_bdgd, "
+      Sql &= " isnull(sum(t_aled),0) as t_aled, "
+      Sql &= " isnull(sum(t_cbda),0) as t_cbda, "
+      Sql &= " isnull(sum(t_cycn),0) as t_cycn, "
+      Sql &= " isnull(sum(t_sson),0) as t_sson, "
+      Sql &= " isnull(sum(t_stcs),0) as t_stcs, "
+      Sql &= " isnull(sum(t_cysc),0) as t_cysc, "
+      Sql &= " isnull(sum(t_coco),0) as t_coco  "
+      Sql &= " from ttpisg306200 "
+      Sql &= " where t_ccod='" & t_ccod & "'"
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          Results = New SIS.CT.tpisg306
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            Results = (New SIS.CT.tpisg306(Reader))
+          End While
+          Reader.Close()
+        End Using
+      End Using
+      Return Results
+    End Function
+
     Public Shared Function SetDefaultValues(ByVal sender As System.Web.UI.WebControls.FormView, ByVal e As System.EventArgs) As System.Web.UI.WebControls.FormView
       With sender
         Try

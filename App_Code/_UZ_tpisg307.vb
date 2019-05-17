@@ -62,23 +62,52 @@ Namespace SIS.CT
       End Using
       Return Results
     End Function
+    Public Shared Function UZ_tpisg307Total(ByVal t_ccod As String) As SIS.CT.tpisg307
+      Dim Results As SIS.CT.tpisg307 = Nothing
+      Dim Sql As String = ""
+      Sql &= " select "
+      Sql &= " isnull(sum(t_bdgd),0) as t_bdgd, "
+      Sql &= " isnull(sum(t_aled),0) as t_aled, "
+      Sql &= " isnull(sum(t_cbda),0) as t_cbda, "
+      Sql &= " isnull(sum(t_cycn),0) as t_cycn, "
+      Sql &= " isnull(sum(t_sson),0) as t_sson, "
+      Sql &= " isnull(sum(t_stcs),0) as t_stcs, "
+      Sql &= " isnull(sum(t_cysc),0) as t_cysc, "
+      Sql &= " isnull(sum(t_coco),0) as t_coco  "
+      Sql &= " from ttpisg307200 "
+      Sql &= " where t_ccod='" & t_ccod & "'"
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetFDBaaNConnectionString())
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          Results = New SIS.CT.tpisg307
+          Con.Open()
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            Results = (New SIS.CT.tpisg307(Reader))
+          End While
+          Reader.Close()
+        End Using
+      End Using
+      Return Results
+    End Function
     Public Shared Function SetDefaultValues(ByVal sender As System.Web.UI.WebControls.FormView, ByVal e As System.EventArgs) As System.Web.UI.WebControls.FormView
       With sender
         Try
-        CType(.FindControl("F_t_user"), TextBox).Text = ""
-        CType(.FindControl("F_t_csdc"), TextBox).Text = ""
-        CType(.FindControl("F_t_bdgd"), TextBox).Text = 0
-        CType(.FindControl("F_t_aled"), TextBox).Text = 0
-        CType(.FindControl("F_t_ccod"), TextBox).Text = ""
-        CType(.FindControl("F_t_cbda"), TextBox).Text = 0
-        CType(.FindControl("F_t_cycn"), TextBox).Text = 0
-        CType(.FindControl("F_t_sson"), TextBox).Text = 0
-        CType(.FindControl("F_t_stcs"), TextBox).Text = 0
-        CType(.FindControl("F_t_cysc"), TextBox).Text = 0
-        CType(.FindControl("F_t_coco"), TextBox).Text = 0
-        CType(.FindControl("F_t_Refcntd"), TextBox).Text = 0
-        CType(.FindControl("F_t_Refcntu"), TextBox).Text = 0
-        CType(.FindControl("F_t_updt"), TextBox).Text = ""
+          CType(.FindControl("F_t_user"), TextBox).Text = ""
+          CType(.FindControl("F_t_csdc"), TextBox).Text = ""
+          CType(.FindControl("F_t_bdgd"), TextBox).Text = 0
+          CType(.FindControl("F_t_aled"), TextBox).Text = 0
+          CType(.FindControl("F_t_ccod"), TextBox).Text = ""
+          CType(.FindControl("F_t_cbda"), TextBox).Text = 0
+          CType(.FindControl("F_t_cycn"), TextBox).Text = 0
+          CType(.FindControl("F_t_sson"), TextBox).Text = 0
+          CType(.FindControl("F_t_stcs"), TextBox).Text = 0
+          CType(.FindControl("F_t_cysc"), TextBox).Text = 0
+          CType(.FindControl("F_t_coco"), TextBox).Text = 0
+          CType(.FindControl("F_t_Refcntd"), TextBox).Text = 0
+          CType(.FindControl("F_t_Refcntu"), TextBox).Text = 0
+          CType(.FindControl("F_t_updt"), TextBox).Text = ""
         Catch ex As Exception
         End Try
       End With

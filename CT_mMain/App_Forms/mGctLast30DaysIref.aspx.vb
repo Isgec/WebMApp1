@@ -60,7 +60,7 @@ Partial Class mGctLast30DaysIref
     Dim btn As Button = Nothing
     th.Attributes.Add("style", "background-color:black;color:white;")
     th.TableSection = TableRowSection.TableHeader
-    For i As Integer = 0 To 8
+    For i As Integer = 0 To 9
       Dim thc As New TableHeaderCell
       With thc
         .Attributes.Add("style", "text-align:center;")
@@ -85,36 +85,41 @@ Partial Class mGctLast30DaysIref
             btn.Text = "ENGINEERING"
             thc.Controls.Add(btn)
           Case 2
+            btn.ID = "CIVIL"
+            btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
+            btn.Text = "CIVIL"
+            thc.Controls.Add(btn)
+          Case 3
             btn.ID = "INDT"
             btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
             btn.Text = "INDENTING"
             thc.Controls.Add(btn)
-          Case 3
+          Case 4
             btn.ID = "RFQ-TO-PO"
             btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
             btn.Text = "RFQ-TO-PO"
             thc.Controls.Add(btn)
-          Case 4
+          Case 5
             btn.ID = "MFG"
             btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
             btn.Text = "MFG."
             thc.Controls.Add(btn)
-          Case 5
+          Case 6
             btn.ID = "DISP"
             btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
             btn.Text = "DISP"
             thc.Controls.Add(btn)
-          Case 6
+          Case 7
             btn.ID = "RECPT"
             btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
             btn.Text = "RECPT"
             thc.Controls.Add(btn)
-          Case 7
+          Case 8
             btn.ID = "EREC"
             btn.PostBackUrl &= "&ID=ACTIVITY&all=false&t_acty=" & btn.ID & IIf(Isbacklog, "&backlog=", "")
             btn.Text = "ERECTION"
             thc.Controls.Add(btn)
-          Case 8
+          Case 9
             .ColumnSpan = 1
             .RowSpan = 2
             .Text = "IMPACT ON COMMISSIONING"
@@ -126,7 +131,7 @@ Partial Class mGctLast30DaysIref
     th = New TableHeaderRow
     th.Attributes.Add("style", "background-color:black;color:white;")
     th.TableSection = TableRowSection.TableHeader
-    For i As Integer = 0 To 6
+    For i As Integer = 0 To 7
       Dim thc As New TableHeaderCell
       With thc
         .Attributes.Add("style", "text-align:center;")
@@ -181,12 +186,14 @@ Partial Class mGctLast30DaysIref
       tr.Cells.Add(td)
 
       '2. Start
-      Dim actAry As Array = {"DESIGN", "INDT", "RFQ-TO-PO", "MFG", "DISP", "RECPT", "EREC"}
+      Dim actAry As Array = {"DESIGN", "CIVIL", "INDT", "RFQ-TO-PO", "MFG", "DISP", "RECPT", "EREC"}
       For Each act As String In actAry
         Dim xx As SIS.CT.DelayStatus30Days.activityType = Nothing
         Select Case act
           Case "DESIGN"
             xx = dt.Design
+          Case "CIVIL"
+            xx = dt.Civil
           Case "INDT"
             xx = dt.Indt
           Case "RFQ-TO-PO"
