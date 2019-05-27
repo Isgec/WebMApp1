@@ -1,4 +1,4 @@
-<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="True" CodeFile="mMenu.aspx.vb" Inherits="mLGMenu" title="Menu" %>
+<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="True" CodeFile="mMenu.aspx.vb" Inherits="mLGMenu" title="ISGECApp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="cph1" ClientIDMode="Static" runat="Server">
   <div id="authFailed" runat="server" visible="false" class="container text-center">
     <div class="btn btn-danger">

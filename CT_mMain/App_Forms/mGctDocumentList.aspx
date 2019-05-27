@@ -177,7 +177,7 @@
       <div class="col-sm-12 text-center chartDiv">
         <h5>
           <asp:Label ID="ProjectActivityName" runat="server" Font-Underline="true"></asp:Label></h5>
-        <div id="irefDelay30d" runat="server" class="container-fluid">
+        <div id="irefDelay30d" runat="server" class="container-fluid" style="overflow:scroll;">
         </div>
 
       </div>

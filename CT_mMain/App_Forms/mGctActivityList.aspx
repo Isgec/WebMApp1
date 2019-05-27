@@ -270,7 +270,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-12 text-center chartDiv">
+      <div class="col-sm-12 text-center chartDiv" style="overflow:scroll;">
         <h5>
           <asp:Label ID="ProjectActivityName" runat="server" Font-Underline="true"></asp:Label></h5>
         <div id="irefDelay30d" runat="server" class="container-fluid">

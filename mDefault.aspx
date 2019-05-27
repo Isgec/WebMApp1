@@ -1,20 +1,9 @@
 <%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="True" CodeFile="mDefault.aspx.vb" Inherits="mLGDefault" title="Home" %>
 <asp:Content ID="none" ContentPlaceHolderID="cphMain" runat="server">
-    <script>
-    //$( document ).ready(function() {
-    //    xxx();
-    //});
-    </script>
-
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="cph1" ClientIDMode="Static" runat="Server">
   <asp:UpdatePanel ID="UPNLmctDefault" runat="server">
     <ContentTemplate>
-      <%--  <div id="isgecLogo" runat="server" visible="true" class="container text-center">
-    <div class=" btn-outline-dark">
-      <asp:Image AlternateText="Isgec" ImageUrl="~/Images/ijtlogo.png" runat="server" />
-    </div>
-  </div>--%>
       <div id="Div1" runat="server" class="container text-right" style="display: none;">
         <asp:Label runat="server" ID="L_DeviceID" Text=""></asp:Label>
         <asp:Label runat="server" ID="L_QString" Text=""></asp:Label>
@@ -56,11 +45,11 @@
       <div id="registerUser" runat="server" visible="false" class="container">
         <div class="form-group">
           <label for="F_UserID">USER ID:</label>
-          <asp:TextBox class="form-control" ID="F_UserID" runat="server" MaxLength="8" required />
+          <asp:TextBox class="form-control" ID="F_UserID" runat="server" MaxLength="8" required="required" />
           <label for="F_UserName">USER NAME:</label>
-          <asp:TextBox class="form-control" ID="F_UserName" runat="server" MaxLength="50" required />
+          <asp:TextBox class="form-control" ID="F_UserName" runat="server" MaxLength="50" required="required" />
           <label for="F_MobileNo">MOBILE No.:</label>
-          <asp:TextBox class="form-control" ID="F_MobileNo" runat="server" MaxLength="15" required />
+          <asp:TextBox class="form-control" ID="F_MobileNo" runat="server" MaxLength="15" required="required" />
         </div>
         <div class="form-group">
           <asp:Button ID="cmdSubmit" runat="server" class="btn btn-primary" Text="Register" />
@@ -75,11 +64,5 @@
       <asp:AsyncPostBackTrigger ControlID="idFirst"  />
     </Triggers>
   </asp:UpdatePanel>
-      <script type="text/javascript">
-        function xxx() {
-        if ($get('idFirst').value == '1')
-          $get('idFirst').click();
-        }
-      </script>
 </asp:Content>
 

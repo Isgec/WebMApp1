@@ -82,7 +82,7 @@
             background-color: lavenderblush;
           }
         </style>
-        <div id="irefDelay30d" runat="server" class="container-fluid text-center">
+        <div id="irefDelay30d" runat="server" class="container-fluid text-center" style="overflow:scroll;">
         </div>
       </div>
     </div>

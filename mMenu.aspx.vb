@@ -4,25 +4,23 @@ Imports System.Security.Principal
 Imports System.Security
 Partial Class mLGMenu
   Inherits System.Web.UI.Page
-  Public Property DeviceID As String
-    Get
-      If ViewState("DeviceID") IsNot Nothing Then
-        Return Convert.ToString(ViewState("DeviceID"))
-      End If
-      Return ""
-    End Get
-    Set(value As String)
-      ViewState.Add("DeviceID", value)
-    End Set
-  End Property
-
-  'Private Sub cmdConfig_Click(sender As Object, e As EventArgs) Handles cmdConfig.Click
-  '  Response.Redirect("mConfig.aspx")
-  'End Sub
-
   Private Sub LGDefault_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
-    If HttpContext.Current.Session("IsAuthenticated") Then
+    If HttpContext.Current.User.Identity.IsAuthenticated Then
       Dim UserID As String = HttpContext.Current.Session("LoginID")
+      '======This Page is opened when Back Button is pressed, user not logged out from  Application Launched from App Icon.=====
+      '======As Application ID gets changed================
+      'To Re-instate Environment do re-login in background
+      '========Un-comment Following Code==================
+      'If HttpContext.Current.Session("ApplicationID").ToString <> "30" Then
+      '  Dim RedirectURL As String = HttpContext.Current.Session("LastURL")
+      '  HttpContext.Current.Session.Clear()
+      '  If SIS.SYS.Utilities.SessionManager.DoLogin(UserID) Then
+      '    RedirectURL = RedirectURL.Replace("mMenu", "mDefault")
+      '    RedirectURL &= "?UserID=" & UserID
+      '    Response.Redirect(RedirectURL)
+      '  End If
+      'End If
+      '===============End of Uncomment=====================
       Me.appIcons.Visible = True
       ShowAppIcons(UserID)
     Else

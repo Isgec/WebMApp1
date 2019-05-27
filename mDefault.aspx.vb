@@ -26,59 +26,6 @@ Partial Class mLGDefault
       ViewState.Add("QString", value)
     End Set
   End Property
-  Protected Sub AuthenticateAndRedirect(ByVal UserID As String)
-    HttpContext.Current.Session("LoginID") = UserID
-    Try
-      Dim pw As String = SIS.SYS.Utilities.SessionManager.GetPassword(UserID)
-      If Membership.ValidateUser(UserID, pw) Then
-      End If
-      HttpContext.Current.Session("IsAuthenticated") = True
-      Dim isPersistent As Boolean = True
-      Dim userData As String = "ApplicationSpecific data for this user."
-      Dim ticket As FormsAuthenticationTicket = New FormsAuthenticationTicket(1,
-                UserID,
-                DateTime.Now,
-                DateTime.Now.AddMinutes(60),
-                isPersistent,
-                userData,
-                FormsAuthentication.FormsCookiePath)
-      ' Encrypt the ticket.
-      Dim encTicket As String = FormsAuthentication.Encrypt(ticket)
-      ' Create the cookie. 
-      HttpContext.Current.Response.Cookies.Add(New HttpCookie(FormsAuthentication.FormsCookieName, encTicket))
-      SIS.SYS.Utilities.SessionManager.InitializeEnvironment(UserID)
-      Response.Redirect("~/mMenu.aspx")
-    Catch ex As Exception
-      L_Err.Text = "Err: " & ex.Message
-    End Try
-  End Sub
-  Protected Sub AuthenticateAndRedirect(ByVal UserID As String, ByVal AppID As String)
-    HttpContext.Current.Session("LoginID") = UserID
-    Dim tmpApl As SIS.MAPP.mappApplications = SIS.MAPP.mappApplications.mappApplicationsGetByID(AppID)
-    Try
-      Dim pw As String = SIS.SYS.Utilities.SessionManager.GetPassword(UserID)
-      If Membership.ValidateUser(UserID, pw) Then
-      End If
-      HttpContext.Current.Session("IsAuthenticated") = True
-      Dim isPersistent As Boolean = True
-      Dim userData As String = "ApplicationSpecific data for this user."
-      Dim ticket As FormsAuthenticationTicket = New FormsAuthenticationTicket(1,
-        UserID,
-        DateTime.Now,
-        DateTime.Now.AddMinutes(60),
-        isPersistent,
-        userData,
-        FormsAuthentication.FormsCookiePath)
-      ' Encrypt the ticket.
-      Dim encTicket As String = FormsAuthentication.Encrypt(ticket)
-      ' Create the cookie. 
-      HttpContext.Current.Response.Cookies.Add(New HttpCookie(FormsAuthentication.FormsCookieName, encTicket))
-      SIS.SYS.Utilities.SessionManager.InitializeEnvironment(UserID)
-      Response.Redirect("~" & tmpApl.MainPageURL)
-    Catch ex As Exception
-      L_Err.Text = "Err: " & ex.Message
-    End Try
-  End Sub
   Protected Sub cmdSubmit_Click(sender As Object, e As EventArgs) Handles cmdSubmit.Click
     HttpContext.Current.Session("LoginID") = "0000"
     Dim UserID As String = F_UserID.Text
@@ -111,43 +58,15 @@ Partial Class mLGDefault
         Else
           tmpDevice = SIS.MAPP.maapRegisteredDevices.UpdateData(tmpDevice)
         End If
-        If AuthenticateRegisteredUser(UserID) Then
+        If SIS.SYS.Utilities.SessionManager.DoLogin(UserID) Then
           Me.registerUser.Visible = False
           Me.unknownUser.Visible = False
           Me.unknownDevice.Visible = False
-          Response.Redirect("mMenu.aspx?" & Request.QueryString.ToString)
+          Response.Redirect("~/mMenu.aspx")
         End If
       End If
     End If
   End Sub
-  Public Function AuthenticateRegisteredUser(ByVal UserID As String) As Boolean
-    Dim mRet As Boolean = True
-    Try
-      Dim pw As String = SIS.SYS.Utilities.SessionManager.GetPassword(UserID)
-      If Membership.ValidateUser(UserID, pw) Then
-      End If
-      HttpContext.Current.Session("IsAuthenticated") = True
-      Dim isPersistent As Boolean = True
-      Dim userData As String = "ApplicationSpecific data for this user."
-      Dim ticket As FormsAuthenticationTicket = New FormsAuthenticationTicket(1,
-                UserID,
-                DateTime.Now,
-                DateTime.Now.AddMinutes(60),
-                isPersistent,
-                userData,
-                FormsAuthentication.FormsCookiePath)
-      ' Encrypt the ticket.
-      Dim encTicket As String = FormsAuthentication.Encrypt(ticket)
-      ' Create the cookie.
-      HttpContext.Current.Response.Cookies.Add(New HttpCookie(FormsAuthentication.FormsCookieName, encTicket))
-      SIS.SYS.Utilities.SessionManager.InitializeEnvironment(UserID)
-      HttpContext.Current.Session("LoginID") = UserID
-      mRet = True
-    Catch ex As Exception
-      L_Err.Text = "Err: " & ex.Message
-    End Try
-    Return mRet
-  End Function
 
   Private Sub cmdRefresh_ServerClick(sender As Object, e As EventArgs) Handles cmdRefresh.ServerClick
     Dim tmpDvc As SIS.MAPP.maapRegisteredDevices = SIS.MAPP.maapRegisteredDevices.maapRegisteredDevicesGetByDeviceID(DeviceID)
@@ -155,78 +74,90 @@ Partial Class mLGDefault
       Me.unknownDevice.Visible = True
       Me.registerUser.Visible = True
     Else
-      If AuthenticateRegisteredUser(tmpDvc.UserID) Then
-        Response.Redirect("mMenu.aspx?" & Qstring)
+      If SIS.SYS.Utilities.SessionManager.DoLogin(tmpDvc.UserID) Then
+        Response.Redirect("~/mMenu.aspx")
       End If
     End If
 
   End Sub
-
-  Private Sub mLGDefault_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
-    'If idFirst.Value = "0" Then
-    '  idFirst.Value = "1"
-    '  Exit Sub
-    'ElseIf idFirst.Value = "1" Then
-    '  idFirst.Value = "2"
-    'End If
-    If Not Page.User.Identity.IsAuthenticated Then
-      If Request.QueryString("UserID") IsNot Nothing AndAlso Request.QueryString("AppID") IsNot Nothing Then
-        Dim UserID As String = Request.QueryString("UserID")
-        Dim AppID As String = Request.QueryString("AppID")
-        AuthenticateAndRedirect(UserID, AppID)
-      ElseIf Request.QueryString("UserID") IsNot Nothing AndAlso Request.QueryString("AppID") Is Nothing Then
-        Dim UserID As String = Request.QueryString("UserID")
-        AuthenticateAndRedirect(UserID)
-      ElseIf Request.QueryString("deviceID") Is Nothing Then
+  Private Sub RedirectUser()
+    If Request.QueryString("UserID") IsNot Nothing AndAlso Request.QueryString("AppID") IsNot Nothing Then
+      Dim UserID As String = Request.QueryString("UserID")
+      Dim AppID As String = Request.QueryString("AppID")
+      If SIS.SYS.Utilities.SessionManager.DoLogin(UserID) Then
+        Dim tmpApl As SIS.MAPP.mappApplications = SIS.MAPP.mappApplications.mappApplicationsGetByID(AppID)
+        Response.Redirect("~" & tmpApl.MainPageURL)
+      End If
+    ElseIf Request.QueryString("UserID") IsNot Nothing AndAlso Request.QueryString("AppID") Is Nothing Then
+      Dim UserID As String = Request.QueryString("UserID")
+      If SIS.SYS.Utilities.SessionManager.DoLogin(UserID) Then
+        Response.Redirect("~/mMenu.aspx")
+      End If
+    ElseIf Request.QueryString("deviceID") Is Nothing Then
+      Me.invalidDevice.Visible = True
+    Else
+      DeviceID = Request.QueryString("deviceID")
+      Qstring = Request.QueryString.ToString
+      L_DeviceID.Text = DeviceID
+      L_QString.Text = Qstring
+      If DeviceID = String.Empty Then
         Me.invalidDevice.Visible = True
       Else
-        DeviceID = Request.QueryString("deviceID")
-        Qstring = Request.QueryString.ToString
-        L_DeviceID.Text = DeviceID
-        L_QString.Text = Qstring
-        If DeviceID = String.Empty Then
-          Me.invalidDevice.Visible = True
+        Dim tmpDvc As SIS.MAPP.maapRegisteredDevices = SIS.MAPP.maapRegisteredDevices.maapRegisteredDevicesGetByDeviceID(DeviceID)
+        If tmpDvc Is Nothing Then
+          Me.unknownDevice.Visible = True
+          Me.registerUser.Visible = True
         Else
-          Dim tmpDvc As SIS.MAPP.maapRegisteredDevices = SIS.MAPP.maapRegisteredDevices.maapRegisteredDevicesGetByDeviceID(DeviceID)
-          If tmpDvc Is Nothing Then
-            Me.unknownDevice.Visible = True
-            Me.registerUser.Visible = True
-          Else
-            If AuthenticateRegisteredUser(tmpDvc.UserID) Then
-              Response.Redirect("mMenu.aspx?" & Request.QueryString.ToString)
-            End If
+          If SIS.SYS.Utilities.SessionManager.DoLogin(tmpDvc.UserID) Then
+            Response.Redirect("~/mMenu.aspx")
           End If
         End If
       End If
-    ElseIf idFirst.Value > "0" Then
-      'registeredAndAuthenticated.Visible = True
     End If
+  End Sub
 
+  Private Sub mLGDefault_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+    'If Not Page.User.Identity.IsAuthenticated Then
+
+    'End If
+    If Request.QueryString("UserID") IsNot Nothing AndAlso Request.QueryString("AppID") IsNot Nothing Then
+      Dim UserID As String = Request.QueryString("UserID")
+      Dim AppID As String = Request.QueryString("AppID")
+      If SIS.SYS.Utilities.SessionManager.DoLogin(UserID) Then
+        Dim tmpApl As SIS.MAPP.mappApplications = SIS.MAPP.mappApplications.mappApplicationsGetByID(AppID)
+        Response.Redirect("~" & tmpApl.MainPageURL)
+      End If
+    ElseIf Request.QueryString("UserID") IsNot Nothing AndAlso Request.QueryString("AppID") Is Nothing Then
+      Dim UserID As String = Request.QueryString("UserID")
+      If SIS.SYS.Utilities.SessionManager.DoLogin(UserID) Then
+        Response.Redirect("~/mMenu.aspx")
+      End If
+    ElseIf Request.QueryString("deviceID") IsNot Nothing Then
+      DeviceID = Request.QueryString("deviceID")
+      L_DeviceID.Text = DeviceID
+      If DeviceID = String.Empty Then
+        Me.invalidDevice.Visible = True
+      Else
+        Dim tmpDvc As SIS.MAPP.maapRegisteredDevices = SIS.MAPP.maapRegisteredDevices.maapRegisteredDevicesGetByDeviceID(DeviceID)
+        If tmpDvc Is Nothing Then
+          Me.unknownDevice.Visible = True
+          Me.registerUser.Visible = True
+        Else
+          If SIS.SYS.Utilities.SessionManager.DoLogin(tmpDvc.UserID) Then
+            Response.Redirect("~/mMenu.aspx")
+          End If
+        End If
+      End If
+    Else
+      If Page.User.Identity.IsAuthenticated AndAlso HttpContext.Current.Session("LoginID") IsNot Nothing Then
+        Response.Redirect("~/mMenu.aspx")
+      Else
+        HttpContext.Current.Response.Cookies.Clear()
+      End If
+    End If
   End Sub
 
   Private Sub cmdContinue_Click(sender As Object, e As EventArgs) Handles cmdContinue.Click
-    Response.Redirect("mMenu.aspx?" & Request.QueryString.ToString)
+    Response.Redirect("~/mMenu.aspx?" & Request.QueryString.ToString)
   End Sub
 End Class
-'Dim userAgent As String = Request.Headers("User-Agent")
-'If userAgent = "ISGEC_Registered_Mobile" Then
-'    Dim uid As String = ""
-'    Dim upw As String = ""
-'    Try
-'      uid = Request.QueryString("id")
-'      upw = Request.QueryString("pw")
-'      'abcd = userAgent & ", " & uid & ", " & upw
-'      If Membership.ValidateUser(uid, upw) Then
-'        Dim id As GenericIdentity = New GenericIdentity(uid, upw)
-'        Context.User = New GenericPrincipal(id, {"user"})
-'        FormsAuthentication.SetAuthCookie(uid, True)
-'        SIS.SYS.Utilities.SessionManager.InitializeEnvironment(uid)
-'        'Response.Redirect("~/WF_Main/App_Forms/GF_wfUserDB.aspx")
-'      Else
-'        'Response.Clear()
-'        'Response.AppendHeader("UA=", userAgent & "-Lalit")
-'        'Response.End()
-'      End If
-'    Catch ex As Exception
-'    End Try
-'  End If

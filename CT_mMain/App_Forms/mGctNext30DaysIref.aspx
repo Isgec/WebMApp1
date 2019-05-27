@@ -69,7 +69,7 @@
     </div>
 
     <div class="row chartDiv">
-      <div class="col-sm-12 text-center" id="irefDelay30d" runat="server"></div>
+      <div class="col-sm-12 text-center" id="irefDelay30d" runat="server" style="overflow:scroll;"></div>
     </div>
 
   </div>

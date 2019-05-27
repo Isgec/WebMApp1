@@ -74,7 +74,7 @@
     <%--Main Graph Row--%>
     <div class="row">
       <div class="col-sm-12 text-center ">
-        <div class="chartDiv" >
+        <div class="chartDiv" style="overflow:scroll;" >
           <h5>OVERALL SUMMARY</h5>
           <asp:Chart
             ID="Chart1"

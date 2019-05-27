@@ -8,6 +8,21 @@ Imports System.Net.Mail.SmtpClient
 Imports System.Web
 Imports System
 Namespace SIS.SYS.Utilities
+
+  Public Class isgecHandler
+    Implements IHttpHandler
+    Implements IRequiresSessionState
+
+    Public ReadOnly Property IsReusable() As Boolean Implements System.Web.IHttpHandler.IsReusable
+      Get
+        Return True
+      End Get
+    End Property
+    Public Sub ProcessRequest(ByVal context As System.Web.HttpContext) Implements System.Web.IHttpHandler.ProcessRequest
+      'SIS.SYS.Utilities.ApplicationSpacific.ApplicationReports(context)
+    End Sub
+  End Class
+
   <AttributeUsage(AttributeTargets.All, AllowMultiple:=False, Inherited:=True)>
   Public Class lgSkipAttribute
     Inherits Attribute
@@ -23,6 +38,15 @@ Namespace SIS.SYS.Utilities
   End Class
   Public Class SessionManager
     Public Shared ci As System.Globalization.CultureInfo = New System.Globalization.CultureInfo("en-GB", True)
+    Public Shared Function DoLogin(ByVal UserID As String) As Boolean
+      Dim mRet As Boolean = False
+      If Membership.ValidateUser(UserID, GetPassword(UserID)) Then
+        FormsAuthentication.RedirectFromLoginPage(UserID, True)
+        SIS.SYS.Utilities.SessionManager.InitializeEnvironment(UserID)
+        mRet = True
+      End If
+      Return mRet
+    End Function
 
     Public Shared Function AuthenticateRegisteredUser(ByVal UserID As String) As Boolean
       Dim mRet As Boolean = False
@@ -68,7 +92,6 @@ Namespace SIS.SYS.Utilities
         .Session("PageSizeProvider") = False
         .Session("PageNoProvider") = False
       End With
-      HttpContext.Current.Session("IsAuthenticated") = False
     End Sub
     Public Shared Sub InitializeEnvironment()
       HttpContext.Current.Session("LoginID") = System.Web.HttpContext.Current.User.Identity.Name
