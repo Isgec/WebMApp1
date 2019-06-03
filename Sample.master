@@ -208,6 +208,36 @@
     </script>
     <asp:ContentPlaceHolder ID="cph1" runat="server" EnableViewState="true">
     </asp:ContentPlaceHolder>
+  <script type="text/javascript">
+    window.onresize = function (event) {
+      SetWidthHeight();
+    }
+    function SetWidthHeight() {
+      var height = $(window).height();
+      var width = $(window).width();
+      $.ajax({
+        url: "/WebMapp1/App_Services/mediaSize.ashx",
+        dataType: 'json',
+        data: {
+          'Height': height,
+          'Width': width
+        },
+        contentType: "application/json; charset=utf-8"
+      }).done(function (data) {
+        if (data.isFirst) {
+          window.location.reload();
+        };
+      }).fail(function (xhr) {
+        alert("Problem to retrieve browser size. "+xhr);
+      });
+
+    }
+    $(function () {
+      SetWidthHeight();
+      var height = $(window).height();
+      var width = $(window).width();
+    });
+  </script>
   </form>
 </body>
 </html>

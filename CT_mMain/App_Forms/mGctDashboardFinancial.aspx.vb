@@ -7,6 +7,7 @@ Imports System.ComponentModel
 Imports System.Web.Script.Serialization
 Partial Class mGctDashboardFinancial
   Inherits System.Web.UI.Page
+  Private Divisor As Integer = 100000
   Public Property t_ccod As String
     Get
       If ViewState("t_ccod") IsNot Nothing Then
@@ -26,7 +27,18 @@ Partial Class mGctDashboardFinancial
     ContractName.Text = F_t_ccod.SelectedItem.Text
   End Sub
 
+
   Private Sub mGctDashboardFinancial_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+    Try
+      If HttpContext.Current.Session("BrowserWidth") IsNot Nothing Then
+        If Convert.ToInt32(HttpContext.Current.Session("BrowserWidth")) <= 1000 Then
+          Divisor = 100000
+        Else
+          Divisor = 1
+        End If
+      End If
+    Catch ex As Exception
+    End Try
     '1. tpisg301
     If t_ccod = "" Then Exit Sub
     Dim tp301 As SIS.CT.tpisg301 = SIS.CT.tpisg301.tpisg301GetByID(t_ccod)
@@ -48,11 +60,11 @@ Partial Class mGctDashboardFinancial
       Ht_ccdt.Text = "Contractual Completion Date :"
       Vt_ccdt.Text = tp301.t_ccdt
       Ht_orvl.Text = "Order Value ( in Foreign Currency):"
-      Vt_orvl.Text = tp301.t_orvl
+      Vt_orvl.Text = (tp301.t_orvl / Divisor).ToString("n")
       Ht_exrt.Text = "Exchange Rate:"
       Vt_exrt.Text = tp301.t_exrt
       Ht_ordl.Text = "Order Value  (Rs. in Lac):"
-      Vt_ordl.Text = tp301.t_ordl
+      Vt_ordl.Text = (tp301.t_ordl / 100000).ToString("n")
       Ht_lddl.Text = "LD Details:"
       Vt_lddl.Text = tp301.t_lddl
     End If
@@ -61,75 +73,75 @@ Partial Class mGctDashboardFinancial
     '3. Project Estimate
     ProjectEstimate.Controls.Add(GetProjectEstimate(t_ccod))
     '4. Billing
-    Vt_blal.Text = tp301.t_blal.ToString("n")
-    Vt_blbd.Text = tp301.t_blbd.ToString("n")
-    Vt_blvr.Text = tp301.t_blvr.ToString("n")
+    Vt_blal.Text = (tp301.t_blal / Divisor).ToString("n")
+    Vt_blbd.Text = (tp301.t_blbd / Divisor).ToString("n")
+    Vt_blvr.Text = (tp301.t_blvr / Divisor).ToString("n")
     '5. Cashflow
-    Vt_cinb.Text = tp301.t_cinb.ToString("n")
-    Vt_cino.Text = tp301.t_cino.ToString("n")
-    Vt_cina.Text = tp301.t_cina.ToString("n")
-    Vt_cinv.Text = tp301.t_cinv.ToString("n")
-    Vt_cotb.Text = tp301.t_cotb.ToString("n")
-    Vt_coto.Text = tp301.t_coto.ToString("n")
-    Vt_cota.Text = tp301.t_cota.ToString("n")
-    Vt_cotv.Text = tp301.t_cotv.ToString("n")
-    Vt_cntb.Text = tp301.t_cntb.ToString("n")
-    Vt_cnto.Text = tp301.t_cnto.ToString("n")
-    Vt_cnta.Text = tp301.t_cnta.ToString("n")
-    Vt_cntv.Text = tp301.t_cntv.ToString("n")
+    Vt_cinb.Text = (tp301.t_cinb / Divisor).ToString("n")
+    Vt_cino.Text = (tp301.t_cino / Divisor).ToString("n")
+    Vt_cina.Text = (tp301.t_cina / Divisor).ToString("n")
+    Vt_cinv.Text = (tp301.t_cinv / Divisor).ToString("n")
+    Vt_cotb.Text = (tp301.t_cotb / Divisor).ToString("n")
+    Vt_coto.Text = (tp301.t_coto / Divisor).ToString("n")
+    Vt_cota.Text = (tp301.t_cota / Divisor).ToString("n")
+    Vt_cotv.Text = (tp301.t_cotv / Divisor).ToString("n")
+    Vt_cntb.Text = (tp301.t_cntb / Divisor).ToString("n")
+    Vt_cnto.Text = (tp301.t_cnto / Divisor).ToString("n")
+    Vt_cnta.Text = (tp301.t_cnta / Divisor).ToString("n")
+    Vt_cntv.Text = (tp301.t_cntv / Divisor).ToString("n")
     '6. Receavables
-    Vt_rsnd.Text = tp301.t_rsnd.ToString("n")
-    Vt_rsum.Text = tp301.t_rsum.ToString("n")
-    Vt_rsbm.Text = tp301.t_rsbm.ToString("n")
-    Vt_rscm.Text = tp301.t_rscm.ToString("n")
-    Vt_rsdm.Text = tp301.t_rsdm.ToString("n")
-    Vt_rsgy.Text = tp301.t_rsgy.ToString("n")
-    Vt_rsmy.Text = tp301.t_rsmy.ToString("n")
-    Vt_rsur.Text = tp301.t_rsur.ToString("n")
-    Vt_rstl.Text = tp301.t_rstl.ToString("n")
-    Vt_nrts.Text = tp301.t_nrts.ToString("n")
-    Vt_rcnd.Text = tp301.t_rcnd.ToString("n")
-    Vt_rcum.Text = tp301.t_rcum.ToString("n")
-    Vt_rcbm.Text = tp301.t_rcbm.ToString("n")
-    Vt_rccm.Text = tp301.t_rccm.ToString("n")
-    Vt_rcdm.Text = tp301.t_rcdm.ToString("n")
-    Vt_rcgy.Text = tp301.t_rcgy.ToString("n")
-    Vt_rcmy.Text = tp301.t_rcmy.ToString("n")
-    Vt_rcur.Text = tp301.t_rcur.ToString("n")
-    Vt_rctl.Text = tp301.t_rctl.ToString("n")
-    Vt_nrtc.Text = tp301.t_nrtc.ToString("n")
-    Vt_rend.Text = tp301.t_rend.ToString("n")
-    Vt_reum.Text = tp301.t_reum.ToString("n")
-    Vt_rebm.Text = tp301.t_rebm.ToString("n")
-    Vt_recm.Text = tp301.t_recm.ToString("n")
-    Vt_redm.Text = tp301.t_redm.ToString("n")
-    Vt_regy.Text = tp301.t_regy.ToString("n")
-    Vt_remy.Text = tp301.t_remy.ToString("n")
-    Vt_reur.Text = tp301.t_reur.ToString("n")
-    Vt_retl.Text = tp301.t_retl.ToString("n")
-    Vt_nrte.Text = tp301.t_nrte.ToString("n")
-    Vt_rtnd.Text = tp301.t_rtnd.ToString("n")
-    Vt_rtum.Text = tp301.t_rtum.ToString("n")
-    Vt_rtbm.Text = tp301.t_rtbm.ToString("n")
-    Vt_rtcm.Text = tp301.t_rtcm.ToString("n")
-    Vt_rtdm.Text = tp301.t_rtdm.ToString("n")
-    Vt_rtgy.Text = tp301.t_rtgy.ToString("n")
-    Vt_rtmy.Text = tp301.t_rtmy.ToString("n")
-    Vt_rtur.Text = tp301.t_rtur.ToString("n")
-    Vt_rttl.Text = tp301.t_rttl.ToString("n")
-    Vt_nrtl.Text = tp301.t_nrtl.ToString("n")
+    Vt_rsnd.Text = (tp301.t_rsnd / Divisor).ToString("n")
+    Vt_rsum.Text = (tp301.t_rsum / Divisor).ToString("n")
+    Vt_rsbm.Text = (tp301.t_rsbm / Divisor).ToString("n")
+    Vt_rscm.Text = (tp301.t_rscm / Divisor).ToString("n")
+    Vt_rsdm.Text = (tp301.t_rsdm / Divisor).ToString("n")
+    Vt_rsgy.Text = (tp301.t_rsgy / Divisor).ToString("n")
+    Vt_rsmy.Text = (tp301.t_rsmy / Divisor).ToString("n")
+    Vt_rsur.Text = (tp301.t_rsur / Divisor).ToString("n")
+    Vt_rstl.Text = (tp301.t_rstl / Divisor).ToString("n")
+    Vt_nrts.Text = (tp301.t_nrts / Divisor).ToString("n")
+    Vt_rcnd.Text = (tp301.t_rcnd / Divisor).ToString("n")
+    Vt_rcum.Text = (tp301.t_rcum / Divisor).ToString("n")
+    Vt_rcbm.Text = (tp301.t_rcbm / Divisor).ToString("n")
+    Vt_rccm.Text = (tp301.t_rccm / Divisor).ToString("n")
+    Vt_rcdm.Text = (tp301.t_rcdm / Divisor).ToString("n")
+    Vt_rcgy.Text = (tp301.t_rcgy / Divisor).ToString("n")
+    Vt_rcmy.Text = (tp301.t_rcmy / Divisor).ToString("n")
+    Vt_rcur.Text = (tp301.t_rcur / Divisor).ToString("n")
+    Vt_rctl.Text = (tp301.t_rctl / Divisor).ToString("n")
+    Vt_nrtc.Text = (tp301.t_nrtc / Divisor).ToString("n")
+    Vt_rend.Text = (tp301.t_rend / Divisor).ToString("n")
+    Vt_reum.Text = (tp301.t_reum / Divisor).ToString("n")
+    Vt_rebm.Text = (tp301.t_rebm / Divisor).ToString("n")
+    Vt_recm.Text = (tp301.t_recm / Divisor).ToString("n")
+    Vt_redm.Text = (tp301.t_redm / Divisor).ToString("n")
+    Vt_regy.Text = (tp301.t_regy / Divisor).ToString("n")
+    Vt_remy.Text = (tp301.t_remy / Divisor).ToString("n")
+    Vt_reur.Text = (tp301.t_reur / Divisor).ToString("n")
+    Vt_retl.Text = (tp301.t_retl / Divisor).ToString("n")
+    Vt_nrte.Text = (tp301.t_nrte / Divisor).ToString("n")
+    Vt_rtnd.Text = (tp301.t_rtnd / Divisor).ToString("n")
+    Vt_rtum.Text = (tp301.t_rtum / Divisor).ToString("n")
+    Vt_rtbm.Text = (tp301.t_rtbm / Divisor).ToString("n")
+    Vt_rtcm.Text = (tp301.t_rtcm / Divisor).ToString("n")
+    Vt_rtdm.Text = (tp301.t_rtdm / Divisor).ToString("n")
+    Vt_rtgy.Text = (tp301.t_rtgy / Divisor).ToString("n")
+    Vt_rtmy.Text = (tp301.t_rtmy / Divisor).ToString("n")
+    Vt_rtur.Text = (tp301.t_rtur / Divisor).ToString("n")
+    Vt_rttl.Text = (tp301.t_rttl / Divisor).ToString("n")
+    Vt_nrtl.Text = (tp301.t_nrtl / Divisor).ToString("n")
     '7. Out BG
-    Vt_obga.Text = tp301.t_obga.ToString("n")
-    Vt_obgc.Text = tp301.t_obgc.ToString("n")
-    Vt_obgp.Text = tp301.t_obgp.ToString("n")
-    Vt_obgt.Text = tp301.t_obgt.ToString("n")
+    Vt_obga.Text = (tp301.t_obga / Divisor).ToString("n")
+    Vt_obgc.Text = (tp301.t_obgc / Divisor).ToString("n")
+    Vt_obgp.Text = (tp301.t_obgp / Divisor).ToString("n")
+    Vt_obgt.Text = (tp301.t_obgt / Divisor).ToString("n")
     '8.
-    Vt_cder.Text = tp301.t_cder.ToString("n")
-    Vt_cddr.Text = tp301.t_cddr.ToString("n")
-    Vt_cdsr.Text = tp301.t_cdsr.ToString("n")
-    Vt_cdds.Text = tp301.t_cdds.ToString("n")
-    Vt_cdra.Text = tp301.t_cdra.ToString("n")
-    Vt_cdsa.Text = tp301.t_cdsa.ToString("n")
+    Vt_cder.Text = (tp301.t_cder / Divisor).ToString("n")
+    Vt_cddr.Text = (tp301.t_cddr / Divisor).ToString("n")
+    Vt_cdsr.Text = (tp301.t_cdsr / Divisor).ToString("n")
+    Vt_cdds.Text = (tp301.t_cdds / Divisor).ToString("n")
+    Vt_cdra.Text = (tp301.t_cdra / Divisor).ToString("n")
+    Vt_cdsa.Text = (tp301.t_cdsa / Divisor).ToString("n")
   End Sub
   Private Function GetProjectEstimate(ByVal t_ccod As String) As Table
     Dim tbl As New Table
@@ -202,28 +214,28 @@ Partial Class mGctDashboardFinancial
             Case 0
               .Text = dt.t_csdc
             Case 1
-              .Text = dt.t_bdgd.ToString("n")
+              .Text = (dt.t_bdgd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 2
-              .Text = dt.t_aled.ToString("n")
+              .Text = (dt.t_aled / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 3
-              .Text = dt.t_coco.ToString("n")
+              .Text = (dt.t_coco / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 4
-              .Text = dt.t_cbda.ToString("n")
+              .Text = (dt.t_cbda / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 5
-              .Text = dt.t_cysc.ToString("n")
+              .Text = (dt.t_cysc / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 6
-              .Text = dt.t_cycn.ToString("n")
+              .Text = (dt.t_cycn / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 7
-              .Text = dt.t_sson.ToString("n")
+              .Text = (dt.t_sson / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 8
-              .Text = dt.t_stcs.ToString("n")
+              .Text = (dt.t_stcs / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
           End Select
         End With
@@ -245,28 +257,28 @@ Partial Class mGctDashboardFinancial
             .Text = "TOTAL"
             td.Style.Add("font-weight", "bold")
           Case 1
-            .Text = tot305.t_bdgd.ToString("n")
+            .Text = (tot305.t_bdgd / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 2
-            .Text = tot305.t_aled.ToString("n")
+            .Text = (tot305.t_aled / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 3
-            .Text = tot305.t_coco.ToString("n")
+            .Text = (tot305.t_coco / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 4
-            .Text = tot305.t_cbda.ToString("n")
+            .Text = (tot305.t_cbda / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 5
-            .Text = tot305.t_cysc.ToString("n")
+            .Text = (tot305.t_cysc / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 6
-            .Text = tot305.t_cycn.ToString("n")
+            .Text = (tot305.t_cycn / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 7
-            .Text = tot305.t_sson.ToString("n")
+            .Text = (tot305.t_sson / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 8
-            .Text = tot305.t_stcs.ToString("n")
+            .Text = (tot305.t_stcs / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
         End Select
       End With
@@ -300,28 +312,28 @@ Partial Class mGctDashboardFinancial
             Case 0
               .Text = dt.t_csdc
             Case 1
-              .Text = dt.t_bdgd.ToString("n")
+              .Text = (dt.t_bdgd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 2
-              .Text = dt.t_aled.ToString("n")
+              .Text = (dt.t_aled / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 3
-              .Text = dt.t_coco.ToString("n")
+              .Text = (dt.t_coco / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 4
-              .Text = dt.t_cbda.ToString("n")
+              .Text = (dt.t_cbda / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 5
-              .Text = dt.t_cysc.ToString("n")
+              .Text = (dt.t_cysc / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 6
-              .Text = dt.t_cycn.ToString("n")
+              .Text = (dt.t_cycn / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 7
-              .Text = dt.t_sson.ToString("n")
+              .Text = (dt.t_sson / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 8
-              .Text = dt.t_stcs.ToString("n")
+              .Text = (dt.t_stcs / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
           End Select
         End With
@@ -343,28 +355,28 @@ Partial Class mGctDashboardFinancial
             .Text = "TOTAL"
             td.Style.Add("font-weight", "bold")
           Case 1
-            .Text = tot306.t_bdgd.ToString("n")
+            .Text = (tot306.t_bdgd / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 2
-            .Text = tot306.t_aled.ToString("n")
+            .Text = (tot306.t_aled / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 3
-            .Text = tot306.t_coco.ToString("n")
+            .Text = (tot306.t_coco / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 4
-            .Text = tot306.t_cbda.ToString("n")
+            .Text = (tot306.t_cbda / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 5
-            .Text = tot306.t_cysc.ToString("n")
+            .Text = (tot306.t_cysc / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 6
-            .Text = tot306.t_cycn.ToString("n")
+            .Text = (tot306.t_cycn / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 7
-            .Text = tot306.t_sson.ToString("n")
+            .Text = (tot306.t_sson / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 8
-            .Text = tot306.t_stcs.ToString("n")
+            .Text = (tot306.t_stcs / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
         End Select
       End With
@@ -396,28 +408,28 @@ Partial Class mGctDashboardFinancial
             Case 0
               .Text = dt.t_csdc
             Case 1
-              .Text = dt.t_bdgd.ToString("n")
+              .Text = (dt.t_bdgd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 2
-              .Text = dt.t_aled.ToString("n")
+              .Text = (dt.t_aled / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 3
-              .Text = dt.t_coco.ToString("n")
+              .Text = (dt.t_coco / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 4
-              .Text = dt.t_cbda.ToString("n")
+              .Text = (dt.t_cbda / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 5
-              .Text = dt.t_cysc.ToString("n")
+              .Text = (dt.t_cysc / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 6
-              .Text = dt.t_cycn.ToString("n")
+              .Text = (dt.t_cycn / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 7
-              .Text = dt.t_sson.ToString("n")
+              .Text = (dt.t_sson / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 8
-              .Text = dt.t_stcs.ToString("n")
+              .Text = (dt.t_stcs / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
           End Select
         End With
@@ -439,28 +451,28 @@ Partial Class mGctDashboardFinancial
             .Text = "TOTAL"
             td.Style.Add("font-weight", "bold")
           Case 1
-            .Text = tot307.t_bdgd.ToString("n")
+            .Text = (tot307.t_bdgd / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 2
-            .Text = tot307.t_aled.ToString("n")
+            .Text = (tot307.t_aled / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 3
-            .Text = tot307.t_coco.ToString("n")
+            .Text = (tot307.t_coco / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 4
-            .Text = tot307.t_cbda.ToString("n")
+            .Text = (tot307.t_cbda / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 5
-            .Text = tot307.t_cysc.ToString("n")
+            .Text = (tot307.t_cysc / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 6
-            .Text = tot307.t_cycn.ToString("n")
+            .Text = (tot307.t_cycn / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 7
-            .Text = tot307.t_sson.ToString("n")
+            .Text = (tot307.t_sson / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 8
-            .Text = tot307.t_stcs.ToString("n")
+            .Text = (tot307.t_stcs / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
         End Select
       End With
@@ -492,28 +504,28 @@ Partial Class mGctDashboardFinancial
             Case 0
               .Text = dt.t_csdc
             Case 1
-              .Text = dt.t_bdgd.ToString("n")
+              .Text = (dt.t_bdgd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 2
-              .Text = dt.t_aled.ToString("n")
+              .Text = (dt.t_aled / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 3
-              .Text = dt.t_coco.ToString("n")
+              .Text = (dt.t_coco / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 4
-              .Text = dt.t_cbda.ToString("n")
+              .Text = (dt.t_cbda / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 5
-              .Text = dt.t_cysc.ToString("n")
+              .Text = (dt.t_cysc / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 6
-              .Text = dt.t_cycn.ToString("n")
+              .Text = (dt.t_cycn / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 7
-              .Text = dt.t_sson.ToString("n")
+              .Text = (dt.t_sson / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 8
-              .Text = dt.t_stcs.ToString("n")
+              .Text = (dt.t_stcs / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
           End Select
         End With
@@ -534,28 +546,28 @@ Partial Class mGctDashboardFinancial
             .Text = "TOTAL"
             td.Style.Add("font-weight", "bold")
           Case 1
-            .Text = tot308.t_bdgd.ToString("n")
+            .Text = (tot308.t_bdgd / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 2
-            .Text = tot308.t_aled.ToString("n")
+            .Text = (tot308.t_aled / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 3
-            .Text = tot308.t_coco.ToString("n")
+            .Text = (tot308.t_coco / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 4
-            .Text = tot308.t_cbda.ToString("n")
+            .Text = (tot308.t_cbda / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 5
-            .Text = tot308.t_cysc.ToString("n")
+            .Text = (tot308.t_cysc / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 6
-            .Text = tot308.t_cycn.ToString("n")
+            .Text = (tot308.t_cycn / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 7
-            .Text = tot308.t_sson.ToString("n")
+            .Text = (tot308.t_sson / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
           Case 8
-            .Text = tot308.t_stcs.ToString("n")
+            .Text = (tot308.t_stcs / Divisor).ToString("n")
             .Attributes.Add("style", "text-align:center;")
         End Select
       End With
@@ -640,22 +652,22 @@ Partial Class mGctDashboardFinancial
             Case 0
               .Text = dt.t_paym
             Case 1
-              .Text = dt.t_samt.ToString("n")
+              .Text = (dt.t_samt / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 2
-              .Text = dt.t_camt.ToString("n")
+              .Text = (dt.t_camt / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 3
-              .Text = dt.t_eamt.ToString("n")
+              .Text = (dt.t_eamt / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 4
-              .Text = dt.t_srcd.ToString("n")
+              .Text = (dt.t_srcd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 5
-              .Text = dt.t_crcd.ToString("n")
+              .Text = (dt.t_crcd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 6
-              .Text = dt.t_ercd.ToString("n")
+              .Text = (dt.t_ercd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
           End Select
         End With
@@ -676,22 +688,22 @@ Partial Class mGctDashboardFinancial
               .Text = dt.t_paym
               .Attributes.Add("style", "text-align:center;")
             Case 1
-              .Text = dt.t_samt.ToString("n")
+              .Text = (dt.t_samt / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 2
-              .Text = dt.t_camt.ToString("n")
+              .Text = (dt.t_camt / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 3
-              .Text = dt.t_eamt.ToString("n")
+              .Text = (dt.t_eamt / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 4
-              .Text = dt.t_srcd.ToString("n")
+              .Text = (dt.t_srcd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 5
-              .Text = dt.t_crcd.ToString("n")
+              .Text = (dt.t_crcd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 6
-              .Text = dt.t_ercd.ToString("n")
+              .Text = (dt.t_ercd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
           End Select
         End With
@@ -712,22 +724,22 @@ Partial Class mGctDashboardFinancial
               .Text = dt.t_paym
               .Attributes.Add("style", "text-align:center;")
             Case 1
-              .Text = dt.t_samt.ToString("n")
+              .Text = (dt.t_samt / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 2
-              .Text = dt.t_camt.ToString("n")
+              .Text = (dt.t_camt / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 3
-              .Text = dt.t_eamt.ToString("n")
+              .Text = (dt.t_eamt / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 4
-              .Text = dt.t_srcd.ToString("n")
+              .Text = (dt.t_srcd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 5
-              .Text = dt.t_crcd.ToString("n")
+              .Text = (dt.t_crcd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
             Case 6
-              .Text = dt.t_ercd.ToString("n")
+              .Text = (dt.t_ercd / Divisor).ToString("n")
               .Attributes.Add("style", "text-align:center;")
           End Select
         End With

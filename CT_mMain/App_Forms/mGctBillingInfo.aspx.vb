@@ -9,6 +9,8 @@ Partial Class mGctBillingInfo
   Inherits System.Web.UI.Page
   Private t_ccod As String = ""
   Private ProjectName As String = ""
+  Private Divisor As Integer = 100000
+
   Private Sub mGctActivityDetails_Load(sender As Object, e As EventArgs) Handles Me.Load
     If Request.QueryString("t_ccod") IsNot Nothing Then t_ccod = Request.QueryString("t_ccod")
     If Request.QueryString("t_nama") IsNot Nothing Then ProjectName = Request.QueryString("t_nama")
@@ -17,6 +19,17 @@ Partial Class mGctBillingInfo
   End Sub
 
   Private Sub mGctBillingInfo_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+    Try
+      If HttpContext.Current.Session("BrowserWidth") IsNot Nothing Then
+        If Convert.ToInt32(HttpContext.Current.Session("BrowserWidth")) <= 1000 Then
+          Divisor = 100000
+        Else
+          Divisor = 1
+        End If
+      End If
+    Catch ex As Exception
+    End Try
+
     If t_ccod = "" Then Exit Sub
     Dim tp309 As List(Of SIS.CT.tpisg309) = SIS.CT.tpisg309.GetMnYr(t_ccod)
     Dim First As Boolean = True
@@ -119,7 +132,7 @@ Partial Class mGctBillingInfo
       td = New TableCell
 
       With td
-        .Text = dt.t_sybd.ToString("n")
+        .Text = (dt.t_sybd / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 249, 230)
       End With
@@ -144,7 +157,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_syac.ToString("n")
+        .Text = (dt.t_syac / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 249, 230)
       End With
@@ -170,7 +183,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_syvr.ToString("n")
+        .Text = (dt.t_syvr / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 249, 230)
       End With
@@ -201,7 +214,7 @@ Partial Class mGctBillingInfo
       End If
       td = New TableCell
       With td
-        .Text = dt.t_erbd.ToString("n")
+        .Text = (dt.t_erbd / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(229, 242, 255)
       End With
@@ -226,7 +239,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_erac.ToString("n")
+        .Text = (dt.t_erac / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(229, 242, 255)
       End With
@@ -251,7 +264,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ervr.ToString("n")
+        .Text = (dt.t_ervr / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(229, 242, 255)
       End With
@@ -282,7 +295,7 @@ Partial Class mGctBillingInfo
       End If
       td = New TableCell
       With td
-        .Text = dt.t_clbd.ToString("n")
+        .Text = (dt.t_clbd / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 255, 179)
       End With
@@ -307,7 +320,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_clac.ToString("n")
+        .Text = (dt.t_clac / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 255, 179)
       End With
@@ -332,7 +345,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_clvr.ToString("n")
+        .Text = (dt.t_clvr / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 255, 179)
       End With
@@ -363,7 +376,7 @@ Partial Class mGctBillingInfo
       End If
       td = New TableCell
       With td
-        .Text = dt.t_tlbd.ToString("n")
+        .Text = (dt.t_tlbd / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
       End With
       tr.Cells.Add(td)
@@ -385,7 +398,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_tlac.ToString("n")
+        .Text = (dt.t_tlac / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
       End With
       tr.Cells.Add(td)
@@ -406,7 +419,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_tlvr.ToString("n")
+        .Text = (dt.t_tlvr / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
       End With
       tr.Cells.Add(td)
@@ -496,7 +509,7 @@ Partial Class mGctBillingInfo
       td = New TableCell
 
       With td
-        .Text = dt.t_ifbu.ToString("n")
+        .Text = (dt.t_ifbu / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 249, 230)
       End With
@@ -521,7 +534,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ifac.ToString("n")
+        .Text = (dt.t_ifac / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 249, 230)
       End With
@@ -547,7 +560,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ifva.ToString("n")
+        .Text = (dt.t_ifva / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 249, 230)
       End With
@@ -578,7 +591,7 @@ Partial Class mGctBillingInfo
       End If
       td = New TableCell
       With td
-        .Text = dt.t_ofbu.ToString("n")
+        .Text = (dt.t_ofbu / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(229, 242, 255)
       End With
@@ -603,7 +616,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ofac.ToString("n")
+        .Text = (dt.t_ofac / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(229, 242, 255)
       End With
@@ -628,7 +641,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ofva.ToString("n")
+        .Text = (dt.t_ofva / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(229, 242, 255)
       End With
@@ -659,7 +672,7 @@ Partial Class mGctBillingInfo
       End If
       td = New TableCell
       With td
-        .Text = dt.t_ntbu.ToString("n")
+        .Text = (dt.t_ntbu / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 255, 179)
       End With
@@ -684,7 +697,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ntac.ToString("n")
+        .Text = (dt.t_ntac / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 255, 179)
       End With
@@ -709,7 +722,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ntva.ToString("n")
+        .Text = (dt.t_ntva / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 255, 179)
       End With
@@ -767,7 +780,7 @@ Partial Class mGctBillingInfo
       td = New TableCell
 
       With td
-        .Text = dt.t_ifbu.ToString("n")
+        .Text = (dt.t_ifbu / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 249, 230)
       End With
@@ -781,7 +794,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ifac.ToString("n")
+        .Text = (dt.t_ifac / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 249, 230)
       End With
@@ -795,7 +808,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ifva.ToString("n")
+        .Text = (dt.t_ifva / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 249, 230)
       End With
@@ -807,7 +820,7 @@ Partial Class mGctBillingInfo
       tr.ForeColor = Drawing.Color.Black
       td = New TableCell
       With td
-        .Text = dt.t_ofbu.ToString("n")
+        .Text = (dt.t_ofbu / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(229, 242, 255)
       End With
@@ -822,7 +835,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ofac.ToString("n")
+        .Text = (dt.t_ofac / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(229, 242, 255)
       End With
@@ -836,7 +849,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ofva.ToString("n")
+        .Text = (dt.t_ofva / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(229, 242, 255)
       End With
@@ -848,7 +861,7 @@ Partial Class mGctBillingInfo
       tr.ForeColor = Drawing.Color.Black
       td = New TableCell
       With td
-        .Text = dt.t_ntbu.ToString("n")
+        .Text = (dt.t_ntbu / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 255, 179)
       End With
@@ -862,7 +875,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ntac.ToString("n")
+        .Text = (dt.t_ntac / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 255, 179)
       End With
@@ -876,7 +889,7 @@ Partial Class mGctBillingInfo
 
       td = New TableCell
       With td
-        .Text = dt.t_ntva.ToString("n")
+        .Text = (dt.t_ntva / Divisor).ToString("n")
         .Attributes.Add("style", "text-align:center;")
         .BackColor = System.Drawing.Color.FromArgb(255, 255, 179)
       End With
