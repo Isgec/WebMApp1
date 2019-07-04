@@ -47,7 +47,7 @@ Namespace SIS.DMISG
       Dim mRet As System.Drawing.Color = Drawing.Color.Blue
       Return mRet
     End Function
-    Public Shared Function UZ_dmisg121200SelectList(ByVal StartRowIndex As Integer, ByVal MaximumRows As Integer, ByVal OrderBy As String, ByVal SearchText As String, ByVal SearchState As Boolean, ByVal LatestRevision As Boolean) As List(Of SIS.DMISG.dmisg121200)
+    Public Shared Function UZ_dmisg121200SelectList(ByVal StartRowIndex As Integer, ByVal MaximumRows As Integer, ByVal OrderBy As String, ByVal SearchText As String, ByVal SearchState As Boolean, ByVal LatestRevision As Boolean, ByVal Comp As String) As List(Of SIS.DMISG.dmisg121200)
       If SearchText Is Nothing Then SearchText = ""
       Dim Results As List(Of SIS.DMISG.dmisg121200) = Nothing
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
@@ -61,6 +61,7 @@ Namespace SIS.DMISG
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@LatestRevision", SqlDbType.Bit, 3, LatestRevision)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@IsSearch", SqlDbType.Bit, 3, SearchState)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@OrderBy", SqlDbType.NVarChar, 50, OrderBy)
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@Comp", SqlDbType.NVarChar, 3, Comp)
           Cmd.Parameters.Add("@RecordCount", SqlDbType.Int)
           Cmd.Parameters("@RecordCount").Direction = ParameterDirection.Output
           _RecordCount = -1
@@ -76,10 +77,10 @@ Namespace SIS.DMISG
       End Using
       Return Results
     End Function
-    Public Shared Function UZ_dmisg121200Count(ByVal SearchText As String, ByVal SearchState As Boolean, ByVal LatestRevision As Boolean) As Integer
+    Public Shared Function UZ_dmisg121200Count(ByVal SearchText As String, ByVal SearchState As Boolean, ByVal LatestRevision As Boolean, ByVal Comp As String) As Integer
       Return _RecordCount
     End Function
-    Public Shared Function UZ_dmisg121200SelectList_All(ByVal StartRowIndex As Integer, ByVal MaximumRows As Integer, ByVal OrderBy As String, ByVal SearchText As String, ByVal SearchState As Boolean) As List(Of SIS.DMISG.dmisg121200)
+    Public Shared Function UZ_dmisg121200SelectList_All(ByVal StartRowIndex As Integer, ByVal MaximumRows As Integer, ByVal OrderBy As String, ByVal SearchText As String, ByVal SearchState As Boolean, ByVal Comp As String) As List(Of SIS.DMISG.dmisg121200)
       If SearchText Is Nothing Then SearchText = ""
       Dim Results As List(Of SIS.DMISG.dmisg121200) = Nothing
       Dim DocID As String = ""
@@ -106,6 +107,7 @@ Namespace SIS.DMISG
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@IsFind", SqlDbType.Bit, 3, Find)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@IsSearch", SqlDbType.Bit, 3, SearchState)
           SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@OrderBy", SqlDbType.NVarChar, 50, OrderBy)
+          SIS.SYS.SQLDatabase.DBCommon.AddDBParameter(Cmd, "@Comp", SqlDbType.NVarChar, 3, Comp)
           Cmd.Parameters.Add("@RecordCount", SqlDbType.Int)
           Cmd.Parameters("@RecordCount").Direction = ParameterDirection.Output
           _RecordCount = -1
@@ -121,7 +123,7 @@ Namespace SIS.DMISG
       End Using
       Return Results
     End Function
-    Public Shared Function UZ_dmisg121200Count_All(ByVal SearchText As String, ByVal SearchState As Boolean) As Integer
+    Public Shared Function UZ_dmisg121200Count_All(ByVal SearchText As String, ByVal SearchState As Boolean, ByVal Comp As String) As Integer
       Return _RecordCount
     End Function
   End Class

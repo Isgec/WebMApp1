@@ -183,4 +183,8 @@ Partial Class mGF_dmisg121
       CType(GVdmisg121.HeaderRow.FindControl("D_PageSize"), DropDownList).SelectedIndex = 1
     End If
   End Sub
+  Private comp As String = "200"
+  Private Sub F_Company_SelectedIndexChanged(sender As Object, e As EventArgs) Handles F_Company.SelectedIndexChanged
+    comp = F_Company.SelectedValue
+  End Sub
 End Class

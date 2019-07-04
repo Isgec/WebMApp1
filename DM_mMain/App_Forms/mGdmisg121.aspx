@@ -78,6 +78,14 @@ input:checked + .slider:before {
           <asp:Label ID="Label1" runat="server" Text="[Please refer DOCUMENT LINKING session for documents released before 20-08-2018]"></asp:Label></h5>
       </div>
     </div>
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <asp:DropDownList ID="F_Company" runat="server" AutoPostBack="true">
+          <asp:ListItem Selected="True" Text="ISGEC" Value="200"></asp:ListItem>
+          <asp:ListItem Text="REDECAM" Value="700"></asp:ListItem>
+        </asp:DropDownList>
+      </div>
+    </div>
     <asp:Button ID="cmdDelete" ClientIDMode="static" runat="server" style="display:none;" />
     <div class="row">
       <div class="col-sm-12">
@@ -226,6 +234,7 @@ input:checked + .slider:before {
               <SelectParameters>
                 <asp:ControlParameter ControlID="F_SearchText" PropertyName="Text" Name="SearchText" Type="String" DefaultValue="" Size="250" />
                 <asp:ControlParameter ControlID="F_LatestRevision" PropertyName="Checked" Name="LatestRevision" Type="Boolean" DefaultValue="False" Direction="Input" Size="3" />
+                <asp:ControlParameter ControlID="F_Company" PropertyName="SelectedValue" Name="Comp" Type="String" DefaultValue="200" Direction="Input" Size="3" />
                 <asp:Parameter Name="SearchState" Type="Boolean" Direction="Input" DefaultValue="false" />
               </SelectParameters>
             </asp:ObjectDataSource>
