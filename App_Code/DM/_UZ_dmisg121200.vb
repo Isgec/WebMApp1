@@ -5,6 +5,7 @@ Imports System.Data.SqlClient
 Imports System.ComponentModel
 Namespace SIS.DMISG
   Partial Public Class dmisg121200
+    Public Property Comp As String = "200"
     Public ReadOnly Property Status As String
       Get
         Dim mRet As String = ""
@@ -40,7 +41,7 @@ Namespace SIS.DMISG
         'If Authority.ToLower = "localhost" Then Authority = "192.9.200.146"
         Dim tmpURL As String = HttpContext.Current.Request.Url.Scheme & Uri.SchemeDelimiter & Authority & HttpContext.Current.Request.ApplicationPath
         'Return "javascript:window.open('" & tmpURL & "/DM_mMain/App_Downloads/download.aspx?doc=" & PrimaryKey & "', 'win" & t_docn & "', 'left=20,top=20,width=100,height=100,toolbar=1,resizable=1,scrollbars=1'); return false;"
-        Return tmpURL & "/DM_mMain/App_Downloads/download.aspx?doc=" & PrimaryKey
+        Return tmpURL & "/DM_mMain/App_Downloads/download.aspx?doc=" & PrimaryKey & "&comp=" & Comp
       End Get
     End Property
     Public Function GetColor() As System.Drawing.Color
@@ -75,6 +76,9 @@ Namespace SIS.DMISG
           _RecordCount = Cmd.Parameters("@RecordCount").Value
         End Using
       End Using
+      For Each x As SIS.DMISG.dmisg121200 In Results
+        x.Comp = Comp
+      Next
       Return Results
     End Function
     Public Shared Function UZ_dmisg121200Count(ByVal SearchText As String, ByVal SearchState As Boolean, ByVal LatestRevision As Boolean, ByVal Comp As String) As Integer
@@ -121,6 +125,9 @@ Namespace SIS.DMISG
           _RecordCount = Cmd.Parameters("@RecordCount").Value
         End Using
       End Using
+      For Each x As SIS.DMISG.dmisg121200 In Results
+        x.Comp = Comp
+      Next
       Return Results
     End Function
     Public Shared Function UZ_dmisg121200Count_All(ByVal SearchText As String, ByVal SearchState As Boolean, ByVal Comp As String) As Integer

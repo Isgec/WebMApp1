@@ -198,7 +198,7 @@ input:checked + .slider:before {
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Activity" SortExpression="t_desc">
               <ItemTemplate>
-                <asp:LinkButton ID="L_t_cact" runat="server" Enabled='<%# Eval("EnableLink") %>' ForeColor='<%# Eval("ForeColor") %>' CssClass="form-control border-0" Title='<%# Eval("t_cact") %>' Text='<%# Eval("t_desc") %>' CommandName="lgEdit" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
+                <asp:LinkButton ID="L_t_cact" runat="server" Enabled='<%# Eval("EnableLink") %>'  CssClass="form-control border-0"  ForeColor='<%# Eval("ForeColor") %>' style="font-size:13px;" Title='<%# Eval("t_cact") %>' Text='<%# Eval("t_desc") %>' CommandName="lgEdit" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
               </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="% Progress" SortExpression="tot_cpgv">

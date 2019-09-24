@@ -11,14 +11,17 @@ Partial Class docdownload
   Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
     HttpContext.Current.Server.ScriptTimeout = Integer.MaxValue
     Dim Value As String = ""
+    Dim comp As String = "200"
     If Request.QueryString("doc") IsNot Nothing Then
       Value = Request.QueryString("doc")
-      DownloadDoc(Value)
+      comp = Request.QueryString("comp")
+      DownloadDoc(Value, comp)
     End If
   End Sub
-  Private Sub DownloadDoc(ByVal pk As String)
-    Dim docHndl As String = "DOCUMENTMASTERPDF_200"
+  Private Sub DownloadDoc(ByVal pk As String, ByVal comp As String)
+    Dim docHndl As String = "DOCUMENTMASTERPDF_" & comp
     Dim docIndx As String = pk.Replace("|", "_")
+
     Dim libPath As String = ""
     Dim filePath As String = ""
     Dim fileName As String = ""

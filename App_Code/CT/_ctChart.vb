@@ -216,7 +216,7 @@ Namespace SIS.CT
         Sql = ""
         Sql &= " declare @LastUpdated Datetime "
         'Sql &= " select top 1 @LastUpdated=convert(date,dateadd(d,-1,getdate()))"  't_limp from ttpisg220200 where t_cprj='" & ProjectID & "'"
-        Sql &= " select @LastUpdated=t_curr from ttpisg216200 where t_proa>0"
+        Sql &= " select @LastUpdated=max(t_curr) from ttpisg216200 where t_proa>0"
         If ActivityType = "" Then
           Sql &= " select aa.t_curr as ValX, aa.t_prop as ValY from ttpisg216200 as aa where aa.t_cprj='" & ProjectID & "'"
           Sql &= " and ( (aa.t_curr = (select min(dd.t_curr) from ttpisg216200 as dd where dd.t_cprj=aa.t_cprj)) "
@@ -254,7 +254,7 @@ Namespace SIS.CT
         Sql = ""
         Sql &= " declare @LastUpdated Datetime "
         'Sql &= " select top 1 @LastUpdated=convert(date,dateadd(d,-1,getdate()))"  't_limp from ttpisg220200 where t_cprj='" & ProjectID & "'"
-        Sql &= " select @LastUpdated=t_curr from ttpisg216200 where t_proa>0"
+        Sql &= " select @LastUpdated=max(t_curr) from ttpisg216200 where t_proa>0"
         If ActivityType = "" Then
           Sql &= " select aa.t_curr as ValX, aa.t_proa as ValY from ttpisg216200 as aa where aa.t_cprj='" & ProjectID & "' and aa.t_curr <= @LastUpdated"
           Sql &= " and ( (aa.t_curr = (select min(dd.t_curr) from ttpisg216200 as dd where dd.t_cprj=aa.t_cprj and dd.t_curr<=@LastUpdated)) "

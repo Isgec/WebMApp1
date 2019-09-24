@@ -97,7 +97,7 @@ Partial Class mGF_dmisg121
   End Sub
   Private Sub DownloadAll(ByVal pk As String)
     HttpContext.Current.Server.ScriptTimeout = Integer.MaxValue
-    Dim docHndl As String = "DOCUMENTMASTERPDF_200"
+    Dim docHndl As String = "DOCUMENTMASTERPDF_" & F_Company.SelectedValue
     Dim LibFolder As String = "attachmentlibrary1"
     Dim libPath As String = ""
     Dim filePath As String = ""
@@ -182,9 +182,5 @@ Partial Class mGF_dmisg121
       GVdmisg121.PageSize = 25
       CType(GVdmisg121.HeaderRow.FindControl("D_PageSize"), DropDownList).SelectedIndex = 1
     End If
-  End Sub
-  Private comp As String = "200"
-  Private Sub F_Company_SelectedIndexChanged(sender As Object, e As EventArgs) Handles F_Company.SelectedIndexChanged
-    comp = F_Company.SelectedValue
   End Sub
 End Class

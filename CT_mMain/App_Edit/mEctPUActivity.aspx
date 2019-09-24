@@ -145,10 +145,34 @@
                 }
               }
             </script>
+            <style>
+              .forsssm-control {
+                  display: table;
+                  white-space: pre-line;
+                  word-break: break-all;
+                  padding:4px;
+              }
+.fxxxorm-control {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: middle;
+    /* new lines */
+    width: 100%;
+    position: absolute;
+    left: 0;
+    padding-left: 30px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.input-group-sm>.custom-select, .input-group-sm>.form-control:not(textarea) {
+     height:unset; /*calc(1.5em + .5rem + 2px);*/ 
+}
+            </style>
             <asp:TextBox ID="OnlyFullProgress" runat="server" Text='<%# Eval("OnlyFullProgress") %>' style="display:none;"></asp:TextBox>
-            <div class="form-group">
+            <div>
               <h6><span class="badge badge-secondary">Project</span></h6>
-              <div class="input-group mb-1">
+              <div class="input-group input-group-sm mb-1">
                 <asp:Label
                   ID="F_t_cprj"
                   Text='<%# Bind("t_cprj") %>'
@@ -166,7 +190,7 @@
                   runat="Server" />
               </div>
               <h6><span class="badge badge-secondary">Activity</span></h6>
-              <div class="input-group mb-1">
+              <div class="input-group input-group-sm mb-1">
                 <asp:Label
                   ID="F_t_atid"
                   Text='<%# Bind("t_atid") %>'
@@ -184,7 +208,7 @@
                   runat="Server" />
               </div>
               <h6><span class="badge badge-secondary">System driven outlook Start & Finish Date</span></h6>
-              <div class="input-group mb-1">
+              <div class="input-group input-group-sm mb-1">
                 <asp:TextBox
                   ID="Label3"
                   Text='<%# Eval("dt_ctsd") %>'
@@ -201,7 +225,7 @@
                   runat="Server" />
               </div>
               <h6><span class="badge badge-secondary">% Progress :</span></h6>
-              <div class="input-group mb-1">
+              <div class="input-group input-group-sm mb-1">
                 <asp:TextBox ID="F_t_tpgv"
                   Text='<%# Bind("t_tpgv") %>'
                   CssClass="form-control"
@@ -227,7 +251,7 @@
                   runat="server" />
               </div>
               <h6><span class="badge badge-secondary">Actual Start Date :</span></h6>
-              <div class="input-group mb-1">
+              <div class="input-group input-group-sm mb-1">
               <asp:TextBox ID="F_t_acsd"
                 Text='<%# Bind("dt_acsd") %>'
                 CssClass="form-control"
@@ -247,7 +271,7 @@
                  ValidationGroup="pp" />
               </div>
               <h6><span class="badge badge-secondary">Outlook Start Date :</span></h6>
-              <div class="input-group mb-1">
+              <div class="input-group input-group-sm mb-1">
               <asp:TextBox ID="F_t_otsd"
                 Text='<%# Bind("dt_otsd") %>'
                 Enabled='<%# Editable %>'
@@ -257,7 +281,7 @@
               </div>
               <div id="pnlconfirmation" runat="server">
                 <h6><span class="badge badge-danger">Pl. Confirm Base Line/System Outlook Dates are OK :</span></h6>
-                <div class="input-group mb-1">
+                <div class="input-group input-group-sm mb-1">
                   <asp:DropDownList
                     ID="F_t_wipd"
                     SelectedValue='<%# Bind("lg_t_wipd") %>'
@@ -279,7 +303,7 @@
                 </div>
               </div>
               <h6><span class="badge badge-secondary">Outlook Finish Date :</span></h6>
-              <div class="input-group mb-1">
+              <div class="input-group input-group-sm mb-1">
                 <asp:TextBox ID="F_t_oted"
                   Text='<%# Bind("dt_oted") %>'
                   CssClass="form-control"
@@ -298,7 +322,7 @@
               </div>
 
               <h6><span class="badge badge-secondary">Actual Finish Date :</span></h6>
-              <div class="input-group mb-1">
+              <div class="input-group input-group-sm mb-1">
                 <asp:TextBox ID="F_t_aced"
                   Text='<%# Bind("dt_aced") %>'
                   CssClass="form-control"
@@ -318,7 +342,7 @@
                  ValidationGroup="pp" />
               </div>
               <h6><span class="badge badge-secondary">Remarks :</span></h6>
-              <div class="input-group mb-1">
+              <div class="input-group input-group-sm mb-1">
                 <asp:TextBox ID="F_t_rmks"
                   Text='<%# Bind("t_rmks") %>'
                   CssClass="form-control"

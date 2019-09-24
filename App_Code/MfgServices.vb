@@ -46,6 +46,7 @@ Public Class MfgServices
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
         Cmd.CommandText = Sql
+        Cmd.CommandTimeout = 150
         Con.Open()
         Dim Reader As SqlDataReader = Cmd.ExecuteReader()
         While (Reader.Read())
@@ -69,6 +70,7 @@ Public Class MfgServices
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
         Cmd.CommandText = Sql
+        Cmd.CommandTimeout = 150
         Con.Open()
         Dim Reader As SqlDataReader = Cmd.ExecuteReader()
         While (Reader.Read())
@@ -94,6 +96,7 @@ Public Class MfgServices
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
         Cmd.CommandText = Sql
+        Cmd.CommandTimeout = 150
         Con.Open()
         Dim Reader As SqlDataReader = Cmd.ExecuteReader()
         While (Reader.Read())
@@ -120,6 +123,7 @@ Public Class MfgServices
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
         Cmd.CommandText = Sql
+        Cmd.CommandTimeout = 150
         Con.Open()
         Dim Reader As SqlDataReader = Cmd.ExecuteReader()
         While (Reader.Read())
@@ -153,6 +157,7 @@ Public Class MfgServices
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
         Cmd.CommandText = Sql
+        Cmd.CommandTimeout = 150
         Con.Open()
         Dim Reader As SqlDataReader = Cmd.ExecuteReader()
         While (Reader.Read())
@@ -201,6 +206,7 @@ Public Class MfgServices
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
         Cmd.CommandText = Sql
+        Cmd.CommandTimeout = 150
         Con.Open()
         Dim Reader As SqlDataReader = Cmd.ExecuteReader()
         While (Reader.Read())
@@ -223,6 +229,7 @@ Public Class MfgServices
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
         Cmd.CommandText = "Select isnull(POTypeID,0) from PAK_PO where PONumber='" & PoNo & "'"
+        Cmd.CommandTimeout = 150
         Con.Open()
         mRet = Cmd.ExecuteScalar
       End Using
@@ -246,6 +253,7 @@ Public Class MfgServices
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
         Cmd.CommandText = Sql
+        Cmd.CommandTimeout = 150
         Con.Open()
         Dim Reader As SqlDataReader = Cmd.ExecuteReader()
         While (Reader.Read())
