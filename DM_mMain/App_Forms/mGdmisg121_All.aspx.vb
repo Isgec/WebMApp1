@@ -28,4 +28,16 @@ Partial Class mGF_dmisg121_All
   Private Sub TBLdmisg121200_Init(sender As Object, e As EventArgs) Handles TBLdmisg121200.Init
     SetToolBar = TBLdmisg121200
   End Sub
+
+  Private Sub mGF_dmisg121_All_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Dim Authority As String = HttpContext.Current.Request.Url.Authority
+    If Authority.ToUpper = "CLOUD.ISGEC.CO.IN" Then
+      divOK.Visible = False
+      divErr.Visible = True
+    Else
+      divOK.Visible = True
+      divErr.Visible = False
+    End If
+
+  End Sub
 End Class

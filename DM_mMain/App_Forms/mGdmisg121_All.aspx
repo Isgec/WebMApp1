@@ -69,7 +69,7 @@ input:checked + .slider:before {
 </style>
 </asp:Content>
 <asp:Content ID="CPHdmisg121" ContentPlaceHolderID="cph1" runat="Server">
-  <div class="container">
+  <div class="container" id="divOK" runat="server" clientidmode="static">
     <div class="container text-center">
       <h3>
         <asp:Label ID="Labeldmisg121" runat="server" Text="Document List-ALL"></asp:Label></h3>
@@ -158,4 +158,8 @@ input:checked + .slider:before {
       </Triggers>
     </asp:UpdatePanel>
   </div>
+  <div class="container-fluid text-center" id="divErr" runat="server" clientidmode="static">
+    <h1>Access Denied</h1>
+  </div>
+
 </asp:Content>

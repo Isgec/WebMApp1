@@ -178,9 +178,17 @@ Partial Class mGF_dmisg121
   End Sub
 
   Private Sub mGF_dmisg121_Load(sender As Object, e As EventArgs) Handles Me.Load
-    If Not Page.IsPostBack And Not Page.IsCallback Then
-      GVdmisg121.PageSize = 25
-      CType(GVdmisg121.HeaderRow.FindControl("D_PageSize"), DropDownList).SelectedIndex = 1
+    Dim Authority As String = HttpContext.Current.Request.Url.Authority
+    If Authority.ToUpper = "CLOUD.ISGEC.CO.IN" Then
+      divOK.Visible = False
+      divErr.Visible = True
+    Else
+      divOK.Visible = True
+      divErr.Visible = False
+      If Not Page.IsPostBack And Not Page.IsCallback Then
+        GVdmisg121.PageSize = 25
+        CType(GVdmisg121.HeaderRow.FindControl("D_PageSize"), DropDownList).SelectedIndex = 1
+      End If
     End If
   End Sub
 End Class
