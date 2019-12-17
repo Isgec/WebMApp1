@@ -13,6 +13,27 @@ Imports System.Collections.Generic
 Public Class MfgServices
   Inherits System.Web.Services.WebService
   <WebMethod(EnableSession:=True)>
+  Public Function GetContractsCashflow(knownCategoryValues As String) As CascadingDropDownNameValue()
+    Dim Contracts As New List(Of CascadingDropDownNameValue)
+    Dim Sql As String = ""
+    Sql &= " select distinct aa.t_ccod,bb.t_ccno from ttpisg089200 as aa "
+    Sql &= " inner join ttpisg087200 as bb on aa.t_ccod = bb.t_ccod "
+    Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+      Using Cmd As SqlCommand = Con.CreateCommand()
+        Cmd.CommandType = CommandType.Text
+        Cmd.CommandText = Sql
+        Cmd.CommandTimeout = 150
+        Con.Open()
+        Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+        While (Reader.Read())
+          Contracts.Add(New CascadingDropDownNameValue() With {.name = Reader("t_ccod") & "-" & Reader("t_ccno"), .value = Reader("t_ccod")})
+        End While
+        Reader.Close()
+      End Using
+    End Using
+    Return Contracts.ToArray()
+  End Function
+  <WebMethod(EnableSession:=True)>
   Public Function GetContracts(knownCategoryValues As String) As CascadingDropDownNameValue()
     Dim Contracts As New List(Of CascadingDropDownNameValue)
     Dim UserID As String = HttpContext.Current.Session("LoginID")
