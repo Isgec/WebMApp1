@@ -89,13 +89,13 @@ Namespace SIS.CT
     Public Property TAO As Decimal = 0
     Public Property BN As Decimal = 0
     Public Property AN As Decimal = 0
-    Public Function GetDataTable(Optional Cumulative As Boolean = False, Optional ByRef cChart As costChart = Nothing) As String
+    Public Function GetDataTableInflow(Optional Cumulative As Boolean = False, Optional Comp As String = "200", Optional ByRef cChart As costChart = Nothing) As String
       'Get Overall X
       Dim mRet As New costChart
       Dim Sql As String = ""
       Dim aData As List(Of ctData) = Nothing
       Sql = ""
-      Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX,t_amti as biY, t_amto as boY,t_cmti as aiY, t_cmto as aoY,t_oami as oiY, t_oamo as ooY from ttpisg089200 where t_ccod='" & ContractID & "'"
+      Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX,t_amti as biY, t_cmti as aiY, t_oami as oiY from ttpisg089" & Comp & " where t_ccod='" & ContractID & "'"
       aData = New List(Of ctData)
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Con.Open()
@@ -110,19 +110,22 @@ Namespace SIS.CT
         End Using
         mRet.OverallX = aData.Select(Function(x) x.ValX).ToArray
         mRet.PlannedY = aData.Select(Function(x) Math.Round(x.biY, 2)).ToArray
-        mRet.OPlannedY = aData.Select(Function(x) Math.Round(x.boY, 2)).ToArray
         mRet.ActualY = aData.Select(Function(x) Math.Round(x.aiY, 2)).ToArray
-        mRet.OActualY = aData.Select(Function(x) Math.Round(x.aoY, 2)).ToArray
         mRet.OutlookY = aData.Select(Function(x) Math.Round(x.oiY, 2)).ToArray
-        mRet.OOutlookY = aData.Select(Function(x) Math.Round(x.ooY, 2)).ToArray
         If Cumulative Then
+          Dim OutlookIStarted As Boolean = False
           For I As Integer = 0 To mRet.OverallX.Length - 2
-            If mRet.PlannedY(I + 1) <> 0 Then mRet.PlannedY(I + 1) += mRet.PlannedY(I)
-            If mRet.OPlannedY(I + 1) <> 0 Then mRet.OPlannedY(I + 1) += mRet.OPlannedY(I)
-            If mRet.ActualY(I + 1) <> 0 Then mRet.ActualY(I + 1) += mRet.ActualY(I)
-            If mRet.OActualY(I + 1) <> 0 Then mRet.OActualY(I + 1) += mRet.OActualY(I)
-            If mRet.OutlookY(I + 1) > 0 Then mRet.OutlookY(I + 1) += (mRet.OutlookY(I) + mRet.ActualY(I))
-            If mRet.OOutlookY(I + 1) > 0 Then mRet.OOutlookY(I + 1) += (mRet.OOutlookY(I) + mRet.OActualY(I))
+            mRet.PlannedY(I + 1) += mRet.PlannedY(I)
+            If Not OutlookIStarted Then
+              If mRet.OutlookY(I + 1) > 0 Then
+                OutlookIStarted = True
+              End If
+            End If
+            If Not OutlookIStarted Then
+              mRet.ActualY(I + 1) += mRet.ActualY(I)
+            Else
+              mRet.OutlookY(I + 1) += (mRet.OutlookY(I) + mRet.ActualY(I))
+            End If
           Next
         End If
       End Using
@@ -130,14 +133,10 @@ Namespace SIS.CT
       Dim mStr As String = ""
       Try
         Dim row1 As String = "<td style='width:100px;background-color:black;color:white;'></td>"
-        Dim row2 As String = "<td><b>I-BUDGETED</b></td>"
-        Dim row3 As String = "<td><b>I-ACTUAL</b></td>"
-        Dim row4 As String = "<td><b>I-OUTLOOK</b></td>"
-        Dim row5 As String = "<td style='background-color:gray;color:white;'><b>I-VARIANCE</b></td>"
-        Dim orow2 As String = "<td><b>O-BUDGETED</b></td>"
-        Dim orow3 As String = "<td><b>O-ACTUAL</b></td>"
-        Dim orow4 As String = "<td><b>O-OUTLOOK</b></td>"
-        Dim orow5 As String = "<td style='background-color:gray;color:white;'><b>O-VARIANCE</b></td>"
+        Dim row2 As String = "<td><b>BUDGETED</b></td>"
+        Dim row3 As String = "<td><b>ACTUAL</b></td>"
+        Dim row4 As String = "<td><b>OUTLOOK</b></td>"
+        Dim row5 As String = "<td style='background-color:gray;color:white;'><b>VARIANCE</b></td>"
         For I As Integer = 0 To mRet.OverallX.Length - 1
           Dim isCurrent As Boolean = False
           If mRet.OverallX(I).Date = LastProcessed.Date Then
@@ -189,7 +188,81 @@ Namespace SIS.CT
             sTmp = Math.Round(tmpV, 2)
           End If
           row5 &= "<td style='text-align:center;background-color:gray;" & IIf(isCurrent, "color:yellow", "color:white") & ";'>" & sTmp & "</td>"
-          '================
+        Next
+
+        mStr &= "<table class='table-bordered' style='width:100%;margin:5px 5px 5px 5px;'>"
+        mStr &= "<tr>" & row1 & "</tr>"
+        mStr &= "<tr>" & row2 & "</tr>"
+        mStr &= "<tr>" & row3 & "</tr>"
+        mStr &= "<tr>" & row4 & "</tr>"
+        mStr &= "<tr>" & row5 & "</tr>"
+        mStr &= "</table>"
+      Catch ex As Exception
+        mStr = ex.Message
+      End Try
+      Return mStr
+    End Function
+
+    Public Function GetDataTableOutflow(Optional Cumulative As Boolean = False, Optional Comp As String = "200", Optional ByRef cChart As costChart = Nothing) As String
+      'Get Overall X
+      Dim mRet As New costChart
+      Dim Sql As String = ""
+      Dim aData As List(Of ctData) = Nothing
+      Sql = ""
+      Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX,t_amto as boY,t_cmto as aoY,t_oamo as ooY from ttpisg089" & Comp & " where t_ccod='" & ContractID & "'"
+      aData = New List(Of ctData)
+      Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+        Con.Open()
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            aData.Add(New ctData(Reader))
+          End While
+          Reader.Close()
+        End Using
+        mRet.OverallX = aData.Select(Function(x) x.ValX).ToArray
+        mRet.OPlannedY = aData.Select(Function(x) Math.Round(x.boY, 2)).ToArray
+        mRet.OActualY = aData.Select(Function(x) Math.Round(x.aoY, 2)).ToArray
+        mRet.OOutlookY = aData.Select(Function(x) Math.Round(x.ooY, 2)).ToArray
+        If Cumulative Then
+          Dim OutlookOStarted As Boolean = False
+
+          For I As Integer = 0 To mRet.OverallX.Length - 2
+            mRet.OPlannedY(I + 1) += mRet.OPlannedY(I)
+            If Not OutlookOStarted Then
+              If mRet.OOutlookY(I + 1) > 0 Then
+                OutlookOStarted = True
+              End If
+            End If
+            If Not OutlookOStarted Then
+              mRet.OActualY(I + 1) += mRet.OActualY(I)
+            Else
+              mRet.OOutlookY(I + 1) += (mRet.OOutlookY(I) + mRet.OActualY(I))
+            End If
+          Next
+        End If
+      End Using
+      cChart = mRet
+      Dim mStr As String = ""
+      Try
+        Dim row1 As String = "<td style='width:100px;background-color:black;color:white;'></td>"
+        Dim orow2 As String = "<td><b>BUDGETED</b></td>"
+        Dim orow3 As String = "<td><b>ACTUAL</b></td>"
+        Dim orow4 As String = "<td><b>OUTLOOK</b></td>"
+        Dim orow5 As String = "<td style='background-color:gray;color:white;'><b>VARIANCE</b></td>"
+        For I As Integer = 0 To mRet.OverallX.Length - 1
+          Dim isCurrent As Boolean = False
+          If mRet.OverallX(I).Date = LastProcessed.Date Then
+            isCurrent = True
+          End If
+          row1 &= "<td style='text-align:center;background-color:black;" & IIf(isCurrent, "color:yellow;", "color:white;") & "'>" & mRet.OverallX(I).ToString("MMM-yyyy") & "</td>"
+          Dim tmpP As Decimal = 0.00
+          Dim tmpA As Double = 0.00
+          Dim tmpO As Double = 0.00
+          Dim tmpV As Double = 0.00
+          Dim sTmp As String = ""
           Try
             tmpP = mRet.OPlannedY(I)
           Catch ex As Exception
@@ -234,10 +307,6 @@ Namespace SIS.CT
 
         mStr &= "<table class='table-bordered' style='width:100%;margin:5px 5px 5px 5px;'>"
         mStr &= "<tr>" & row1 & "</tr>"
-        mStr &= "<tr>" & row2 & "</tr>"
-        mStr &= "<tr>" & row3 & "</tr>"
-        mStr &= "<tr>" & row4 & "</tr>"
-        mStr &= "<tr>" & row5 & "</tr>"
         mStr &= "<tr>" & orow2 & "</tr>"
         mStr &= "<tr>" & orow3 & "</tr>"
         mStr &= "<tr>" & orow4 & "</tr>"
@@ -248,13 +317,13 @@ Namespace SIS.CT
       End Try
       Return mStr
     End Function
-    Public Function GetDataTableNet(Optional Cumulative As Boolean = False, Optional ByRef cChart As costChart = Nothing) As String
+    Public Function GetDataTableNet(Optional Cumulative As Boolean = False, Optional Comp As String = "200", Optional ByRef cChart As costChart = Nothing) As String
       'Get Overall X
       Dim mRet As New costChart
       Dim Sql As String = ""
       Dim aData As List(Of ctData) = Nothing
       Sql = ""
-      Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_namt as biY,t_cnmt as aiY,t_oamn as oiY from ttpisg089200 where t_ccod='" & ContractID & "'"
+      Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_namt as biY,t_cnmt as aiY,t_oamn as oiY from ttpisg089" & Comp & " where t_ccod='" & ContractID & "'"
       aData = New List(Of ctData)
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Con.Open()
@@ -272,10 +341,22 @@ Namespace SIS.CT
         mRet.ActualY = aData.Select(Function(x) Math.Round(x.aiY, 2)).ToArray
         mRet.OutlookY = aData.Select(Function(x) Math.Round(x.oiY, 2)).ToArray
         If Cumulative Then
+          Dim OutlookStarted As Boolean = False
           For I As Integer = 0 To mRet.OverallX.Length - 2
-            If mRet.PlannedY(I + 1) <> 0 Then mRet.PlannedY(I + 1) += mRet.PlannedY(I)
-            If mRet.ActualY(I + 1) <> 0 Then mRet.ActualY(I + 1) += mRet.ActualY(I)
-            If mRet.OutlookY(I + 1) > 0 Then mRet.OutlookY(I + 1) += (mRet.OutlookY(I) + mRet.ActualY(I))
+            'If mRet.PlannedY(I + 1) <> 0 Then mRet.PlannedY(I + 1) += mRet.PlannedY(I)
+            'If mRet.ActualY(I + 1) <> 0 Then mRet.ActualY(I + 1) += mRet.ActualY(I)
+            'If mRet.OutlookY(I + 1) > 0 Then mRet.OutlookY(I + 1) += (mRet.OutlookY(I) + mRet.ActualY(I))
+            mRet.PlannedY(I + 1) += mRet.PlannedY(I)
+            If Not OutlookStarted Then
+              If mRet.OutlookY(I + 1) > 0 Then
+                OutlookStarted = True
+              End If
+            End If
+            If Not OutlookStarted Then
+              mRet.ActualY(I + 1) += mRet.ActualY(I)
+            Else
+              mRet.OutlookY(I + 1) += (mRet.OutlookY(I) + mRet.ActualY(I))
+            End If
           Next
         End If
       End Using
@@ -370,128 +451,12 @@ Namespace SIS.CT
           .MajorGrid.LineColor = Drawing.Color.LightGray
           .MajorGrid.LineWidth = 1
         End With
-      End With
-      Dim s As Series = Nothing
-      '=====================================
-      s = New Series("Budgeted-Outflow")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Column
-        .Points.DataBindXY(dt.PlannedX, dt.OPlannedY)
-        .ChartArea = "ChartArea1"
-        .BorderWidth = Border
-        .Color = Drawing.Color.Green
-        .ToolTip = "#VALY"
-      End With
-      s = New Series("Actual-Outflow")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Column
-        .Points.DataBindXY(dt.ActualX, dt.OActualY)
-        .ChartArea = "ChartArea1"
-        .BorderWidth = Border
-        .Color = System.Drawing.Color.DeepPink
-        .ToolTip = "#VALY"
-      End With
-      s = New Series("Outlook-Outflow")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Column
-        .Points.DataBindXY(dt.OutlookX, dt.OOutlookY)
-        .ChartArea = "ChartArea1"
-        .BorderDashStyle = ChartDashStyle.DashDotDot
-        .BorderWidth = Border
-        .Color = Drawing.Color.Purple
-        .ToolTip = "#VALY"
-      End With
-      s = New Series("Budgeted-Inflow")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Spline
-        .Points.DataBindXY(dt.PlannedX, dt.PlannedY)
-        .ChartArea = "ChartArea1"
-        .BorderWidth = Border
-        .Color = Drawing.Color.OrangeRed
-        .ToolTip = "#VALY"
-        '.IsValueShownAsLabel = True
-        '.MarkerSize = 15
-        '.MarkerStyle = MarkerStyle.Diamond
-        'With .SmartLabelStyle
-        '  .Enabled = True
-        '  .CalloutStyle = LabelCalloutStyle.Box
-        '  .CalloutLineColor = Drawing.Color.Goldenrod
-        '  .CalloutLineDashStyle = ChartDashStyle.Solid
-        '  .CalloutLineWidth = 3
-        '  .CalloutLineAnchorCapStyle = LineAnchorCapStyle.Arrow
-        '  .MinMovingDistance = 20
-        '  .MaxMovingDistance = 100
-        '  .MovingDirection = LabelAlignmentStyles.TopRight
-        'End With
-      End With
-
-      Dim dateLine As New VerticalLineAnnotation()
-      dateLine.AxisX = Chart1.ChartAreas(0).AxisX
-      dateLine.AxisY = Chart1.ChartAreas(0).AxisY
-      dateLine.LineColor = Drawing.Color.Red
-      dateLine.LineWidth = 5
-      dateLine.LineDashStyle = ChartDashStyle.Dot
-      dateLine.AnchorX = Now.Date.ToOADate()
-      dateLine.AnchorY = 0
-      dateLine.ClipToChartArea = "ChartArea1"
-      dateLine.IsInfinitive = True
-      Chart1.Annotations.Add(dateLine)
-      For Each xPoint As DataPoint In s.Points
-        If xPoint.YValues(0) = 0 Then xPoint.IsEmpty = True
-      Next
-
-
-      s = New Series("Actual-Inflow")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Spline
-        .Points.DataBindXY(dt.ActualX, dt.ActualY)
-        .ChartArea = "ChartArea1"
-        .BorderWidth = Border
-        .Color = System.Drawing.Color.Blue
-        .ToolTip = "#VALY"
-      End With
-      s = New Series("Outlook-Inflow")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Spline
-        .Points.DataBindXY(dt.OutlookX, dt.OutlookY)
-        .ChartArea = "ChartArea1"
-        .BorderDashStyle = ChartDashStyle.DashDotDot
-        .BorderWidth = Border
-        .Color = Drawing.Color.Gold
-        .ToolTip = "#VALY"
-      End With
-
-      Return Chart1
-    End Function
-    Public Shared Function RenderChartNet(ByVal Chart1 As Chart, ByVal dt As costChart, Optional ByVal IntervalY As Integer = 10, Optional ByVal Border As Integer = 3) As Chart
-      Dim ca As ChartArea = Chart1.ChartAreas(0)
-      With ca
-        With .AxisX
-          .MinorTickMark.Enabled = True
-          .IntervalOffset = 0
-          .IntervalOffsetType = DateTimeIntervalType.Months
-          .IsLabelAutoFit = True
-          .LabelAutoFitStyle = LabelAutoFitStyles.DecreaseFont
-          .LabelStyle.Format = "MMM-yyyy"
-          .MajorGrid.LineColor = Drawing.Color.LightGray
-          .MajorGrid.LineWidth = 1
-        End With
-        With .AxisY
-          .MajorGrid.LineColor = Drawing.Color.LightGray
-          .MajorGrid.LineWidth = 1
-        End With
 
       End With
       Dim s As Series = Nothing
 
       'Add Series to the Chart.
-      s = New Series("NET-Budgeted")
+      s = New Series("Budgeted")
       Chart1.Series.Add(s)
       With s
         .ChartType = SeriesChartType.Spline
@@ -501,8 +466,11 @@ Namespace SIS.CT
         .BorderWidth = Border
         .Color = Drawing.Color.OrangeRed
         .ToolTip = "#VALY"
+        .IsValueShownAsLabel = True
+        .LabelFormat = "###0"
+        .LabelForeColor = Drawing.Color.OrangeRed
       End With
-      s = New Series("NET-Actual")
+      s = New Series("Actual")
       Chart1.Series.Add(s)
       With s
         .ChartType = SeriesChartType.Spline
@@ -511,8 +479,11 @@ Namespace SIS.CT
         .BorderWidth = Border
         .Color = System.Drawing.Color.Blue
         .ToolTip = "#VALY"
+        .IsValueShownAsLabel = True
+        .LabelFormat = "###0"
+        .LabelForeColor = Drawing.Color.Blue
       End With
-      s = New Series("NET-Outlook")
+      s = New Series("Outlook")
       Chart1.Series.Add(s)
       With s
         .ChartType = SeriesChartType.Spline
@@ -520,17 +491,20 @@ Namespace SIS.CT
         .ChartArea = "ChartArea1"
         .BorderDashStyle = ChartDashStyle.DashDotDot
         .BorderWidth = Border
-        .Color = Drawing.Color.Gold
+        .Color = Drawing.Color.LightBlue
         .ToolTip = "#VALY"
+        .IsValueShownAsLabel = True
+        .LabelFormat = "###0"
+        .LabelForeColor = Drawing.Color.CadetBlue
       End With
 
       Dim dateLine As New VerticalLineAnnotation()
       dateLine.AxisX = Chart1.ChartAreas(0).AxisX
       dateLine.AxisY = Chart1.ChartAreas(0).AxisY
-      dateLine.LineColor = Drawing.Color.Red
+      dateLine.LineColor = Drawing.Color.Green
       dateLine.LineWidth = 5
       dateLine.LineDashStyle = ChartDashStyle.Dot
-      dateLine.AnchorX = Now.Date.ToOADate()
+      dateLine.AnchorX = Convert.ToDateTime("01/" & (Now.Month).ToString.PadLeft(2, "0") & "/" & Now.Year).AddMonths(-1).ToOADate()
       dateLine.AnchorY = 0
       dateLine.ClipToChartArea = "ChartArea1"
       dateLine.IsInfinitive = True
@@ -538,14 +512,14 @@ Namespace SIS.CT
 
       Return Chart1
     End Function
-    Public Shared Function GetCostChart(ByVal ContractID As String, Optional ByVal ActivityType As String = "", Optional countOfX As Integer = 30) As costChart
+    Public Shared Function GetCostChart(ByVal ContractID As String, Comp As String, Optional ByVal ActivityType As String = "", Optional countOfX As Integer = 30) As costChart
       If ContractID = "" Then Return Nothing
       Dim mRet As New costChart
       mRet.ContractID = ContractID
       mRet.ActivityType = ActivityType
       mRet.CountOfXValuesToBeShown = countOfX
 
-      mRet.LastUpdatedOn = Convert.ToDateTime("01/" & (Now.Month).ToString.PadLeft(2, "0") & "/" & Now.Year)
+      mRet.LastUpdatedOn = Convert.ToDateTime("01/" & (Now.Month).ToString.PadLeft(2, "0") & "/" & Now.Year).AddMonths(-1)
       mRet.LastProcessed = mRet.LastUpdatedOn
 
       Dim Sql As String = ""
@@ -555,10 +529,12 @@ Namespace SIS.CT
         'Get Budgted
         Sql = ""
         Select Case ActivityType
-          Case "BA", "BAC"
-            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_amti as biY, t_amto as boY from ttpisg089200 where (t_amti <> 0 or t_amto <> 0) and t_ccod='" & ContractID & "'"
+          Case "I", "IC"
+            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_amti as biY from ttpisg089" & Comp & " where t_ccod='" & ContractID & "'"
+          Case "O", "OC"
+            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_amto as biY from ttpisg089" & Comp & " where t_ccod='" & ContractID & "'"
           Case "NET", "NETC"
-            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_namt as biY from ttpisg089200 where (t_amti <> 0 or t_amto <> 0) and t_ccod='" & ContractID & "'"
+            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_namt as biY from ttpisg089" & Comp & " where t_ccod='" & ContractID & "'"
         End Select
         aData = New List(Of ctData)
         Using Cmd As SqlCommand = Con.CreateCommand()
@@ -569,13 +545,11 @@ Namespace SIS.CT
           While (Reader.Read())
             Dim x As New ctData(Reader)
             Select Case ActivityType
-              Case "BAC", "NETC"
+              Case "NETC", "IC", "OC"
                 With xL
                   .biY += x.biY
-                  .boY += x.boY
                 End With
                 x.biY = xL.biY
-                x.boY = xL.boY
             End Select
             aData.Add(x)
           End While
@@ -583,86 +557,213 @@ Namespace SIS.CT
         End Using
         mRet.PlannedX = aData.Select(Function(x) x.ValX).ToArray
         mRet.PlannedY = aData.Select(Function(x) Math.Round(x.biY, 2)).ToArray
-        mRet.OPlannedY = aData.Select(Function(x) Math.Round(x.boY, 2)).ToArray
-        'Get Actual
-        Sql = ""
-        Select Case ActivityType
-          Case "BA", "BAC"
-            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_cmti as aiY, t_cmto as aoY from ttpisg089200 where (t_cmti<>0 or t_cmto<>0) and t_ccod='" & ContractID & "'"
-          Case "NET", "NETC"
-            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_cnmt as aiY from ttpisg089200 where (t_cmti<>0 or t_cmto<>0) and t_ccod='" & ContractID & "'"
-        End Select
-        aData = New List(Of ctData)
-        Using Cmd As SqlCommand = Con.CreateCommand()
-          Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = Sql
-          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
-          Dim xL As New ctData
-          While (Reader.Read())
-            Dim x As New ctData(Reader)
-            Select Case ActivityType
-              Case "BAC", "NETC"
-                With xL
-                  .aiY += x.aiY
-                  .aoY += x.aoY
-                End With
-                x.aiY = xL.aiY
-                x.aoY = xL.aoY
-            End Select
-            aData.Add(x)
-          End While
-          Reader.Close()
-        End Using
-        mRet.ActualX = aData.Select(Function(x) x.ValX).ToArray
-        mRet.ActualY = aData.Select(Function(x) Math.Round(x.aiY, 2)).ToArray
-        mRet.OActualY = aData.Select(Function(x) Math.Round(x.aoY, 2)).ToArray
-        Dim LastActual As ctData = aData.Last.Clone
+
+
+
         'Get Outlook
         Sql = ""
         Select Case ActivityType
-          Case "BA", "BAC"
-            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_oami as oiY, t_oamo as ooY from ttpisg089200  where (t_oami<>0 or t_oamo<>0) and t_ccod='" & ContractID & "'"
+          Case "I", "IC"
+            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_oami as oiY from ttpisg089" & Comp & "  where t_ccod='" & ContractID & "'"
+          Case "O", "OC"
+            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_oamo as oiY from ttpisg089" & Comp & "  where t_ccod='" & ContractID & "'"
           Case "NET", "NETC"
-            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_oamn as oiY from ttpisg089200 where (t_oami<>0 or t_oamo<>0) and t_ccod='" & ContractID & "'"
+            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_oamn as oiY from ttpisg089" & Comp & " where t_ccod='" & ContractID & "'"
         End Select
-        aData = New List(Of ctData)
-        With LastActual
-          .oiY = .aiY
-          .ooY = .aoY
-        End With
-        aData.Add(LastActual)
+        Dim outlookaData = New List(Of ctData)
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
-          Dim xL As New ctData
-          With xL
-            .oiY = LastActual.aiY
-            .ooY = LastActual.aoY
-          End With
           While (Reader.Read())
             Dim x As New ctData(Reader)
-            Select Case ActivityType
-              Case "BAC", "NETC"
-                With xL
-                  .oiY += x.oiY
-                  .ooY += x.ooY
-                End With
-                x.oiY = xL.oiY
-                x.ooY = xL.ooY
-            End Select
+            outlookaData.Add(x)
+          End While
+          Reader.Close()
+        End Using
+        Dim Found As Boolean = False
+        For i As Integer = outlookaData.Count - 1 To 0 Step -1
+          If Found Then
+            If outlookaData(i).oiY = 0 Then
+              outlookaData.RemoveAt(i)
+            End If
+          Else
+            If outlookaData(i).oiY <> 0 Then
+              Found = True
+            End If
+          End If
+        Next
+        'Do not put outlook values
+        '===================================
+        'Get Actual upto start Month of Outlook
+        Dim FirstOutlook As ctData = outlookaData(0).Clone
+        Sql = ""
+        Select Case ActivityType
+          Case "I", "IC"
+            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_cmti as aiY from ttpisg089" & Comp & " where t_ccod='" & ContractID & "'"
+          Case "O", "OC"
+            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_cmto as aiY from ttpisg089" & Comp & " where t_ccod='" & ContractID & "'"
+          Case "NET", "NETC"
+            Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, t_cnmt as aiY from ttpisg089" & Comp & " where t_ccod='" & ContractID & "'"
+        End Select
+        Sql &= " and ((t_year=" & FirstOutlook.ValX.Year & " and t_mnth<" & FirstOutlook.ValX.Month & ") or (t_year<" & FirstOutlook.ValX.Year & "))"
+        aData = New List(Of ctData)
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+          While (Reader.Read())
+            Dim x As New ctData(Reader)
             aData.Add(x)
           End While
           Reader.Close()
         End Using
+        'Cumulative Value
+        Select Case ActivityType
+          Case "IC", "OC", "NETC"
+            For i = 1 To aData.Count - 1
+              aData(i).aiY = aData(i).aiY + aData(i - 1).aiY
+            Next
+        End Select
+        'End Cumulative
+        mRet.ActualX = aData.Select(Function(x) x.ValX).ToArray
+        mRet.ActualY = aData.Select(Function(x) Math.Round(x.aiY, 2)).ToArray
+
+        'Put outlook values now
+        Dim lastActual As ctData = aData.Last.Clone
+        lastActual.oiY = lastActual.aiY
+        aData = New List(Of ctData)
+        aData.Add(lastActual)
+        aData.AddRange(outlookaData)
+        'Cumulative Value
+        Select Case ActivityType
+          Case "IC", "OC", "NETC"
+            For i = 1 To aData.Count - 1
+              aData(i).oiY = aData(i).oiY + aData(i - 1).oiY
+            Next
+        End Select
+        'End Cumulative
         mRet.OutlookX = aData.Select(Function(x) x.ValX).ToArray
         mRet.OutlookY = aData.Select(Function(x) Math.Round(x.oiY, 2)).ToArray
-        mRet.OOutlookY = aData.Select(Function(x) Math.Round(x.ooY, 2)).ToArray
-        'Making Outlook value for outflow to Zero, because outflow is BAR Graph
-        'To have clearity in view, though outlook value is okay for inflow, because inflow is line graph
-        mRet.OOutlookY(0) = 0
+
       End Using
       Return mRet
     End Function
   End Class
 End Namespace
+'Public Shared Function RenderChart(ByVal Chart1 As Chart, ByVal dt As costChart, Optional ByVal IntervalY As Integer = 10, Optional ByVal Border As Integer = 3) As Chart
+'  Dim ca As ChartArea = Chart1.ChartAreas(0)
+'  With ca
+'    With .AxisX
+'      .MinorTickMark.Enabled = True
+'      .IntervalOffset = 0
+'      .IntervalOffsetType = DateTimeIntervalType.Months
+'      .IsLabelAutoFit = True
+'      .LabelAutoFitStyle = LabelAutoFitStyles.DecreaseFont
+'      .LabelStyle.Format = "MMM-yyyy"
+'      .MajorGrid.LineColor = Drawing.Color.LightGray
+'      .MajorGrid.LineWidth = 1
+'    End With
+'    With .AxisY
+'      .MajorGrid.LineColor = Drawing.Color.LightGray
+'      .MajorGrid.LineWidth = 1
+'    End With
+'  End With
+'  Dim s As Series = Nothing
+'  '=====================================
+'  s = New Series("Budgeted-Outflow")
+'  Chart1.Series.Add(s)
+'  With s
+'    .ChartType = SeriesChartType.Spline
+'    .Points.DataBindXY(dt.PlannedX, dt.OPlannedY)
+'    .ChartArea = "ChartArea1"
+'    .BorderWidth = Border
+'    .Color = Drawing.Color.FromArgb(233, 22, 64)
+'    .ToolTip = "#VALY"
+'  End With
+'  s = New Series("Actual-Outflow")
+'  Chart1.Series.Add(s)
+'  With s
+'    .ChartType = SeriesChartType.Spline
+'    .Points.DataBindXY(dt.ActualX, dt.OActualY)
+'    .ChartArea = "ChartArea1"
+'    .BorderWidth = Border
+'    .Color = System.Drawing.Color.FromArgb(248, 185, 198)
+'    .ToolTip = "#VALY"
+'  End With
+'  s = New Series("Outlook-Outflow")
+'  Chart1.Series.Add(s)
+'  With s
+'    .ChartType = SeriesChartType.Spline
+'    .Points.DataBindXY(dt.OutlookX, dt.OOutlookY)
+'    .ChartArea = "ChartArea1"
+'    .BorderDashStyle = ChartDashStyle.DashDotDot
+'    .BorderWidth = Border
+'    .Color = System.Drawing.Color.FromArgb(248, 185, 198)
+'    .ToolTip = "#VALY"
+'  End With
+'  Dim dateLine As New VerticalLineAnnotation()
+'  dateLine.AxisX = Chart1.ChartAreas(0).AxisX
+'  dateLine.AxisY = Chart1.ChartAreas(0).AxisY
+'  dateLine.LineColor = Drawing.Color.Red
+'  dateLine.LineWidth = 5
+'  dateLine.LineDashStyle = ChartDashStyle.Dot
+'  dateLine.AnchorX = Convert.ToDateTime("01/" & (Now.Month).ToString.PadLeft(2, "0") & "/" & Now.Year).AddMonths(-1).ToOADate()
+'  dateLine.AnchorY = 0
+'  dateLine.ClipToChartArea = "ChartArea1"
+'  dateLine.IsInfinitive = True
+'  Chart1.Annotations.Add(dateLine)
+'  For Each xPoint As DataPoint In s.Points
+'    If xPoint.YValues(0) = 0 Then xPoint.IsEmpty = True
+'  Next
+'  s = New Series("Budgeted-Inflow")
+'  Chart1.Series.Add(s)
+'  With s
+'    .ChartType = SeriesChartType.Spline
+'    .Points.DataBindXY(dt.PlannedX, dt.PlannedY)
+'    .ChartArea = "ChartArea1"
+'    .BorderWidth = Border
+'    .Color = Drawing.Color.Blue
+'    .ToolTip = "#VALY"
+'    '.IsValueShownAsLabel = True
+'    '.MarkerSize = 15
+'    '.MarkerStyle = MarkerStyle.Diamond
+'    'With .SmartLabelStyle
+'    '  .Enabled = True
+'    '  .CalloutStyle = LabelCalloutStyle.Box
+'    '  .CalloutLineColor = Drawing.Color.Goldenrod
+'    '  .CalloutLineDashStyle = ChartDashStyle.Solid
+'    '  .CalloutLineWidth = 3
+'    '  .CalloutLineAnchorCapStyle = LineAnchorCapStyle.Arrow
+'    '  .MinMovingDistance = 20
+'    '  .MaxMovingDistance = 100
+'    '  .MovingDirection = LabelAlignmentStyles.TopRight
+'    'End With
+'  End With
+
+
+
+'  s = New Series("Actual-Inflow")
+'  Chart1.Series.Add(s)
+'  With s
+'    .ChartType = SeriesChartType.Spline
+'    .Points.DataBindXY(dt.ActualX, dt.ActualY)
+'    .ChartArea = "ChartArea1"
+'    .BorderWidth = Border
+'    .Color = System.Drawing.Color.LightBlue
+'    .ToolTip = "#VALY"
+'  End With
+'  s = New Series("Outlook-Inflow")
+'  Chart1.Series.Add(s)
+'  With s
+'    .ChartType = SeriesChartType.Spline
+'    .Points.DataBindXY(dt.OutlookX, dt.OutlookY)
+'    .ChartArea = "ChartArea1"
+'    .BorderDashStyle = ChartDashStyle.DashDotDot
+'    .BorderWidth = Border
+'    .Color = Drawing.Color.SkyBlue
+'    .ToolTip = "#VALY"
+'  End With
+
+'  Return Chart1
+'End Function

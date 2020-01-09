@@ -51,11 +51,11 @@ Partial Class GF_cfCashflow
                 Else
                   Exit For
                 End If
-                If sYear <> wsD.Cells(i, 1).Text Or sMonth <> wsD.Cells(i, 2).Text Then
-                  IsError = True
-                  ErrMsg = "Line No: " & i & ", All records do not belong to same year / month."
-                  Exit For
-                End If
+                'If sYear <> wsD.Cells(i, 1).Text Or sMonth <> wsD.Cells(i, 2).Text Then
+                '  IsError = True
+                '  ErrMsg = "Line No: " & i & ", All records do not belong to same year / month."
+                '  Exit For
+                'End If
                 '2. Valid Year
                 Dim tmpI As Integer = 0
                 Try
@@ -63,11 +63,11 @@ Partial Class GF_cfCashflow
                 Catch ex As Exception
                   tmpI = 0
                 End Try
-                If tmpI <> Now.Year And tmpI <> Now.Year - 1 Then
-                  IsError = True
-                  ErrMsg = "Line No: " & i & ", Invalid Year."
-                  Exit For
-                End If
+                'If tmpI <> Now.Year And tmpI <> Now.Year - 1 Then
+                '  IsError = True
+                '  ErrMsg = "Line No: " & i & ", Invalid Year."
+                '  Exit For
+                'End If
                 '3. Valid Month
                 Try
                   tmpI = Convert.ToInt32(sMonth)
@@ -80,11 +80,11 @@ Partial Class GF_cfCashflow
                   Exit For
                 End If
                 '4. Valid Project
-                If Not ProjectExists(wsD.Cells(i, 3).Text) Then
-                  IsError = True
-                  ErrMsg = "Line No: " & i & ", Invalid Project."
-                  Exit For
-                End If
+                'If Not ProjectExists(wsD.Cells(i, 3).Text) Then
+                '  IsError = True
+                '  ErrMsg = "Line No: " & i & ", Invalid Project."
+                '  Exit For
+                'End If
                 '5. Value inflow
                 Try
                   Dim tmpD As Decimal = Convert.ToDecimal(wsD.Cells(i, 4).Text)
@@ -103,10 +103,10 @@ Partial Class GF_cfCashflow
                 End Try
               Next
               '3. Check Freezed
-              If DataFreezed(sYear, sMonth, Comp) Then
-                IsError = True
-                ErrMsg = "Data is Freezed for Year/Month"
-              End If
+              'If DataFreezed(sYear, sMonth, Comp) Then
+              '  IsError = True
+              '  ErrMsg = "Data is Freezed for Year/Month"
+              'End If
               '4. If Error Alert and Exit
               If IsError Then
                 xlP.Dispose()
@@ -124,6 +124,9 @@ Partial Class GF_cfCashflow
                 If sYear <> "" And sMonth <> "" And sProject <> "" And sInFlow <> "" And sOutFlow <> "" Then
                 Else
                   Exit For
+                End If
+                If Not ProjectExists(sProject) Then
+                  Continue For
                 End If
                 Dim Found As Boolean = False
                 Dim o As tfisg014 = tfisg014.GetByPK(sYear, sMonth, sProject, Comp)
@@ -198,16 +201,16 @@ Partial Class GF_cfCashflow
       Con.Open()
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
-        Cmd.CommandText = "select isnull(count(*),0) as cnt from ttfisg013" & comp & " where upper(t_capc)='" & prj.ToUpper & "'"
+        Cmd.CommandText = "select isnull(count(*),0) as cnt from ttfisg013" & comp & " where upper(t_ccod)='" & prj.ToUpper & "'"
         mret = Cmd.ExecuteScalar
       End Using
-      If mret <= 0 Then
-        Using Cmd As SqlCommand = Con.CreateCommand()
-          Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = "select isnull(count(*),0) as cnt from ttppdm600" & comp & " where upper(t_cprj)='" & prj.ToUpper & "'"
-          mret = Cmd.ExecuteScalar
-        End Using
-      End If
+      'If mret <= 0 Then
+      '  Using Cmd As SqlCommand = Con.CreateCommand()
+      '    Cmd.CommandType = CommandType.Text
+      '    Cmd.CommandText = "select isnull(count(*),0) as cnt from ttppdm600" & comp & " where upper(t_cprj)='" & prj.ToUpper & "'"
+      '    mret = Cmd.ExecuteScalar
+      '  End Using
+      'End If
     End Using
     Return (mret > 0)
   End Function

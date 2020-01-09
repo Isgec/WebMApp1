@@ -5,9 +5,9 @@
   <%--Side Menu Bar--%>
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <asp:LinkButton ID="cmdMnu1" runat="server" Text="----------------" ToolTip="No Option" />
-<%--  <asp:LinkButton ID="cmd30Days" runat="server" Text="Progress Status [Last 30 Days]" ToolTip="Last 30 days." />
-  <asp:LinkButton ID="cmdBacklog" runat="server" Text="Progress Status [Overall]" ToolTip="Since Project Start." />
+  <asp:LinkButton ID="cmdBilling" runat="server" Text="Billing Status" ToolTip="Billing Status Dashboard" />
+  <asp:LinkButton ID="cmdOutstanding" runat="server" Text="Outstanding Status" ToolTip="Outstanding Status" />
+<%--  <asp:LinkButton ID="cmdBacklog" runat="server" Text="Progress Status [Overall]" ToolTip="Since Project Start." />
   <asp:LinkButton ID="cmd30Next" runat="server" Text="Progress Status [Next 30 Days]" ToolTip="Next 30 days." />
   <asp:LinkButton ID="cmdDelayed" runat="server" Text="Delayed Status [Overall]" ToolTip="Delayed Since Project Start." />
   <asp:LinkButton ID="cmdFinance" runat="server" Text="Financial Dashboard" ToolTip="Financial Dashboard." />--%>
@@ -116,11 +116,37 @@
         </div>
       </div>
     </div>
+    <%--NET-Cumulative Row--%>
+    <div class="row">
+      <div class="col-sm-12 text-center ">
+        <div class="chartDiv" style="overflow:scroll;" >
+          <h5>Budget vs Actual - NET Cashflow - Cumulative</h5>
+          <asp:Chart
+            ID="Chart4"
+            Height="400px"
+            Width="1000px"
+            ClientIDMode="Predictable"
+            runat="server">
+            <Legends>
+              <asp:Legend Name="Legend1" Docking="Bottom" IsDockedInsideChartArea="true">
+                <Position Auto="True" />
+              </asp:Legend>
+            </Legends>
+            <ChartAreas>
+              <asp:ChartArea Name="ChartArea1">
+              </asp:ChartArea>
+            </ChartAreas>
+          </asp:Chart>
+          <div id="Chart4Data" runat="server" class="container-fluid text-center"></div>
+        </div>
+      </div>
+    </div>
+
     <%--Main Budget vs Actual Row Inflow--%>
     <div class="row">
       <div class="col-sm-12 text-center ">
         <div class="chartDiv" style="overflow:scroll;" >
-          <h5>Budget vs Actual - Inflow & Outflow</h5>
+          <h5>Budget vs Actual - Inflow</h5>
           <asp:Chart
             ID="Chart1"
             Height="400px"
@@ -141,9 +167,34 @@
         </div>
       </div>
     </div>
+    <%--Main Budget vs Actual Row Outflow--%>
+    <div class="row">
+      <div class="col-sm-12 text-center ">
+        <div class="chartDiv" style="overflow:scroll;" >
+          <h5>Budget vs Actual - Outflow</h5>
+          <asp:Chart
+            ID="Chart5"
+            Height="400px"
+            Width="1000px"
+            ClientIDMode="Predictable"
+            runat="server">
+            <Legends>
+              <asp:Legend Name="Legend1" Docking="Bottom" IsDockedInsideChartArea="true">
+                <Position Auto="True" />
+              </asp:Legend>
+            </Legends>
+            <ChartAreas>
+              <asp:ChartArea Name="ChartArea1">
+              </asp:ChartArea>
+            </ChartAreas>
+          </asp:Chart>
+          <div id="Chart5Data" runat="server" class="container-fluid text-center"></div>
+        </div>
+      </div>
+    </div>
 
     <%--Main Budget vs Actual-Inflow-Cumulative Row--%>
-    <div class="row">
+    <div class="row" style="display:none;">
       <div class="col-sm-12 text-center ">
         <div class="chartDiv" style="overflow:scroll;" >
           <h5>Budget vs Actual- Inflow & Outflow - Cumulative</h5>
@@ -170,7 +221,7 @@
 
 
     <%--NET Row--%>
-    <div class="row">
+    <div class="row" style="display:none;">
       <div class="col-sm-12 text-center ">
         <div class="chartDiv" style="overflow:scroll;" >
           <h5>Budget vs Actual - NET Cashflow</h5>
@@ -195,31 +246,6 @@
       </div>
     </div>
 
-    <%--NET -Cumulative Row--%>
-    <div class="row">
-      <div class="col-sm-12 text-center ">
-        <div class="chartDiv" style="overflow:scroll;" >
-          <h5>Budget vs Actual - NET Cashflow - Cumulative</h5>
-          <asp:Chart
-            ID="Chart4"
-            Height="400px"
-            Width="1000px"
-            ClientIDMode="Predictable"
-            runat="server">
-            <Legends>
-              <asp:Legend Name="Legend1" Docking="Bottom" IsDockedInsideChartArea="true">
-                <Position Auto="True" />
-              </asp:Legend>
-            </Legends>
-            <ChartAreas>
-              <asp:ChartArea Name="ChartArea1">
-              </asp:ChartArea>
-            </ChartAreas>
-          </asp:Chart>
-          <div id="Chart4Data" runat="server" class="container-fluid text-center"></div>
-        </div>
-      </div>
-    </div>
 
   </div>
 </asp:Content>

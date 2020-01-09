@@ -16,8 +16,15 @@ Public Class MfgServices
   Public Function GetContractsCashflow(knownCategoryValues As String) As CascadingDropDownNameValue()
     Dim Contracts As New List(Of CascadingDropDownNameValue)
     Dim Sql As String = ""
-    Sql &= " select distinct aa.t_ccod,bb.t_ccno from ttpisg089200 as aa "
-    Sql &= " inner join ttpisg087200 as bb on aa.t_ccod = bb.t_ccod "
+    Sql &= " select distinct * from ( "
+    Sql &= "  select distinct aa.t_ccod,bb.t_ccno +' '+ bp.t_nama as t_ccno from ttpisg089200 as aa inner join ttpisg087200 as bb on aa.t_ccod = bb.t_ccod  inner join ttccom100200 as bp on bp.t_bpid=bb.t_cust "
+    Sql &= "  union all  "
+    Sql &= "  select distinct aa.t_ccod,bb.t_ccno +' '+ bp.t_nama as t_ccno from ttpisg088200 as aa inner join ttpisg087200 as bb on aa.t_ccod = bb.t_ccod inner join ttccom100200 as bp on bp.t_bpid=bb.t_cust where aa.t_cprj in (select t_cprj from ttpisg086200)  "
+    Sql &= "  union all  "
+    Sql &= "  select distinct aa.t_ccod,bb.t_ccno +' '+ bp.t_nama as t_ccno from ttpisg088200 as aa inner join ttpisg087200 as bb on aa.t_ccod = bb.t_ccod inner join ttccom100200 as bp on bp.t_bpid=bb.t_cust where aa.t_cprj in (select t_cprj from ttfisg016200)  "
+    Sql &= "  union all  "
+    Sql &= "  select distinct aa.t_ccod,bb.t_ccno +' '+ bp.t_nama as t_ccno from ttpisg088200 as aa inner join ttpisg087200 as bb on aa.t_ccod = bb.t_ccod inner join ttccom100200 as bp on bp.t_bpid=bb.t_cust where aa.t_cprj in (select t_cprj from ttfisg017200) "
+    Sql &= "  ) as tmp "
     Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text

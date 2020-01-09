@@ -42,5 +42,10 @@
   <div class="container-fluid text-center" id="divErr" runat="server">
     <h1>Access Denied</h1>
   </div>
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <asp:HyperLink runat="server" NavigateUrl="~/App_Templates/Cashflow_Template.xlsx" Text="Download Template"></asp:HyperLink>
+      </div>
+    </div>
 
 </asp:Content>

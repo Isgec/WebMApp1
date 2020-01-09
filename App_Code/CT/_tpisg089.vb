@@ -23,13 +23,13 @@ Namespace SIS.CT
       Public Property StDt As DateTime = Nothing
       Public Property FnDt As DateTime = Nothing
     End Class
-    Public Shared Function GetContractCustomer(ByVal t_ccod As String) As String
+    Public Shared Function GetContractCustomer(ByVal t_ccod As String, Comp As String) As String
       If t_ccod = "" Then Return ""
       Dim Results As String = ""
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = "select isnull(bp.t_nama +'-'+bp.t_bpid,'') as tmp from ttpisg087200 as ct inner join ttccom100200 as bp on bp.t_bpid=ct.t_cust where ct.t_ccod='" & t_ccod & "'"
+          Cmd.CommandText = "select isnull(bp.t_nama +'-'+bp.t_bpid,'') as tmp from ttpisg087" & Comp & " as ct inner join ttccom100" & Comp & " as bp on bp.t_bpid=ct.t_cust where ct.t_ccod='" & t_ccod & "'"
           Con.Open()
           Results = Cmd.ExecuteScalar
         End Using
@@ -59,12 +59,12 @@ Namespace SIS.CT
       mStr &= "</table>"
       Return mStr
     End Function
-    Public Shared Function SelectListForDataTable(ByVal t_cprj As String, ByVal AsOn As String) As List(Of SIS.CT.tpisg216)
+    Public Shared Function SelectListForDataTable(ByVal t_cprj As String, ByVal AsOn As String, Comp As String) As List(Of SIS.CT.tpisg216)
       Dim Results As List(Of SIS.CT.tpisg216) = Nothing
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = "select * from ttpisg216200 as aa where aa.t_cprj='" & t_cprj & "' and aa.t_curr in (select max(bb.t_curr) from ttpisg216200 as bb where bb.t_cprj=aa.t_cprj group by month(bb.t_curr), year(bb.t_curr)) order by t_curr"
+          Cmd.CommandText = "select * from ttpisg216" & Comp & " as aa where aa.t_cprj='" & t_cprj & "' and aa.t_curr in (select max(bb.t_curr) from ttpisg216" & Comp & " as bb where bb.t_cprj=aa.t_cprj group by month(bb.t_curr), year(bb.t_curr)) order by t_curr"
           Results = New List(Of SIS.CT.tpisg216)()
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
@@ -78,12 +78,12 @@ Namespace SIS.CT
     End Function
 
     <DataObjectMethod(DataObjectMethodType.Select)>
-    Public Shared Function SelectList(ByVal t_ccod As String) As List(Of SIS.CT.tpisg089)
+    Public Shared Function SelectList(ByVal t_ccod As String, Comp As String) As List(Of SIS.CT.tpisg089)
       Dim Results As New List(Of SIS.CT.tpisg089)
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = "select * from ttpisg089200 where t_ccod='" & t_ccod & "'"
+          Cmd.CommandText = "select * from ttpisg089" & Comp & " where t_ccod='" & t_ccod & "'"
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
           While (Reader.Read())
@@ -94,13 +94,13 @@ Namespace SIS.CT
       End Using
       Return Results
     End Function
-    Public Shared Function GetMainPeriod(ByVal t_ccod As String) As ChartPeriod
+    Public Shared Function GetMainPeriod(ByVal t_ccod As String, Comp As String) As ChartPeriod
       If t_ccod = "" Then Return Nothing
       Dim Results As New ChartPeriod
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = "select min(convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )) as stdt, max(convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )) as fndt from ttpisg089200 where (t_amti>0 or t_amto>0) and t_ccod='" & t_ccod & "'"
+          Cmd.CommandText = "select min(convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )) as stdt, max(convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )) as fndt from ttpisg089" & Comp & " where (t_amti>0 or t_amto>0) and t_ccod='" & t_ccod & "'"
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
           If (Reader.Read()) Then
@@ -115,13 +115,13 @@ Namespace SIS.CT
       End Using
       Return Results
     End Function
-    Public Shared Function GetOutlookPeriod(ByVal t_ccod As String) As ChartPeriod
+    Public Shared Function GetOutlookPeriod(ByVal t_ccod As String, Comp As String) As ChartPeriod
       If t_ccod = "" Then Return Nothing
       Dim Results As New ChartPeriod
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
-          Cmd.CommandText = "select min(convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )) as stdt, max(convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )) as fndt from ttpisg089200 where t_oami > 0 and t_ccod='" & t_ccod & "'"
+          Cmd.CommandText = "select min(convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )) as stdt, max(convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )) as fndt from ttpisg089" & Comp & " where t_oami > 0 and t_ccod='" & t_ccod & "'"
           Con.Open()
           Dim Reader As SqlDataReader = Cmd.ExecuteReader()
           If (Reader.Read()) Then

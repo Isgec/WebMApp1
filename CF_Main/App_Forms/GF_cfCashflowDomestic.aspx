@@ -1,4 +1,4 @@
-<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" ClientIDMode="Static" CodeFile="GF_cfCashflowSummary.aspx.vb" Inherits="GF_cfCashflowSummary" title="Upload: Cashflow Summary [Monthly]" %>
+<%@ Page Language="VB" MasterPageFile="~/Sample.master" AutoEventWireup="False" ClientIDMode="Static" CodeFile="GF_cfCashflowDomestic.aspx.vb" Inherits="GF_cfCashflowDomestic" title="Upload: Domestic Report" %>
 <asp:Content ID="None" ContentPlaceHolderID="cphMain" runat="server">
 </asp:Content>
 <asp:Content ID="CPHdmisg121" ContentPlaceHolderID="cph1" runat="Server">
@@ -13,11 +13,15 @@
     <div class="row">
       <div class="col-sm-12 text-center">
         <h3>
-          <asp:Label ID="Labeldmisg121" runat="server" Text="Upload Cashflow Summary [Monthly]"></asp:Label></h3>
+          <asp:Label ID="Labeldmisg121" runat="server" Text="Upload Customer Outstanding Report (Domestic Projects)"></asp:Label></h3>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-12 text-center">
+<%--        <asp:DropDownList ID="F_Company" runat="server">
+          <asp:ListItem Selected="True" Text="ISGEC" Value="200"></asp:ListItem>
+          <asp:ListItem Text="REDECAM" Value="700"></asp:ListItem>
+        </asp:DropDownList>--%>
       </div>
     </div>
     <div class="row lgOutline" style="margin-top:100px;">
@@ -40,7 +44,7 @@
   </div>
     <div class="row">
       <div class="col-sm-12 text-center">
-        <asp:HyperLink runat="server" NavigateUrl="~/App_Templates/CashflowSummary_Template.xlsx" Text="Download Template"></asp:HyperLink>
+        <asp:HyperLink runat="server" NavigateUrl="~/App_Templates/Domestic_Template.xlsx" Text="Download Template"></asp:HyperLink>
       </div>
     </div>
 
