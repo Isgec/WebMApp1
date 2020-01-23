@@ -53,15 +53,8 @@ Namespace SIS.CT
         Return DirectCast(MemberwiseClone(), ctData)
       End Function
     End Class
-    Public Property CountOfXValuesToBeShown As Integer = 30
-    Public Property IntervalX As Integer = 30
-    Public Property MinimumX As DateTime = Nothing
-    Public Property MaximumX As DateTime = Nothing
     Public Property ContractID As String = ""
     Public Property OverallX As DateTime()
-    Public Property OverallBY As Decimal()
-    Public Property OverallAY As Decimal()
-    Public Property OverallOY As Decimal()
 
     Public Property BudgetX As DateTime()
     Public Property ActualX As DateTime()
@@ -73,6 +66,8 @@ Namespace SIS.CT
     Public Shared Function GetDataTable(mRet As billingChart, Optional Comp As String = "200") As String
       Dim mStr As String = ""
       Try
+        'Replace Outlook(Zero)=0
+        mRet.OutlookY(0) = 0
         Dim row1 As String = "<td style='width:100px;background-color:black;color:white;'></td>"
         Dim row2 As String = "<td><b>BUDGETED</b></td>"
         Dim row3 As String = "<td><b>ACTUAL</b></td>"
@@ -84,45 +79,61 @@ Namespace SIS.CT
             isCurrent = True
           End If
           row1 &= "<td style='text-align:center;background-color:black;" & IIf(isCurrent, "color:yellow;", "color:white;") & "'>" & mRet.OverallX(I).ToString("MMM-yyyy") & "</td>"
-          Dim tmpP As Decimal = 0.00
+          Dim tmpB As Decimal = 0.00
           Dim tmpA As Double = 0.00
           Dim tmpO As Double = 0.00
           Dim tmpV As Double = 0.00
           Dim sTmp As String = ""
-          Try
-            tmpP = mRet.OverallBY(I)
-          Catch ex As Exception
-            tmpP = 0
-          End Try
-          If tmpP > 1 Or tmpP < -1 Then
-            sTmp = Math.Truncate(Math.Round(tmpP, 0))
+          For f As Integer = 0 To mRet.BudgetX.Length - 1
+            If mRet.OverallX(I) = mRet.BudgetX(f) Then
+              Try
+                tmpB = mRet.BudgetY(f)
+              Catch ex As Exception
+                tmpB = 0
+              End Try
+              Exit For
+            End If
+          Next
+          If tmpB > 1 Or tmpB < -1 Then
+            sTmp = Math.Truncate(Math.Round(tmpB, 0))
           Else
-            sTmp = Math.Round(tmpP, 2)
+            sTmp = Math.Round(tmpB, 2)
           End If
           row2 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
-          Try
-            tmpA = mRet.OverallAY(I)
-          Catch ex As Exception
-            tmpA = 0
-          End Try
+          For f As Integer = 0 To mRet.ActualX.Length - 1
+            If mRet.OverallX(I) = mRet.ActualX(f) Then
+              Try
+                tmpA = mRet.ActualY(f)
+              Catch ex As Exception
+                tmpA = 0
+              End Try
+              Exit For
+            End If
+          Next
           If tmpA > 1 Or tmpA < -1 Then
             sTmp = Math.Truncate(Math.Round(tmpA, 0))
           Else
             sTmp = Math.Round(tmpA, 2)
           End If
           row3 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
-          Try
-            tmpO = mRet.OverallOY(I)
-          Catch ex As Exception
-            tmpO = 0
-          End Try
+          For f As Integer = 0 To mRet.OutlookX.Length - 1
+            If mRet.OverallX(I) = mRet.OutlookX(f) Then
+              Try
+                tmpO = mRet.OutlookY(f)
+              Catch ex As Exception
+                tmpO = 0
+              End Try
+              Exit For
+            End If
+          Next
+
           If tmpO > 1 Or tmpO < -1 Then
             sTmp = Math.Truncate(Math.Round(tmpO, 0))
           Else
             sTmp = Math.Round(tmpO, 2)
           End If
           row4 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
-          tmpV = (tmpA + tmpO) - tmpP
+          tmpV = (tmpA + tmpO) - tmpB
           If tmpV > 1 Or tmpV < -1 Then
             sTmp = Math.Truncate(Math.Round(tmpV, 0))
           Else
@@ -228,6 +239,10 @@ Namespace SIS.CT
       mRet.ContractID = ContractID
       mRet.CurrentDate = Convert.ToDateTime("01/" & (Now.Month).ToString.PadLeft(2, "0") & "/" & Now.Year).AddMonths(-1)
 
+      Dim sysDate As DateTime = Now.AddDays(-1 * (Now.Day - 1))
+      Dim ActualTill As String = sysDate.AddMonths(-1).ToString("dd/MM/yyyy")
+      Dim OutlookFrom As String = sysDate.ToString("dd/MM/yyyy")
+
       Dim Sql As String = ""
       Dim aBud As New List(Of ctData)
       Dim aAct As New List(Of ctData)
@@ -235,9 +250,34 @@ Namespace SIS.CT
 
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Con.Open()
+        'Get Contract List
+        Dim ccodList As New ArrayList
+        ccodList.Add(ContractID)
+        'Sql = ""
+        'Sql &= " select aa.t_ccod from ttpisg087" & Comp & " as aa inner join ttpisg088" & Comp & " as bb on bb.t_cprj=aa.t_lprj where bb.t_ccod ='" & ContractID & "'"
+        'Using Cmd As SqlCommand = Con.CreateCommand()
+        '  Cmd.CommandType = CommandType.Text
+        '  Cmd.CommandText = Sql
+        '  Dim Reader As SqlDataReader = Cmd.ExecuteReader()
+        '  Dim xL As New ctData
+        '  While (Reader.Read())
+        '    ccodList.Add(Reader("t_ccod"))
+        '  End While
+        '  Reader.Close()
+        'End Using
+        'Create IN List of contract ID
+        Dim ccodStr As String = ""
+        For Each str As String In ccodList
+          If ccodStr = "" Then
+            ccodStr = "('" & str & "'"
+          Else
+            ccodStr &= ",'" & str & "'"
+          End If
+        Next
+        ccodStr &= ")"
         'Get Budgted
         Sql = ""
-        Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, sum(t_budg) as ValY from ttpisg086" & Comp & " where t_cprj in (select t_cprj from ttpisg088" & Comp & " where t_ccod ='" & ContractID & "') group by convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )"
+        Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, sum(t_budg) as ValY from ttpisg086" & Comp & " where t_cprj in (select t_cprj from ttpisg088" & Comp & " where t_ccod IN " & ccodStr & ") group by convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )"
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -252,7 +292,7 @@ Namespace SIS.CT
 
         'Get Actual
         Sql = ""
-        Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, sum(t_actu) as ValY from ttpisg086" & Comp & " where t_cprj in (select t_cprj from ttpisg088" & Comp & " where t_ccod ='" & ContractID & "') group by convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )"
+        Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, sum(t_actu) as ValY from ttpisg086" & Comp & " where convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) <= convert(datetime,'" & ActualTill & "',103)  and t_cprj in (select t_cprj from ttpisg088" & Comp & " where t_ccod IN " & ccodStr & ") group by convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )"
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -267,7 +307,7 @@ Namespace SIS.CT
 
         'Get Outlook
         Sql = ""
-        Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, sum(t_outl) as ValY from ttpisg086" & Comp & " where t_cprj in (select t_cprj from ttpisg088" & Comp & " where t_ccod ='" & ContractID & "') group by convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )"
+        Sql &= " select convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) as ValX, sum(t_outl) as ValY from ttpisg086" & Comp & " where convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 ) >= convert(datetime,'" & OutlookFrom & "',103)  and t_cprj in (select t_cprj from ttpisg088" & Comp & " where t_ccod IN " & ccodStr & ") group by convert(datetime, '01/'+right('00'+ltrim(str(t_mnth)),2)+'/'+str(t_year), 103 )"
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -283,29 +323,6 @@ Namespace SIS.CT
 
       '- Assign OverallX from any of List
       mRet.OverallX = aBud.Select(Function(x) x.ValX).ToArray
-      mRet.OverallBY = aBud.Select(Function(x) x.ValY).ToArray
-      mRet.OverallAY = aAct.Select(Function(x) x.ValY).ToArray
-      mRet.OverallOY = aOut.Select(Function(x) x.ValY).ToArray
-      If Cumulative Then
-        For I As Integer = 1 To mRet.OverallBY.Length - 1
-          mRet.OverallBY(I) += mRet.OverallBY(I - 1)
-        Next
-        For I As Integer = 1 To mRet.OverallAY.Length - 1
-          mRet.OverallAY(I) += mRet.OverallAY(I - 1)
-        Next
-        Dim Added As Boolean = False
-        For I As Integer = 1 To mRet.OverallOY.Length - 1
-          If Not Added Then
-            If mRet.OverallOY(I) > 0 Then
-              mRet.OverallOY(I) += mRet.OverallAY(mRet.OverallAY.Length - 1)
-              Added = True
-            End If
-          Else
-            mRet.OverallOY(I) += mRet.OverallOY(I - 1)
-          End If
-        Next
-      End If
-
       '- Remove Trailing Zeros from Budget
       For I As Integer = aBud.Count - 1 To 0 Step -1
         If aBud(I).ValY = 0 Then
@@ -314,28 +331,9 @@ Namespace SIS.CT
           Exit For
         End If
       Next
-      '- Remove Starting Zeros from Outlook
-      Dim ValueFound As Boolean = False
-      For I As Integer = aOut.Count - 1 To 0 Step -1
-        If Not ValueFound Then
-          If aOut(I).ValY > 0 Then
-            ValueFound = True
-          End If
-        Else
-          If aOut(I).ValY = 0 Then
-            aOut.RemoveAt(I)
-          End If
-        End If
-      Next
-      '- Remove Trailing Zeros from Actual upto outlook start
-      Dim FirstOutlook As ctData = aOut(0).Clone
-      For I As Integer = aAct.Count - 1 To 0 Step -1
-        If aAct(I).ValY = 0 AndAlso aAct(I).ValX >= FirstOutlook.ValX Then
-          aAct.RemoveAt(I)
-        Else
-          Exit For
-        End If
-      Next
+      Dim lastActual As ctData = aAct.Last.Clone
+      aOut.Insert(0, lastActual)
+
       If Cumulative Then
         For I As Integer = 1 To aBud.Count - 1
           aBud(I).ValY += aBud(I - 1).ValY
@@ -343,14 +341,11 @@ Namespace SIS.CT
         For I As Integer = 1 To aAct.Count - 1
           aAct(I).ValY += aAct(I - 1).ValY
         Next
-        Dim lastActual As ctData = aAct.Last.Clone
-        aOut.Insert(0, lastActual)
+        aOut(0).ValY = aAct.Last.ValY
         For I As Integer = 1 To aOut.Count - 1
           aOut(I).ValY += aOut(I - 1).ValY
         Next
       Else
-        Dim lastActual As ctData = aAct.Last.Clone
-        aOut.Insert(0, lastActual)
       End If
       mRet.BudgetX = aBud.Select(Function(x) x.ValX).ToArray
       mRet.BudgetY = aBud.Select(Function(x) Math.Round(x.ValY, 2)).ToArray

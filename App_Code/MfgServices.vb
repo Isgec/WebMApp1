@@ -24,7 +24,7 @@ Public Class MfgServices
     Sql &= "  select distinct aa.t_ccod,bb.t_ccno +' '+ bp.t_nama as t_ccno from ttpisg088200 as aa inner join ttpisg087200 as bb on aa.t_ccod = bb.t_ccod inner join ttccom100200 as bp on bp.t_bpid=bb.t_cust where aa.t_cprj in (select t_cprj from ttfisg016200)  "
     Sql &= "  union all  "
     Sql &= "  select distinct aa.t_ccod,bb.t_ccno +' '+ bp.t_nama as t_ccno from ttpisg088200 as aa inner join ttpisg087200 as bb on aa.t_ccod = bb.t_ccod inner join ttccom100200 as bp on bp.t_bpid=bb.t_cust where aa.t_cprj in (select t_cprj from ttfisg017200) "
-    Sql &= "  ) as tmp "
+    Sql &= "  ) as tmp order by t_ccod "
     Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text

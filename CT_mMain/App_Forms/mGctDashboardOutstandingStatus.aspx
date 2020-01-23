@@ -9,12 +9,20 @@
       <div class="col-sm-12 text-center">
         <h5>
           <asp:Label ID="Label1" runat="server" Font-Underline="true" Text="OUTSTANDING STATUS"></asp:Label></h5>
+        <h6>
+          <asp:Label ID="Label2" runat="server"></asp:Label></h6>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-12 text-center">
         <h4>
           <asp:Label ID="ContractName" runat="server"></asp:Label></h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <h6>
+          <asp:Label ID="IncludingContracts" runat="server"></asp:Label></h6>
       </div>
     </div>
     <div class="row">

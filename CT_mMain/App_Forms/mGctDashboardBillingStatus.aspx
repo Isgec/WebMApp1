@@ -9,6 +9,8 @@
       <div class="col-sm-12 text-center">
         <h5>
           <asp:Label ID="Label1" runat="server" Font-Underline="true" Text="BILLING STATUS"></asp:Label></h5>
+        <h6>
+          <asp:Label ID="Label2" runat="server"></asp:Label></h6>
       </div>
     </div>
     <div class="row">

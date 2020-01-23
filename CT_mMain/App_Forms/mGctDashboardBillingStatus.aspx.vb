@@ -17,10 +17,10 @@ Partial Class mGctDashboardBillingStatus
 
   End Sub
 
-
   Private Sub Chart1_PreRender(sender As Object, e As EventArgs) Handles Chart1.PreRender
     If ContractCode = "" Then Exit Sub
     L_Customer.Text = SIS.CT.tpisg089.GetContractCustomer(ContractCode, Comp)
+    Label2.Text = ContractDescription
     '1.Billing
     Try
       Dim Dt1 As SIS.CT.billingChart = SIS.CT.billingChart.GetChart(ContractCode, Comp)
@@ -37,8 +37,6 @@ Partial Class mGctDashboardBillingStatus
     Catch ex As Exception
       Chart2Data.InnerHtml = "<h3>NO DATA FOUND</h3>"
     End Try
-
-
   End Sub
 
 End Class
