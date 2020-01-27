@@ -63,6 +63,8 @@ Namespace SIS.CT
     Public Property ActualY As Decimal()
     Public Property OutlookY As Decimal()
     Public Property CurrentDate As DateTime = Now
+    Public Property TotalBudget As Decimal = 0
+    Public Property totalActual As Decimal = 0
     Public Shared Function GetDataTable(mRet As billingChart, Optional Comp As String = "200") As String
       Dim mStr As String = ""
       Try
@@ -353,6 +355,19 @@ Namespace SIS.CT
       mRet.ActualY = aAct.Select(Function(x) Math.Round(x.ValY, 2)).ToArray
       mRet.OutlookX = aOut.Select(Function(x) x.ValX).ToArray
       mRet.OutlookY = aOut.Select(Function(x) Math.Round(x.ValY, 2)).ToArray
+
+      'total amount till current mark line i.e. last month
+      For Each tmp As ctData In aBud
+        If tmp.ValX <= mRet.CurrentDate Then
+          mRet.TotalBudget += tmp.ValY
+        End If
+      Next
+      For Each tmp As ctData In aAct
+        If tmp.ValX <= mRet.CurrentDate Then
+          mRet.totalActual += tmp.ValY
+        End If
+      Next
+
       Return mRet
     End Function
   End Class

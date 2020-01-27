@@ -28,6 +28,37 @@
       </div>
     </div>
 
+    <%--Billing Detaila--%>
+    <div class="chartDiv text-left">
+      <div class="row">
+        <div class="col-sm-3">
+            <asp:Label ID="Label3" runat="server">TOTAL BUDGET:</asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="LTB" Font-Bold="true" runat="server"></asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="Label5" runat="server">TOTAL ACTUAL:</asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="LTA" Font-Bold="true" runat="server"></asp:Label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+            <asp:Label ID="Label7" runat="server"></asp:Label>
+        </div>
+        <div class="col-sm-3 text-right" >
+            <asp:Label ID="Label6" runat="server">BUDGET STATUS:</asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="LSTATUS" Font-Bold="true" runat="server"></asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="Label9" Font-Bold="true" runat="server"></asp:Label>
+        </div>
+      </div>
+    </div>
 
     <%--Cumulative Billing Status--%>
     <div class="row">

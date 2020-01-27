@@ -43,6 +43,21 @@ Partial Class mGctDashboardOutstandingStatus
         IncludingContracts.Text = "<u>Lead Division - " & Dt1.MainContract.Division & "</u><br/>"
         IncludingContracts.Text &= Dt1.MainContract.ContractID & " - " & Dt1.MainContract.ContractName
       End If
+      If Dt1.IsExport Then
+        LReportHeader.Text = "OUTSTANDING STATUS [EXPORT]"
+        LCur.Text = "[All amounts are in " & Dt1.Currency & "]"
+      Else
+        LReportHeader.Text = "OUTSTANDING STATUS [DOMESTIC]"
+      End If
+      Dim tmpP As Double = 0
+      Dim sTmp As String = ""
+      tmpP = Dt1.Retention
+      If tmpP > 1 Or tmpP < -1 Then
+        sTmp = Math.Truncate(Math.Round(tmpP, 0))
+      Else
+        sTmp = Math.Round(tmpP, 2)
+      End If
+      LUNFC.Text = sTmp
     Catch ex As Exception
       Chart1Data.InnerHtml = "<h3>NO DATA FOUND</h3>"
     End Try

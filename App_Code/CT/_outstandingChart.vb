@@ -18,6 +18,7 @@ Namespace SIS.CT
       Public Property Slab3Y As Double = 0.00
       Public Property Slab4Y As Double = 0.00
       Public Property Slab5Y As Double = 0.00
+      Public Property Unfc As Double = 0.00
 
       Public Sub New(ByVal Reader As SqlDataReader)
         Try
@@ -92,6 +93,9 @@ Namespace SIS.CT
     Public Property CurrentDate As DateTime = Now
     Public Property ContractList As New List(Of Contracts)
     Public Property MainContract As Contracts = Nothing
+    Public Property IsExport As Boolean = False
+    Public Property Currency As String = "INR"
+    Public Property Retention As Decimal = 0
 
     Public Shared Function GetDataTable(mRet As outstandingChart, Optional Comp As String = "200") As String
       Dim mStr As String = ""
@@ -120,83 +124,87 @@ Namespace SIS.CT
             sTmp = Math.Round(tmpP, 2)
           End If
           row2 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
-          Try
-            tmpP = mRet.NotDueY(I)
-          Catch ex As Exception
-            tmpP = 0
-          End Try
-          If tmpP > 1 Or tmpP < -1 Then
-            sTmp = Math.Truncate(Math.Round(tmpP, 0))
-          Else
-            sTmp = Math.Round(tmpP, 2)
+          If Not mRet.IsExport Then
+            Try
+              tmpP = mRet.NotDueY(I)
+            Catch ex As Exception
+              tmpP = 0
+            End Try
+            If tmpP > 1 Or tmpP < -1 Then
+              sTmp = Math.Truncate(Math.Round(tmpP, 0))
+            Else
+              sTmp = Math.Round(tmpP, 2)
+            End If
+            row3 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
+            Try
+              tmpP = mRet.Slab1Y(I)
+            Catch ex As Exception
+              tmpP = 0
+            End Try
+            If tmpP > 1 Or tmpP < -1 Then
+              sTmp = Math.Truncate(Math.Round(tmpP, 0))
+            Else
+              sTmp = Math.Round(tmpP, 2)
+            End If
+            row4 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
+            Try
+              tmpP = mRet.Slab2Y(I)
+            Catch ex As Exception
+              tmpP = 0
+            End Try
+            If tmpP > 1 Or tmpP < -1 Then
+              sTmp = Math.Truncate(Math.Round(tmpP, 0))
+            Else
+              sTmp = Math.Round(tmpP, 2)
+            End If
+            row5 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
+            Try
+              tmpP = mRet.Slab3Y(I)
+            Catch ex As Exception
+              tmpP = 0
+            End Try
+            If tmpP > 1 Or tmpP < -1 Then
+              sTmp = Math.Truncate(Math.Round(tmpP, 0))
+            Else
+              sTmp = Math.Round(tmpP, 2)
+            End If
+            row6 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
+            Try
+              tmpP = mRet.Slab4Y(I)
+            Catch ex As Exception
+              tmpP = 0
+            End Try
+            If tmpP > 1 Or tmpP < -1 Then
+              sTmp = Math.Truncate(Math.Round(tmpP, 0))
+            Else
+              sTmp = Math.Round(tmpP, 2)
+            End If
+            row7 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
+            Try
+              tmpP = mRet.Slab5Y(I)
+            Catch ex As Exception
+              tmpP = 0
+            End Try
+            If tmpP > 1 Or tmpP < -1 Then
+              sTmp = Math.Truncate(Math.Round(tmpP, 0))
+            Else
+              sTmp = Math.Round(tmpP, 2)
+            End If
+            row8 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
           End If
-          row3 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
-          Try
-            tmpP = mRet.Slab1Y(I)
-          Catch ex As Exception
-            tmpP = 0
-          End Try
-          If tmpP > 1 Or tmpP < -1 Then
-            sTmp = Math.Truncate(Math.Round(tmpP, 0))
-          Else
-            sTmp = Math.Round(tmpP, 2)
-          End If
-          row4 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
-          Try
-            tmpP = mRet.Slab2Y(I)
-          Catch ex As Exception
-            tmpP = 0
-          End Try
-          If tmpP > 1 Or tmpP < -1 Then
-            sTmp = Math.Truncate(Math.Round(tmpP, 0))
-          Else
-            sTmp = Math.Round(tmpP, 2)
-          End If
-          row5 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
-          Try
-            tmpP = mRet.Slab3Y(I)
-          Catch ex As Exception
-            tmpP = 0
-          End Try
-          If tmpP > 1 Or tmpP < -1 Then
-            sTmp = Math.Truncate(Math.Round(tmpP, 0))
-          Else
-            sTmp = Math.Round(tmpP, 2)
-          End If
-          row6 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
-          Try
-            tmpP = mRet.Slab4Y(I)
-          Catch ex As Exception
-            tmpP = 0
-          End Try
-          If tmpP > 1 Or tmpP < -1 Then
-            sTmp = Math.Truncate(Math.Round(tmpP, 0))
-          Else
-            sTmp = Math.Round(tmpP, 2)
-          End If
-          row7 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
-          Try
-            tmpP = mRet.Slab5Y(I)
-          Catch ex As Exception
-            tmpP = 0
-          End Try
-          If tmpP > 1 Or tmpP < -1 Then
-            sTmp = Math.Truncate(Math.Round(tmpP, 0))
-          Else
-            sTmp = Math.Round(tmpP, 2)
-          End If
-          row8 &= "<td style='text-align:center;color:blue;" & IIf(isCurrent, "background-color:yellow;", "background-color:white;") & "'>" & sTmp & "</td>"
         Next
 
         mStr &= "<table class='table-bordered' style='width:100%;margin:5px 5px 5px 5px;'>"
         mStr &= "<tr>" & row1 & "</tr>"
         mStr &= "<tr>" & row2 & "</tr>"
-        mStr &= "<tr>" & row3 & "</tr>"
-        mStr &= "<tr>" & row4 & "</tr>"
-        mStr &= "<tr>" & row5 & "</tr>"
-        mStr &= "<tr>" & row6 & "</tr>"
-        mStr &= "<tr>" & row7 & "</tr>"
-        mStr &= "<tr>" & row8 & "</tr>"
+        If Not mRet.IsExport Then
+          mStr &= "<tr>" & row3 & "</tr>"
+          mStr &= "<tr>" & row4 & "</tr>"
+          mStr &= "<tr>" & row5 & "</tr>"
+          mStr &= "<tr>" & row6 & "</tr>"
+          mStr &= "<tr>" & row7 & "</tr>"
+          mStr &= "<tr>" & row8 & "</tr>"
+        End If
         mStr &= "</table>"
       Catch ex As Exception
         mStr = ex.Message
@@ -240,84 +248,99 @@ Namespace SIS.CT
         .LabelFormat = "###0"
         .LabelForeColor = Drawing.Color.OrangeRed
       End With
-      s = New Series("Not Due")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Spline
-        .Points.DataBindXY(bc.OverallX, bc.NotDueY)
-        .ChartArea = "ChartArea1"
-        .BorderWidth = Border
-        .Color = System.Drawing.Color.Blue
-        .ToolTip = "#VALY"
-        .IsValueShownAsLabel = True
-        .LabelFormat = "###0"
-        .LabelForeColor = Drawing.Color.Blue
-      End With
-      s = New Series("<1 Month")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Spline
-        .Points.DataBindXY(bc.OverallX, bc.Slab1Y)
-        .ChartArea = "ChartArea1"
-        .BorderWidth = Border
-        .Color = System.Drawing.Color.Magenta
-        .ToolTip = "#VALY"
-        .IsValueShownAsLabel = True
-        .LabelFormat = "###0"
-        .LabelForeColor = Drawing.Color.Magenta
-      End With
-      s = New Series(">1 and <6 Months")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Spline
-        .Points.DataBindXY(bc.OverallX, bc.Slab2Y)
-        .ChartArea = "ChartArea1"
-        .BorderWidth = Border
-        .Color = System.Drawing.Color.Purple
-        .ToolTip = "#VALY"
-        .IsValueShownAsLabel = True
-        .LabelFormat = "###0"
-        .LabelForeColor = Drawing.Color.Purple
-      End With
-      s = New Series(">6 and <12 Months")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Spline
-        .Points.DataBindXY(bc.OverallX, bc.Slab3Y)
-        .ChartArea = "ChartArea1"
-        .BorderWidth = Border
-        .Color = System.Drawing.Color.LawnGreen
-        .ToolTip = "#VALY"
-        .IsValueShownAsLabel = True
-        .LabelFormat = "###0"
-        .LabelForeColor = Drawing.Color.LawnGreen
-      End With
-      s = New Series(">12 and <24 Months")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Spline
-        .Points.DataBindXY(bc.OverallX, bc.Slab4Y)
-        .ChartArea = "ChartArea1"
-        .BorderWidth = Border
-        .Color = System.Drawing.Color.Olive
-        .ToolTip = "#VALY"
-        .IsValueShownAsLabel = True
-        .LabelFormat = "###0"
-        .LabelForeColor = Drawing.Color.Olive
-      End With
-      s = New Series(">24 Months")
-      Chart1.Series.Add(s)
-      With s
-        .ChartType = SeriesChartType.Spline
-        .Points.DataBindXY(bc.OverallX, bc.Slab5Y)
-        .ChartArea = "ChartArea1"
-        .BorderWidth = Border
-        .Color = System.Drawing.Color.CadetBlue
-        .ToolTip = "#VALY"
-        .IsValueShownAsLabel = True
-        .LabelFormat = "###0"
-        .LabelForeColor = Drawing.Color.CadetBlue
-      End With
+      If Not bc.IsExport Then
+        s = New Series("Not Due")
+        Chart1.Series.Add(s)
+        With s
+          .ChartType = SeriesChartType.Spline
+          .Points.DataBindXY(bc.OverallX, bc.NotDueY)
+          .ChartArea = "ChartArea1"
+          .BorderWidth = Border
+          .Color = System.Drawing.Color.Blue
+          .ToolTip = "#VALY"
+          .IsValueShownAsLabel = True
+          .LabelFormat = "###0"
+          .LabelForeColor = Drawing.Color.Blue
+        End With
+        s = New Series("<1 Month")
+        Chart1.Series.Add(s)
+        With s
+          .ChartType = SeriesChartType.Spline
+          .Points.DataBindXY(bc.OverallX, bc.Slab1Y)
+          .ChartArea = "ChartArea1"
+          .BorderWidth = Border
+          .Color = System.Drawing.Color.Magenta
+          .ToolTip = "#VALY"
+          .IsValueShownAsLabel = True
+          .LabelFormat = "###0"
+          .LabelForeColor = Drawing.Color.Magenta
+        End With
+        s = New Series(">1 and <6 Months")
+        Chart1.Series.Add(s)
+        With s
+          .ChartType = SeriesChartType.Spline
+          .Points.DataBindXY(bc.OverallX, bc.Slab2Y)
+          .ChartArea = "ChartArea1"
+          .BorderWidth = Border
+          .Color = System.Drawing.Color.Purple
+          .ToolTip = "#VALY"
+          .IsValueShownAsLabel = True
+          .LabelFormat = "###0"
+          .LabelForeColor = Drawing.Color.Purple
+        End With
+        s = New Series(">6 and <12 Months")
+        Chart1.Series.Add(s)
+        With s
+          .ChartType = SeriesChartType.Spline
+          .Points.DataBindXY(bc.OverallX, bc.Slab3Y)
+          .ChartArea = "ChartArea1"
+          .BorderWidth = Border
+          .Color = System.Drawing.Color.LawnGreen
+          .ToolTip = "#VALY"
+          .IsValueShownAsLabel = True
+          .LabelFormat = "###0"
+          .LabelForeColor = Drawing.Color.LawnGreen
+        End With
+        s = New Series(">12 and <24 Months")
+        Chart1.Series.Add(s)
+        With s
+          .ChartType = SeriesChartType.Spline
+          .Points.DataBindXY(bc.OverallX, bc.Slab4Y)
+          .ChartArea = "ChartArea1"
+          .BorderWidth = Border
+          .Color = System.Drawing.Color.Olive
+          .ToolTip = "#VALY"
+          .IsValueShownAsLabel = True
+          .LabelFormat = "###0"
+          .LabelForeColor = Drawing.Color.Olive
+        End With
+        s = New Series(">24 Months")
+        Chart1.Series.Add(s)
+        With s
+          .ChartType = SeriesChartType.Spline
+          .Points.DataBindXY(bc.OverallX, bc.Slab5Y)
+          .ChartArea = "ChartArea1"
+          .BorderWidth = Border
+          .Color = System.Drawing.Color.CadetBlue
+          .ToolTip = "#VALY"
+          .IsValueShownAsLabel = True
+          .LabelFormat = "###0"
+          .LabelForeColor = Drawing.Color.CadetBlue
+        End With
+      End If
+
+      'Dim dateLine As New VerticalLineAnnotation()
+      'dateLine.AxisX = Chart1.ChartAreas(0).AxisX
+      'dateLine.AxisY = Chart1.ChartAreas(0).AxisY
+      'dateLine.LineColor = Drawing.Color.Green
+      'dateLine.LineWidth = 5
+      'dateLine.LineDashStyle = ChartDashStyle.Dot
+      'dateLine.AnchorX = bc.CurrentDate.ToOADate()
+      'dateLine.AnchorY = 0
+      'dateLine.ClipToChartArea = "ChartArea1"
+      'dateLine.IsInfinitive = True
+      'Chart1.Annotations.Add(dateLine)
+
 
       Return Chart1
     End Function
@@ -334,6 +357,21 @@ Namespace SIS.CT
 
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
         Con.Open()
+        'Get IsExport Contract
+        Sql = ""
+        Sql &= " select top 1 isnull(pdm.t_ccty,'IN') from ttpisg087" & Comp & " as ch inner join ttpisg088" & Comp & " as cd on ch.t_ccod=cd.t_ccod inner join ttppdm740" & Comp & " as pdm on pdm.t_cprj=cd.t_cprj where ch.t_ccod = '" & ContractID & "'"
+        'As country is not properly updated in Project Table
+        Sql = " select top 1 isnull(t_ccur,'INR') from ttpisg088" & Comp & " where t_ccod = '" & ContractID & "'"
+        Using Cmd As SqlCommand = Con.CreateCommand()
+          Cmd.CommandType = CommandType.Text
+          Cmd.CommandText = Sql
+          mRet.Currency = Cmd.ExecuteScalar
+          If mRet.Currency = "INR" Then
+            mRet.IsExport = False
+          Else
+            mRet.IsExport = True
+          End If
+        End Using
         'Get Lead Contract
         Sql = ""
         Sql &= " select top 1 aa.t_ccod, aa.t_ccno, aa.t_lddn from ttpisg087" & Comp & " as aa where aa.t_ccod = (select bb.t_ccod from ttpisg088" & Comp & " as bb where bb.t_cprj=(select cc.t_lprj from ttpisg087" & Comp & " as cc where cc.t_ccod ='" & ContractID & "'))"
@@ -371,7 +409,11 @@ Namespace SIS.CT
         ccodStr &= ")"
         Dim LastSixMonths As String = Now.AddDays(-1 * (Now.Day - 1)).AddMonths(-6).ToString("dd/MM/yyyy")
         Sql = ""
-        Sql &= " select t_ddte as ValX, sum(t_tdte) as TotalY, sum(t_notd) as NotDueY, sum(t_sla1) as Slab1Y, sum(t_sla2) as Slab2Y, sum(t_sla3) as Slab3Y, sum(t_sla4) as Slab4Y, sum(t_sla5) as Slab5Y from ttfisg016" & Comp & " where t_ddte >= convert(datetime,'" & LastSixMonths & "',103)  and t_cprj in (select t_cprj from ttpisg088" & Comp & " where t_ccod IN " & ccodStr & ") group by t_ddte"
+        If Not mRet.IsExport Then
+          Sql &= " select t_ddte as ValX, sum(t_tdte) as TotalY, sum(t_notd) as NotDueY, sum(t_sla1) as Slab1Y, sum(t_sla2) as Slab2Y, sum(t_sla3) as Slab3Y, sum(t_sla4) as Slab4Y, sum(t_sla5) as Slab5Y, sum(t_unre) as Unfc from ttfisg016" & Comp & " where t_ddte >= convert(datetime,'" & LastSixMonths & "',103)  and t_cprj in (select t_cprj from ttpisg088" & Comp & " where t_ccod IN " & ccodStr & ") group by t_ddte order by t_ddte"
+        Else
+          Sql &= " select t_ddte as ValX, sum(t_outd) as TotalY, sum(t_unfc) as Unfc from ttfisg017" & Comp & " where t_ddte >= convert(datetime,'" & LastSixMonths & "',103)  and t_cprj in (select t_cprj from ttpisg088" & Comp & " where t_ccod IN " & ccodStr & ") group by t_ddte order by t_ddte"
+        End If
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text
           Cmd.CommandText = Sql
@@ -389,12 +431,15 @@ Namespace SIS.CT
       Next
       mRet.OverallX = aData.Select(Function(x) x.ValX).ToArray
       mRet.TotalY = aData.Select(Function(x) x.TotalY).ToArray
-      mRet.NotDueY = aData.Select(Function(x) x.NotDueY).ToArray
-      mRet.Slab1Y = aData.Select(Function(x) x.Slab1Y).ToArray
-      mRet.Slab2Y = aData.Select(Function(x) x.Slab2Y).ToArray
-      mRet.Slab3Y = aData.Select(Function(x) x.Slab3Y).ToArray
-      mRet.Slab4Y = aData.Select(Function(x) x.Slab4Y).ToArray
-      mRet.Slab5Y = aData.Select(Function(x) x.Slab5Y).ToArray
+      If Not mRet.IsExport Then
+        mRet.NotDueY = aData.Select(Function(x) x.NotDueY).ToArray
+        mRet.Slab1Y = aData.Select(Function(x) x.Slab1Y).ToArray
+        mRet.Slab2Y = aData.Select(Function(x) x.Slab2Y).ToArray
+        mRet.Slab3Y = aData.Select(Function(x) x.Slab3Y).ToArray
+        mRet.Slab4Y = aData.Select(Function(x) x.Slab4Y).ToArray
+        mRet.Slab5Y = aData.Select(Function(x) x.Slab5Y).ToArray
+      End If
+      mRet.Retention = aData.Last.Unfc
       Return mRet
     End Function
   End Class

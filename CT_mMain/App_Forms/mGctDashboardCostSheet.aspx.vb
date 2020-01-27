@@ -40,8 +40,8 @@ Partial Class mGctDashboardCostSheet
       Dim Dt1 As SIS.CT.costChart = SIS.CT.costChart.GetChart(t_ccod, Comp, "I")
       Chart1 = SIS.CT.costChart.RenderChart(Chart1, Dt1)
       Chart1Data.InnerHtml = SIS.CT.costChart.GetDataTable(Dt1, Comp)
-      LTBI.Text = Dt1.BudgetY.Sum()
-      LTAI.Text = Dt1.ActualY.Sum()
+      LTBI.Text = Dt1.TotalBudget
+      LTAI.Text = Dt1.TotalActual
     Catch ex As Exception
       Chart1Data.InnerHtml = "<h3>NO DATA FOUND</h3>"
     End Try
@@ -51,8 +51,8 @@ Partial Class mGctDashboardCostSheet
       Dim Dt5 As SIS.CT.costChart = SIS.CT.costChart.GetChart(t_ccod, Comp, "O")
       Chart5 = SIS.CT.costChart.RenderChart(Chart5, Dt5)
       Chart5Data.InnerHtml = SIS.CT.costChart.GetDataTable(Dt5, Comp)
-      LTBO.Text = Dt5.BudgetY.Sum()
-      LTAO.Text = Dt5.ActualY.Sum()
+      LTBO.Text = Dt5.TotalBudget
+      LTAO.Text = Dt5.TotalActual
     Catch ex As Exception
       Chart5Data.InnerHtml = "<h3>NO DATA FOUND</h3>"
     End Try
@@ -67,7 +67,15 @@ Partial Class mGctDashboardCostSheet
     Catch ex As Exception
       Chart4Data.InnerHtml = "<h3>NO DATA FOUND</h3>"
     End Try
-
+    Try
+      If Convert.ToDecimal(LAN.Text) - Convert.ToDecimal(LBN.Text) >= 0 Then
+        LSTATUS.Text = "POSITIVE"
+      Else
+        LSTATUS.Text = "NEGATIVE"
+      End If
+    Catch ex As Exception
+      LSTATUS.Text = ex.Message
+    End Try
 
   End Sub
 

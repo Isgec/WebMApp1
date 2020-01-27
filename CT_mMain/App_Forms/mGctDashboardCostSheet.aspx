@@ -71,7 +71,7 @@
         <asp:Label runat="server" Text="[All amounts are in LAKH]" ForeColor="Red" Font-Italic="true"></asp:Label>
       </div>
     </div>
-    <%--Contract Detaila--%>
+    <%--Cashflow Detaila--%>
     <div class="chartDiv text-left">
       <div class="row">
         <div class="col-sm-3">
@@ -113,6 +113,20 @@
         </div>
         <div class="col-sm-3">
             <asp:Label ID="LAN" Font-Bold="true" runat="server"></asp:Label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+            <asp:Label ID="Label7" runat="server"></asp:Label>
+        </div>
+        <div class="col-sm-3 text-right" >
+            <asp:Label ID="Label4" runat="server">CASHFLOW STATUS:</asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="LSTATUS" Font-Bold="true" runat="server"></asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="Label9" Font-Bold="true" runat="server"></asp:Label>
         </div>
       </div>
     </div>

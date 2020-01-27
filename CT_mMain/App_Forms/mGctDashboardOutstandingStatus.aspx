@@ -8,7 +8,7 @@
     <div class="row">
       <div class="col-sm-12 text-center">
         <h5>
-          <asp:Label ID="Label1" runat="server" Font-Underline="true" Text="OUTSTANDING STATUS"></asp:Label></h5>
+          <asp:Label ID="LReportHeader" runat="server" Font-Underline="true" Text="OUTSTANDING STATUS"></asp:Label></h5>
         <h6>
           <asp:Label ID="Label2" runat="server"></asp:Label></h6>
       </div>
@@ -30,11 +30,30 @@
         <h5><asp:Label ID="L_Customer" Font-Bold="true" runat="server" Text=""></asp:Label></h5>
       </div>
       <div class="col-sm-4 text-right">
-        <asp:Label runat="server" Text="[All amounts are in LAKH]" ForeColor="Red" Font-Italic="true"></asp:Label>
+        <asp:Label runat="server" ID="LCur" Text="[All amounts are in LAKH]" ForeColor="Red" Font-Italic="true"></asp:Label>
       </div>
     </div>
 
-    <%--Billing Status--%>
+    <%--Outstanding Detaila--%>
+    <div class="chartDiv text-left">
+      <div class="row">
+        <div class="col-sm-3">
+            <asp:Label ID="Label3" runat="server">UNCLAIMED RETENTION:</asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="LUNFC" Font-Bold="true" runat="server"></asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="Label5" runat="server">:</asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="LTA" Font-Bold="true" runat="server"></asp:Label>
+        </div>
+      </div>
+    </div>
+
+
+    <%--Outstanding Status--%>
     <div class="row">
       <div class="col-sm-12 text-center ">
         <div class="chartDiv" style="overflow:scroll;" >
