@@ -74,17 +74,17 @@ Partial Class GF_cfCashflow
                 Catch ex As Exception
                   tmpI = 0
                 End Try
-                If tmpI <= 1 Or tmpI > 12 Then
+                If tmpI < 1 Or tmpI > 12 Then
                   IsError = True
                   ErrMsg = "Line No: " & i & ", Invalid Month."
                   Exit For
                 End If
                 '4. Valid Project
-                'If Not ProjectExists(wsD.Cells(i, 3).Text) Then
-                '  IsError = True
-                '  ErrMsg = "Line No: " & i & ", Invalid Project."
-                '  Exit For
-                'End If
+                If Not ProjectExists(wsD.Cells(i, 3).Text) Then
+                  IsError = True
+                  ErrMsg = "Line No: " & i & ", Contract Not Found."
+                  Exit For
+                End If
                 '5. Value inflow
                 Try
                   Dim tmpD As Decimal = Convert.ToDecimal(wsD.Cells(i, 4).Text)
@@ -154,6 +154,7 @@ Partial Class GF_cfCashflow
                     o.t_quat = "Q3"
                     o.t_fyer = sYear
                 End Select
+                o.t_nama = GetContractCustomer(sProject, Comp)
                 o.t_udat = Now.ToString("dd/MM/yyyy")
                 o.t_udby = LNUser
                 o.t_year = sYear
@@ -183,6 +184,21 @@ Partial Class GF_cfCashflow
     End If
     HttpContext.Current.Server.ScriptTimeout = st
   End Sub
+  Public Shared Function GetContractCustomer(ByVal t_ccod As String, Comp As String) As String
+    If t_ccod = "" Then Return ""
+    Dim Results As String = ""
+    Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetBaaNConnectionString())
+      Using Cmd As SqlCommand = Con.CreateCommand()
+        Cmd.CommandType = CommandType.Text
+        Cmd.CommandText = "select isnull(bp.t_nama,'') as tmp from ttpisg087" & Comp & " as ct inner join ttccom100" & Comp & " as bp on bp.t_bpid=ct.t_cust where ct.t_ccod='" & t_ccod & "'"
+        Con.Open()
+        Results = Cmd.ExecuteScalar
+        Results = Results.Replace("'".ToCharArray, "")
+      End Using
+    End Using
+    Return Results
+  End Function
+
   Private Function DataFreezed(sYear As String, sMonth As String, Optional comp As String = "200") As Boolean
     Dim mret As Integer = 0
     Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetCFBaaNConnectionString())
@@ -278,6 +294,7 @@ Public Class tfisg014
   Public Property t_udby As String = ""
   Public Property t_frez As Integer = 0
   Public Property t_fyer As Integer = 0
+  Public Property t_nama As String = ""
   Public Shared Function GetByPK(sYear As String, sMonth As String, sPrj As String, Optional comp As String = "200") As tfisg014
     Dim mRet As tfisg014 = Nothing
     Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetCFBaaNConnectionString())
@@ -298,7 +315,7 @@ Public Class tfisg014
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
         Cmd.CommandText = " Update ttfisg014" & comp & " set "
-        Cmd.CommandText &= " t_iamt=" & obj.t_iamt & ",t_oamt=" & obj.t_oamt & ",t_quat='" & obj.t_quat & "',t_Refcntd=0,t_Refcntu=0,t_udat=convert(datetime,'" & obj.t_udat & "',103),t_udby='" & obj.t_udby & "',t_frez=" & obj.t_frez & ",t_fyer=" & obj.t_fyer & " "
+        Cmd.CommandText &= " t_iamt=" & obj.t_iamt & ",t_oamt=" & obj.t_oamt & ",t_quat='" & obj.t_quat & "',t_Refcntd=0,t_Refcntu=0,t_udat=convert(datetime,'" & obj.t_udat & "',103),t_udby='" & obj.t_udby & "',t_frez=" & obj.t_frez & ",t_fyer=" & obj.t_fyer & ",t_nama='" & obj.t_nama & "' "
         Cmd.CommandText &= " where t_year=" & obj.t_year & " and t_mnth=" & obj.t_mnth & " and t_cprj='" & obj.t_cprj & "'"
         Con.Open()
         Cmd.ExecuteNonQuery()
@@ -310,8 +327,8 @@ Public Class tfisg014
     Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetCFBaaNConnectionString())
       Using Cmd As SqlCommand = Con.CreateCommand()
         Cmd.CommandType = CommandType.Text
-        Cmd.CommandText = " insert into ttfisg014" & comp & " (t_year,t_mnth,t_cprj,t_iamt,t_oamt,t_quat,t_Refcntd,t_Refcntu,t_udat,t_udby,t_frez,t_fyer) values "
-        Cmd.CommandText &= " (" & obj.t_year & "," & obj.t_mnth & ",'" & obj.t_cprj & "'," & obj.t_iamt & "," & obj.t_oamt & ",'" & obj.t_quat & "',0,0,convert(datetime,'" & obj.t_udat & "',103),'" & obj.t_udby & "'," & obj.t_frez & "," & obj.t_fyer & ")"
+        Cmd.CommandText = " insert into ttfisg014" & comp & " (t_year,t_mnth,t_cprj,t_iamt,t_oamt,t_quat,t_Refcntd,t_Refcntu,t_udat,t_udby,t_frez,t_fyer,t_nama) values "
+        Cmd.CommandText &= " (" & obj.t_year & "," & obj.t_mnth & ",'" & obj.t_cprj & "'," & obj.t_iamt & "," & obj.t_oamt & ",'" & obj.t_quat & "',0,0,convert(datetime,'" & obj.t_udat & "',103),'" & obj.t_udby & "'," & obj.t_frez & "," & obj.t_fyer & ",'" & obj.t_nama & "')"
         Con.Open()
         Cmd.ExecuteNonQuery()
       End Using

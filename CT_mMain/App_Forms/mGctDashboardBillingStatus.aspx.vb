@@ -33,11 +33,7 @@ Partial Class mGctDashboardBillingStatus
     Try
       LTB.Text = Dt1.TotalBudget
       LTA.Text = Dt1.totalActual
-      If Dt1.totalActual - Dt1.TotalBudget >= 0 Then
-        LSTATUS.Text = "POSITIVE"
-      Else
-        LSTATUS.Text = "NEGATIVE"
-      End If
+      LSTATUS.Text = Math.Round(Dt1.totalActual - Dt1.TotalBudget, 2)
     Catch ex As Exception
     End Try
     '1.Cumulative Billing

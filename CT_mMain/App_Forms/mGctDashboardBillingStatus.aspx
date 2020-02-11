@@ -45,16 +45,16 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-3">
-            <asp:Label ID="Label7" runat="server"></asp:Label>
-        </div>
         <div class="col-sm-3 text-right" >
-            <asp:Label ID="Label6" runat="server">BUDGET STATUS:</asp:Label>
+            <asp:Label ID="Label6" runat="server">VARIANCE:</asp:Label>
         </div>
         <div class="col-sm-3">
             <asp:Label ID="LSTATUS" Font-Bold="true" runat="server"></asp:Label>
         </div>
-        <div class="col-sm-3">
+         <div class="col-sm-3">
+            <asp:Label ID="Label7" runat="server"></asp:Label>
+        </div>
+       <div class="col-sm-3">
             <asp:Label ID="Label9" Font-Bold="true" runat="server"></asp:Label>
         </div>
       </div>

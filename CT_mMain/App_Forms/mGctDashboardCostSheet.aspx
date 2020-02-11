@@ -116,14 +116,14 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-3">
-            <asp:Label ID="Label7" runat="server"></asp:Label>
-        </div>
         <div class="col-sm-3 text-right" >
             <asp:Label ID="Label4" runat="server">CASHFLOW STATUS:</asp:Label>
         </div>
         <div class="col-sm-3">
             <asp:Label ID="LSTATUS" Font-Bold="true" runat="server"></asp:Label>
+        </div>
+        <div class="col-sm-3">
+            <asp:Label ID="Label7" runat="server"></asp:Label>
         </div>
         <div class="col-sm-3">
             <asp:Label ID="Label9" Font-Bold="true" runat="server"></asp:Label>
