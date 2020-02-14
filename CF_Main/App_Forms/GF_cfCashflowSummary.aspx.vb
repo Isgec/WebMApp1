@@ -74,7 +74,7 @@ Partial Class GF_cfCashflowSummary
                 Catch ex As Exception
                   tmpI = 0
                 End Try
-                If tmpI <= 1 Or tmpI > 12 Then
+                If tmpI < 1 Or tmpI > 12 Then
                   IsError = True
                   ErrMsg = "Line No: " & i & ", Invalid Month."
                   Exit For

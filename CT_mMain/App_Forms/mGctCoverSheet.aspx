@@ -72,7 +72,7 @@
             <tr>
               <td style="text-align: center; font-weight: bold;"></td>
               <td colspan="3">
-                <asp:Label ID="Ht_lddn" runat="server" Font-Bold="true" Text="Order Value in Functional currency"></asp:Label></td>
+                <asp:Label ID="Ht_lddn" runat="server" Font-Bold="true" Text="Order Value in Project currency as on date"></asp:Label></td>
               <td>
                 <asp:Label ID="Vt_lddn" runat="server" Text=""></asp:Label></td>
             </tr>
@@ -89,7 +89,7 @@
               <td style="text-align: center; font-weight: bold;">a.
               </td>
               <td colspan="2">
-                <asp:Label ID="Ht_zdat" runat="server" Font-Bold="true" Text="Original order value in Functional Currency"></asp:Label></td>
+                <asp:Label ID="Ht_zdat" runat="server" Font-Bold="true" Text="Original order value in Project Currency"></asp:Label></td>
               <td>
                 <asp:Label ID="Vt_zdat" runat="server" Text=""></asp:Label></td>
             </tr>
