@@ -5,13 +5,13 @@ Partial Class GF_ntNotes
   Protected Sub Info_Click(ByVal sender As Object, ByVal e As System.Web.UI.ImageClickEventArgs)
     Dim oBut As ImageButton = CType(sender, ImageButton)
     Dim aVal() As String = oBut.CommandArgument.ToString.Split(",".ToCharArray)
-    Dim RedirectUrl As String = _InfoUrl  & "?NotesId=" & aVal(0)
+    Dim RedirectUrl As String = _InfoUrl & "?NotesId=" & aVal(0)
     Response.Redirect(RedirectUrl)
   End Sub
   Protected Sub GVntNotes_RowCommand(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.GridViewCommandEventArgs) Handles GVntNotes.RowCommand
     If e.CommandName.ToLower = "lgedit".ToLower Then
       Try
-        Dim NotesId As String = GVntNotes.DataKeys(e.CommandArgument).Values("NotesId")  
+        Dim NotesId As String = GVntNotes.DataKeys(e.CommandArgument).Values("NotesId")
         Dim RedirectUrl As String = TBLntNotes.EditUrl & "?NotesId=" & NotesId
         Response.Redirect(RedirectUrl)
       Catch ex As Exception

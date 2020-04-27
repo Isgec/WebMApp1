@@ -81,6 +81,7 @@ input:checked + .slider:before {
         <asp:DropDownList ID="F_Company" runat="server" AutoPostBack="true">
           <asp:ListItem Selected="True" Text="ISGEC" Value="200"></asp:ListItem>
           <asp:ListItem Text="REDECAM" Value="700"></asp:ListItem>
+          <asp:ListItem Text="ISGEC COVEMA" Value="651"></asp:ListItem>
         </asp:DropDownList>
       </div>
     </div>

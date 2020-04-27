@@ -159,30 +159,30 @@ Namespace SIS.NT
       Try
         Dim LibraryPath As String = ""
         Dim LibraryID As String = ""
-        Dim tmpL As SIS.EDI.ediALib = SIS.EDI.ediALib.GetActiveLibrary
-        LibraryPath = "D:\" & tmpL.t_path
-        If Request.Url.Authority.ToLower = "localhost" Then
-          LibraryPath = "D:\Temp"
-        End If
+        Dim tmpL As ejiVault.EJI.ediALib = ejiVault.EJI.ediALib.GetActiveLibrary
+        LibraryPath = tmpL.LibraryPath
         LibraryID = tmpL.t_lbcd
-
+        If Not ejiVault.EJI.DBCommon.IsLocalISGECVault Then
+          ejiVault.EJI.ediALib.ConnectISGECVault(tmpL)
+        End If
         Dim oFiles As HttpFileCollection = Request.Files
         For i As Integer = 0 To Request.Files.Count - 1
           Dim pfile As HttpPostedFile
           pfile = Request.Files.Item(i)
           If pfile.ContentLength <= 0 Then Continue For
           Dim LibFileName As String = ""
-          LibFileName = SIS.EDI.ediASeries.GetNextFileName
+          LibFileName = ejiVault.EJI.ediASeries.GetNextFileID
           Dim LibFile As String = LibraryPath & "\\" & LibFileName
           pfile.SaveAs(LibFile)
           Try
             If IO.File.Exists(LibFile) Then
-              Dim tmp As New SIS.EDI.ediAFile
+              Dim tmp As New ejiVault.EJI.ediAFile
               With tmp
+                .t_drid = ejiVault.EJI.ediASeries.GetNextRecordID
                 .t_dcid = LibFileName
                 .t_hndl = "JOOMLA_NOTES"
                 .t_indx = PrimaryKey
-                .t_prcd = "By Mobile App"
+                .t_prcd = "EJIMAIN"
                 .t_fnam = pfile.FileName
                 .t_lbcd = LibraryID
                 .t_atby = HttpContext.Current.Session("LoginID")
@@ -190,11 +190,14 @@ Namespace SIS.NT
                 .t_Refcntd = 0
                 .t_Refcntu = 0
               End With
-              tmp = SIS.EDI.ediAFile.InsertData(tmp)
+              tmp = ejiVault.EJI.ediAFile.InsertData(tmp)
             End If
           Catch ex As Exception
           End Try
         Next
+        If Not ejiVault.EJI.DBCommon.IsLocalISGECVault Then
+          ejiVault.EJI.ediALib.DisconnectISGECVault()
+        End If
       Catch ex As Exception
         HttpContext.Current.Session.Timeout = L_SessionTimeOut
         HttpContext.Current.Server.ScriptTimeout = L_ScriptTimeOut
@@ -205,7 +208,6 @@ Namespace SIS.NT
       Return True
     End Function
     Public Shared Function GetNextNotesNo(ByRef Prefix As String, ByRef NextNo As Integer) As String
-      Dim tmp As SIS.EDI.ediASeries = Nothing
       Using Con As SqlConnection = New SqlConnection(SIS.SYS.SQLDatabase.DBCommon.GetConnectionString())
         Using Cmd As SqlCommand = Con.CreateCommand()
           Cmd.CommandType = CommandType.Text

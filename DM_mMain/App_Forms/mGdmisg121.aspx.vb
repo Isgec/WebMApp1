@@ -4,6 +4,7 @@ Imports System.IO
 Imports System.Web.Script.Serialization
 Imports Ionic
 Imports Ionic.Zip
+Imports ejiVault
 Partial Class mGF_dmisg121
   Inherits SIS.SYS.GridBase
   Private st As Long = HttpContext.Current.Server.ScriptTimeout
@@ -97,26 +98,15 @@ Partial Class mGF_dmisg121
   End Sub
   Private Sub DownloadAll(ByVal pk As String)
     HttpContext.Current.Server.ScriptTimeout = Integer.MaxValue
+    Dim L_Comp As String = EJI.DBCommon.ERPCompany
+    EJI.DBCommon.ERPCompany = F_Company.SelectedValue
+
     Dim docHndl As String = "DOCUMENTMASTERPDF_" & F_Company.SelectedValue
-    Dim LibFolder As String = "attachmentlibrary1"
-    Dim libPath As String = ""
     Dim filePath As String = ""
     Dim fileName As String = pk & ".zip"
-    Dim NeedsMapping As Boolean = False
-    Dim Mapped As Boolean = False
+    Dim LibraryID As String = ""
 
-    Dim UrlAuthority As String = HttpContext.Current.Request.Url.Authority
-    If UrlAuthority.ToLower <> "192.9.200.146" Then
-      UrlAuthority = "192.9.200.146"
-      NeedsMapping = True
-    End If
-    libPath = "D:\" & LibFolder
-    If NeedsMapping Then
-      libPath = "\\" & UrlAuthority & "\" & LibFolder
-      If ConnectToNetworkFunctions.connectToNetwork(libPath, "X:", "ISGECNET\adskvault", "adskvault@123") Then
-        Mapped = True
-      End If
-    End If
+
     Dim tmpFilesToDelete As New ArrayList
     Response.Clear()
     Response.AppendHeader("content-disposition", "attachment; filename=" & fileName)
@@ -125,21 +115,18 @@ Partial Class mGF_dmisg121
       zip.CompressionLevel = Zlib.CompressionLevel.Level5
       For Each tDoc As ListItem In lstSelected.Items
         Dim docIndx As String = tDoc.Text
-        Dim rDoc As SIS.EDI.ediAFile = SIS.EDI.ediAFile.ediAFileGetByHandleIndex(docHndl, docIndx)
+        Dim rDoc As EJI.ediAFile = EJI.ediAFile.GetFileByHandleIndex(docHndl, docIndx)
         If rDoc IsNot Nothing Then
-          filePath = libPath & "\" & rDoc.t_dcid
+          Dim rLib As EJI.ediALib = EJI.ediALib.GetLibraryByID(rDoc.t_lbcd)
+          If LibraryID <> rDoc.t_lbcd Then
+            If Not EJI.DBCommon.IsLocalISGECVault Then
+              EJI.ediALib.ConnectISGECVault(rLib)
+            End If
+            LibraryID = rDoc.t_lbcd
+          End If
+          filePath = rLib.LibraryPath & "\" & rDoc.t_dcid
           fileName = rDoc.t_fnam
           '====================
-          '===Just to remap====
-          If Not IO.File.Exists(filePath) Then
-            libPath = "D:\" & LibFolder
-            If NeedsMapping Then
-              libPath = "\\" & UrlAuthority & "\" & LibFolder
-              If ConnectToNetworkFunctions.connectToNetwork(libPath, "X:", "ISGECNET\adskvault", "adskvault@123") Then
-                Mapped = True
-              End If
-            End If
-          End If
           '====================
           If IO.File.Exists(filePath) Then
             Dim tmpFile As String = Server.MapPath("~/..") & "App_Temp/" & fileName
@@ -170,9 +157,10 @@ Partial Class mGF_dmisg121
       Catch ex As Exception
       End Try
     Next
-    If Mapped Then
-      ConnectToNetworkFunctions.disconnectFromNetwork("X:")
+    If Not EJI.DBCommon.IsLocalISGECVault Then
+      EJI.ediALib.DisconnectISGECVault()
     End If
+    EJI.DBCommon.ERPCompany = L_Comp
     Response.End()
 
   End Sub
